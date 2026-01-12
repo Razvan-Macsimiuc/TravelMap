@@ -1,0 +1,7 @@
+{
+  "name": "TravelMap",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
