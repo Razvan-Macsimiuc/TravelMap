@@ -1,11 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
+import { OverlayService } from './services/overlay.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
-  standalone: false,
+  imports: [IonApp, IonRouterOutlet],
 })
 export class AppComponent {
-  constructor() {}
+  private readonly overlayService = inject(OverlayService);
+
+  constructor() {
+    // Initialize overlay service to close modals/menus on navigation
+    this.overlayService.initialize();
+  }
 }

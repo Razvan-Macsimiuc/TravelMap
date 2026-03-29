@@ -1,0 +1,115 @@
+<ion-content [fullscreen]="true" class="ion-padding settings-content">
+  <!-- Animated Background -->
+  <app-animated-background
+    [subtle]="true"
+    [showGrid]="true"
+  ></app-animated-background>
+
+  <!-- Full-screen Resetting Overlay -->
+  @if (isResetting()) {
+  <div class="resetting-overlay">
+    <div class="resetting-content">
+      <div class="resetting-icon">
+        <div class="spinner-ring"></div>
+        <ion-icon name="trash-outline" class="center-icon"></ion-icon>
+      </div>
+      <h2 class="resetting-title">Resetting Data</h2>
+      <p class="resetting-message">
+        Please wait while we clear all your data...
+      </p>
+      <div class="progress-dots">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Data Management Section -->
+  <ion-card class="settings-card danger-card">
+    <ion-card-header>
+      <ion-card-title class="section-title">
+        <ion-icon name="trash-outline"></ion-icon>
+        Data Management
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <div class="data-summary">
+        <div class="data-item">
+          <ion-icon name="map-outline"></ion-icon>
+          <span class="data-value">{{ visitedCount() }}</span>
+          <span class="data-label">Countries</span>
+        </div>
+      </div>
+
+      <ion-button
+        expand="block"
+        color="danger"
+        fill="outline"
+        (click)="onResetData()"
+        [disabled]="isResetting()"
+        class="reset-button"
+      >
+        @if (isResetting()) {
+        <ion-icon name="refresh-outline" class="spin"></ion-icon>
+        Resetting... } @else {
+        <ion-icon name="trash-outline" slot="start"></ion-icon>
+        Reset All Data }
+      </ion-button>
+
+      <p class="warning-text">
+        This will permanently delete all visited countries and saved progress.
+      </p>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- About Section -->
+  <ion-card class="settings-card about-card">
+    <ion-card-header>
+      <ion-card-title class="section-title">
+        <ion-icon name="information-circle-outline"></ion-icon>
+        About
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <div class="about-header">
+        <div class="app-icon">🌍</div>
+        <div class="app-info">
+          <h2 class="app-name">HopaHopa</h2>
+          <p class="app-version">Version {{ appVersion }}</p>
+        </div>
+      </div>
+
+      <p class="app-description">
+        Track your travels around the world! Mark countries you've visited and see
+        your exploration progress with achievements and statistics.
+      </p>
+
+      <div class="features-list">
+        <div class="feature">
+          <ion-icon name="map-outline"></ion-icon>
+          <span>Interactive world map</span>
+        </div>
+        <div class="feature">
+          <ion-icon name="stats-chart-outline"></ion-icon>
+          <span>Travel statistics</span>
+        </div>
+      </div>
+
+      <div class="credits">
+        <p>
+          Made with
+          <ion-icon name="heart-outline" class="heart-icon"></ion-icon>
+          using Ionic & Angular
+        </p>
+        <p class="tech-stack">Mapbox GL JS • Capacitor • Angular Signals</p>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Bottom spacer for tab bar -->
+  <div class="bottom-spacer"></div>
+</ion-content>

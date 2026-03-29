@@ -1,13 +1,10 @@
 /*
- * App Global CSS
+ * App Global CSS - HopaHopa Fluid Glass Design
  * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
- * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
  */
+
+/* Mapbox GL CSS */
+@import "mapbox-gl/dist/mapbox-gl.css";
 
 /* Core CSS required for Ionic components to work properly */
 @import "@ionic/angular/css/core.css";
@@ -18,20 +15,314 @@
 @import "@ionic/angular/css/typography.css";
 @import "@ionic/angular/css/display.css";
 
-/* Optional CSS utils that can be commented out */
+/* Optional CSS utils */
 @import "@ionic/angular/css/padding.css";
 @import "@ionic/angular/css/float-elements.css";
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
+/* Ionic Dark Mode - Class-based */
+@import "@ionic/angular/css/palettes/dark.class.css";
 
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import "@ionic/angular/css/palettes/dark.system.css";
+/* ============================================
+   Global Typography
+   ============================================ */
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+p, span, label, ion-label {
+  font-family: var(--font-body);
+}
+
+code, pre, .mono {
+  font-family: var(--font-mono);
+}
+
+/* ============================================
+   Global Animations
+   ============================================ */
+
+// Page transition wrapper
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: pageEnter 0.4s var(--ease-out-expo) both;
+}
+
+// Staggered children animation helper
+@for $i from 1 through 10 {
+  .stagger-#{$i} {
+    animation-delay: #{$i * 0.05}s;
+  }
+}
+
+/* ============================================
+   Floating Tab Bar Overrides
+   ============================================ */
+
+ion-tab-bar.apple-tab-bar {
+  border: none !important;
+  z-index: 1000;
+}
+
+ion-tabs {
+  .tabs-inner {
+    padding-bottom: 100px !important;
+  }
+}
+
+ion-tab-button.apple-tab-button {
+  position: relative;
+  overflow: visible;
+  --ripple-color: transparent;
+
+  ion-icon,
+  ion-label {
+    z-index: 2;
+  }
+}
+
+/* ============================================
+   Action Sheet Styling
+   ============================================ */
+
+.country-action-sheet {
+  --background: var(--glass-bg-strong);
+  --backdrop-opacity: 0.4;
+
+  .action-sheet-container {
+    backdrop-filter: var(--glass-blur);
+  }
+
+  .action-sheet-title {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+
+  .action-sheet-button {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    border-radius: var(--radius-md);
+    margin: var(--space-1) var(--space-2);
+
+    &.action-sheet-cancel {
+      font-weight: 600;
+    }
+  }
+
+  .action-sheet-icon {
+    font-size: 1.3rem;
+    margin-right: var(--space-3);
+  }
+}
+
+/* ============================================
+   Toast Styling
+   ============================================ */
+
+.country-toast {
+  --border-radius: var(--radius-lg);
+  --box-shadow: var(--shadow-lg);
+  --background: var(--glass-bg-strong);
+  font-family: var(--font-display);
+  font-weight: 500;
+}
+
+/* ============================================
+   Alert Styling
+   ============================================ */
+
+.reset-alert {
+  --backdrop-opacity: 0.5;
+
+  .alert-wrapper {
+    border-radius: var(--radius-xl) !important;
+    background: var(--glass-bg-strong);
+    backdrop-filter: var(--glass-blur);
+    box-shadow: var(--shadow-2xl);
+  }
+
+  .alert-head {
+    padding: var(--space-5) var(--space-5) var(--space-2);
+  }
+
+  .alert-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .alert-message {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--ion-color-medium);
+    white-space: pre-line;
+    padding: 0 var(--space-5) var(--space-4);
+  }
+
+  .alert-button-group {
+    padding: var(--space-3) var(--space-4) var(--space-4);
+    gap: var(--space-2);
+  }
+
+  .alert-button {
+    font-family: var(--font-display);
+    font-weight: 600;
+    border-radius: var(--radius-md) !important;
+    margin: 0 !important;
+    min-height: 44px;
+  }
+
+  .alert-button[role="destructive"] {
+    color: var(--ion-color-danger);
+  }
+}
+
+/* ============================================
+   Achievement Modal
+   ============================================ */
+
+.achievement-modal {
+  --background: transparent;
+  --backdrop-opacity: 0.9;
+  --width: 100%;
+  --height: 100%;
+  --border-radius: 0;
+  --box-shadow: none;
+
+  &::part(backdrop) {
+    background: rgba(0, 0, 0, 0.85);
+  }
+
+  &::part(content) {
+    background: transparent;
+  }
+}
+
+/* ============================================
+   Global Button Interactions
+   ============================================ */
+
+ion-button,
+button:not(.mapboxgl-ctrl-zoom-in):not(.mapboxgl-ctrl-zoom-out):not(.mapboxgl-ctrl-attrib-button) {
+  transition: all 0.2s var(--ease-out-expo);
+
+  &:active:not(:disabled) {
+    transform: scale(0.96);
+  }
+}
+
+.button-pressing,
+ion-button.button-pressing {
+  transform: scale(0.96) !important;
+}
+
+/* ============================================
+   Scrollbar Styling (WebKit)
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--ion-color-step-300);
+  border-radius: var(--radius-full);
+
+  &:hover {
+    background: var(--ion-color-step-400);
+  }
+}
+
+/* ============================================
+   Selection Highlight
+   ============================================ */
+
+::selection {
+  background: rgba(14, 165, 233, 0.2);
+  color: inherit;
+}
+
+::-moz-selection {
+  background: rgba(14, 165, 233, 0.2);
+  color: inherit;
+}
+
+/* ============================================
+   Focus Visible States
+   ============================================ */
+
+:focus-visible {
+  outline: 2px solid var(--ion-color-primary);
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+ion-button:focus-visible {
+  outline: 2px solid var(--ion-color-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+}
+
+.gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.shadow-glow {
+  box-shadow: var(--shadow-primary);
+}
+
+.animate-in {
+  animation: pageEnter 0.4s var(--ease-out-expo) both;
+}
+
+/* ============================================
+   Dark Mode - Global Fixes
+   ============================================ */
+
+body.ion-palette-dark {
+  // Override ion-card backgrounds for dark mode
+  ion-card {
+    --background: rgba(20, 27, 45, 0.85);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}

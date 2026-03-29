@@ -1,1 +1,254 @@
+// ============================================
+// Floating Island Tab Bar - Fluid Glass Design
+// ============================================
 
+:host {
+  // Tab bar theming - Welcome-style colors
+  --tab-bg: rgba(255, 255, 255, 0.9);
+  --tab-border: rgba(255, 255, 255, 0.5);
+  --tab-inactive: #64748b;
+  --tab-active: #0ea5e9;
+  --tab-active-bg: rgba(14, 165, 233, 0.15);
+}
+
+body.ion-palette-dark :host {
+  --tab-bg: rgba(20, 27, 45, 0.9);
+  --tab-border: rgba(255, 255, 255, 0.1);
+  --tab-active: #22d3ee;
+  --tab-active-bg: rgba(34, 211, 238, 0.2);
+}
+
+// ============================================
+// Tab Bar Container - Floating Island
+// ============================================
+
+ion-tab-bar.apple-tab-bar {
+  // Reset Ionic defaults
+  --background: transparent;
+  --border: none;
+  border: none !important;
+  contain: none;
+
+  // Floating island positioning
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+
+  // Size & shape - Compact
+  width: auto;
+  min-width: 200px;
+  max-width: 280px;
+  height: 56px;
+  padding: 6px;
+
+  // Glassmorphism island
+  background: var(--tab-bg);
+  backdrop-filter: var(--glass-blur-strong);
+  -webkit-backdrop-filter: var(--glass-blur-strong);
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--tab-border);
+
+  // Layered shadow for depth
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+  // Smooth entrance animation
+  animation: tabBarSlideUp 0.6s var(--ease-out-expo) both;
+  animation-delay: 0.2s;
+}
+
+@keyframes tabBarSlideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(40px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+// ============================================
+// Tab Buttons - Morphing Pills
+// ============================================
+
+ion-tab-button.apple-tab-button {
+  // Reset
+  --background: transparent;
+  --color: var(--tab-inactive);
+  --color-selected: var(--tab-active);
+  --ripple-color: transparent;
+  --padding-start: 0;
+  --padding-end: 0;
+
+  // Layout - Compact
+  flex: 1;
+  min-width: 54px;
+  max-width: 76px;
+  height: 44px;
+  margin: 0 3px;
+
+  // Shape
+  border-radius: var(--radius-lg);
+  position: relative;
+  overflow: visible;
+
+  // Transition
+  transition: all 0.3s var(--ease-out-expo);
+
+  // Icon styling - Smaller
+  ion-icon {
+    font-size: 22px;
+    margin-bottom: 2px;
+    transition: all 0.3s var(--ease-out-back);
+    z-index: 2;
+    position: relative;
+  }
+
+  // Label styling - Smaller
+  ion-label {
+    font-family: var(--font-display);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    text-transform: uppercase;
+    opacity: 0.7;
+    transition: all 0.3s var(--ease-out-expo);
+    z-index: 2;
+    position: relative;
+  }
+
+  // Hover state
+  &:hover:not(.tab-selected) {
+    --color: var(--ion-text-color);
+
+    ion-icon {
+      transform: translateY(-2px) scale(1.05);
+    }
+
+    ion-label {
+      opacity: 1;
+    }
+  }
+
+  // Active/pressed state
+  &:active {
+    transform: scale(0.92);
+  }
+
+  // ============================================
+  // Selected State - Glowing Pill
+  // ============================================
+  &.tab-selected {
+    --background: var(--tab-active-bg);
+
+    ion-icon {
+      transform: scale(1.15);
+      filter: drop-shadow(0 0 12px currentColor);
+    }
+
+    ion-label {
+      opacity: 1;
+      font-weight: 700;
+    }
+
+    // Animated glow background
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      background: var(--tab-active-bg);
+      border-radius: var(--radius-lg);
+      z-index: 1;
+      animation: selectedPulse 2s ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes selectedPulse {
+  0%,
+  100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+// ============================================
+// Responsive Adjustments
+// ============================================
+
+// Small screens
+@media (max-width: 360px) {
+  ion-tab-bar.apple-tab-bar {
+    min-width: 180px;
+    padding: 4px;
+    height: 50px;
+  }
+
+  ion-tab-button.apple-tab-button {
+    min-width: 48px;
+    height: 40px;
+
+    ion-icon {
+      font-size: 20px;
+    }
+
+    ion-label {
+      font-size: 8px;
+    }
+  }
+}
+
+// Larger screens
+@media (min-width: 600px) {
+  ion-tab-bar.apple-tab-bar {
+    max-width: 320px;
+    height: 64px;
+    padding: 8px 10px;
+    bottom: 24px;
+  }
+
+  ion-tab-button.apple-tab-button {
+    max-width: 90px;
+    height: 48px;
+
+    ion-icon {
+      font-size: 24px;
+    }
+
+    ion-label {
+      font-size: 10px;
+    }
+  }
+}
+
+// Safe area for notched devices
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  ion-tab-bar.apple-tab-bar {
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+// ============================================
+// Dark Mode Overrides
+// ============================================
+
+:host-context(body.ion-palette-dark) {
+  ion-tab-bar.apple-tab-bar {
+    background: rgba(20, 27, 45, 0.92) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  ion-tab-bar.apple-tab-bar {
+    background: rgba(20, 27, 45, 0.92) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+  }
+}

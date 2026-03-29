@@ -1,0 +1,114 @@
+// ============================================
+// Country Detail Page
+// ============================================
+
+.country-detail-content {
+  --background: transparent;
+  position: relative;
+}
+
+.detail-header {
+  ion-toolbar {
+    --background: transparent;
+    --border-width: 0;
+  }
+
+  ion-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+
+  ion-back-button {
+    --color: var(--ion-color-primary);
+    font-weight: 600;
+  }
+}
+
+.country-header-card {
+  margin: 0 0 var(--space-6) 0;
+  border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);
+  border: none;
+  background: var(--gradient-hero);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  box-shadow: var(--shadow-xl);
+
+  animation: heroSlideDown 0.6s var(--ease-out-expo) both;
+
+  ion-card-header {
+    padding: var(--space-12) var(--space-6) var(--space-10);
+    position: relative;
+    z-index: 1;
+  }
+
+  .flag-container {
+    margin-bottom: var(--space-4);
+
+    .flag-emoji {
+      font-size: 84px;
+      line-height: 1;
+      display: inline-block;
+      filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.2));
+      animation: flagBounceIn 0.7s var(--ease-out-back) 0.2s both;
+    }
+  }
+
+  ion-card-title {
+    font-family: var(--font-display);
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: var(--space-1);
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  ion-card-subtitle {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+}
+
+@keyframes heroSlideDown {
+  from { opacity: 0; transform: translateY(-40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes flagBounceIn {
+  0% { opacity: 0; transform: scale(0.3) rotate(-20deg); }
+  60% { transform: scale(1.1) rotate(5deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+.status-card {
+  margin: 0 var(--space-4) var(--space-4);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  box-shadow: var(--shadow-md);
+
+  .section-title {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+}
+
+.skeleton-card {
+  margin: 0 var(--space-4);
+}
+
+.bottom-spacer {
+  height: 100px;
+}
+
+@media (min-width: 768px) {
+  .status-card,
+  .country-header-card {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

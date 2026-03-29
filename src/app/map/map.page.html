@@ -1,0 +1,91 @@
+<ion-content [fullscreen]="true" class="map-content">
+  <!-- Animated Background -->
+  <app-animated-background [subtle]="true" [showGrid]="false"></app-animated-background>
+  <!-- Map Container -->
+  <div #mapContainer class="map-container"></div>
+
+  <!-- Floating Stats Card -->
+  <div class="floating-stats-card">
+    <div class="stats-main">
+      <span class="stats-count">{{ visitedCount() }}</span>
+      <span class="stats-separator">/</span>
+      <span class="stats-total">195</span>
+      <span class="stats-label">countries</span>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  @if (isMapLoading() || isCountriesLoading()) {
+  <div class="loading-overlay">
+    <div class="loading-content">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <p class="loading-text">
+        @if (isMapLoading()) { Loading map... } @else { Loading countries... }
+      </p>
+    </div>
+  </div>
+  }
+
+  <!-- Error State -->
+  @if (mapLoadError()) {
+  <div class="error-overlay">
+    <div class="error-content">
+      <ion-icon name="alert-circle-outline" class="error-icon"></ion-icon>
+      <p class="error-title">Map Load Error</p>
+      <p class="error-message">{{ mapLoadError() }}</p>
+      <button class="retry-button" (click)="retryMapLoad()">
+        <ion-icon name="refresh-outline"></ion-icon>
+        <span>Retry</span>
+      </button>
+    </div>
+  </div>
+  }
+
+  <!-- Country Dock - Emerges from clicked country -->
+  @if (showDock()) {
+  <div class="country-dock-overlay" (click)="closeDock()"></div>
+  <div
+    class="country-dock"
+    [class.dock-visible]="dockAnimating()"
+    [style.left.px]="dockPosition().x"
+    [style.top.px]="dockPosition().y"
+  >
+    <!-- Country info header -->
+    <div class="dock-header">
+      <span class="dock-flag">{{ selectedCountryFlag() }}</span>
+      <span class="dock-name">{{ selectedCountryName() }}</span>
+    </div>
+
+    <!-- Dock action buttons -->
+    <div class="dock-actions">
+      <button
+        class="dock-btn"
+        [class.visited]="selectedCountryVisited()"
+        (click)="onDockToggleVisited()"
+      >
+        <ion-icon
+          [name]="selectedCountryVisited() ? 'checkmark-circle' : 'add-circle-outline'"
+        ></ion-icon>
+        <span>{{ selectedCountryVisited() ? 'Visited' : 'Mark' }}</span>
+      </button>
+
+      <div class="dock-divider"></div>
+
+      <button class="dock-btn details" (click)="onDockViewDetails()">
+        <ion-icon name="information-circle-outline"></ion-icon>
+        <span>Details</span>
+      </button>
+
+      <div class="dock-divider"></div>
+
+      <button class="dock-btn close" (click)="closeDock()">
+        <ion-icon name="close-circle-outline"></ion-icon>
+        <span>Close</span>
+      </button>
+    </div>
+
+    <!-- Dock pointer/arrow -->
+    <div class="dock-pointer"></div>
+  </div>
+  }
+</ion-content>

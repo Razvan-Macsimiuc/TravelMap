@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2732 2732">
+  <defs>
+    <!-- Background gradient -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#16213e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f3460;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Globe gradient -->
+    <linearGradient id="globeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4ECDC4;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#44A08D;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2E7D6B;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Pin gradient -->
+    <linearGradient id="pinGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#EE5A5A;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Glow effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="30" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Shadow -->
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="20" stdDeviation="40" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="2732" height="2732" fill="url(#bgGradient)"/>
+  
+  <!-- Decorative background elements -->
+  <g opacity="0.05">
+    <circle cx="400" cy="400" r="200" fill="#4ECDC4"/>
+    <circle cx="2332" cy="400" r="150" fill="#FF6B6B"/>
+    <circle cx="300" cy="2332" r="180" fill="#4ECDC4"/>
+    <circle cx="2432" cy="2232" r="220" fill="#4ECDC4"/>
+    <circle cx="1366" cy="200" r="100" fill="#FF6B6B"/>
+    <circle cx="1366" cy="2532" r="120" fill="#FF6B6B"/>
+  </g>
+  
+  <!-- Outer decorative ring -->
+  <circle cx="1366" cy="1200" r="500" fill="none" stroke="#4ECDC4" stroke-width="2" opacity="0.1" stroke-dasharray="30 15"/>
+  <circle cx="1366" cy="1200" r="550" fill="none" stroke="#4ECDC4" stroke-width="1" opacity="0.05" stroke-dasharray="20 10"/>
+  
+  <!-- Globe with shadow -->
+  <g filter="url(#shadow)">
+    <circle cx="1366" cy="1200" r="400" fill="url(#globeGradient)"/>
+  </g>
+  
+  <!-- Globe highlight -->
+  <ellipse cx="1240" cy="1070" rx="160" ry="130" fill="#fff" opacity="0.15"/>
+  
+  <!-- Globe grid lines -->
+  <g stroke="#fff" stroke-width="4" fill="none" opacity="0.35">
+    <!-- Meridians -->
+    <ellipse cx="1366" cy="1200" rx="400" ry="400"/>
+    <ellipse cx="1366" cy="1200" rx="260" ry="400"/>
+    <ellipse cx="1366" cy="1200" rx="100" ry="400"/>
+    
+    <!-- Parallels -->
+    <ellipse cx="1366" cy="1200" rx="400" ry="80"/>
+    <ellipse cx="1366" cy="1070" rx="370" ry="65"/>
+    <ellipse cx="1366" cy="1330" rx="370" ry="65"/>
+    <ellipse cx="1366" cy="950" rx="280" ry="45"/>
+    <ellipse cx="1366" cy="1450" rx="280" ry="45"/>
+  </g>
+  
+  <!-- Continent shapes -->
+  <g fill="#2E7D6B" opacity="0.55">
+    <!-- North America -->
+    <path d="M1100 1000 Q1160 960 1260 980 Q1360 950 1400 1020 Q1440 1100 1380 1160 Q1300 1220 1200 1180 Q1140 1140 1100 1000Z"/>
+    <!-- Europe -->
+    <path d="M1460 980 Q1520 950 1580 980 Q1640 1020 1610 1080 Q1580 1130 1520 1110 Q1460 1090 1460 980Z"/>
+    <!-- Africa -->
+    <path d="M1420 1140 Q1480 1110 1540 1160 Q1590 1240 1560 1330 Q1510 1420 1440 1390 Q1380 1330 1400 1240 Q1410 1180 1420 1140Z"/>
+    <!-- South America -->
+    <path d="M1180 1220 Q1240 1190 1280 1240 Q1310 1320 1280 1400 Q1240 1470 1180 1430 Q1140 1370 1150 1300 Q1160 1250 1180 1220Z"/>
+    <!-- Australia -->
+    <path d="M1580 1280 Q1650 1250 1700 1300 Q1730 1360 1690 1400 Q1630 1430 1580 1390 Q1550 1340 1580 1280Z"/>
+  </g>
+  
+  <!-- Location pin -->
+  <g transform="translate(1530, 850)" filter="url(#glow)">
+    <!-- Pin shadow -->
+    <ellipse cx="70" cy="250" rx="45" ry="15" fill="#000" opacity="0.3"/>
+    
+    <!-- Pin body -->
+    <path d="M70 0 C115 0 145 35 145 80 C145 145 70 230 70 230 C70 230 -5 145 -5 80 C-5 35 25 0 70 0Z" 
+          fill="url(#pinGradient)" 
+          stroke="#fff" 
+          stroke-width="6"/>
+    
+    <!-- Pin inner circle -->
+    <circle cx="70" cy="80" r="35" fill="#fff"/>
+    
+    <!-- Pin center -->
+    <circle cx="70" cy="80" r="18" fill="#FF6B6B"/>
+  </g>
+  
+  <!-- App name -->
+  <text x="1366" y="1780" 
+        font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
+        font-size="120" 
+        font-weight="700" 
+        fill="#fff" 
+        text-anchor="middle" 
+        letter-spacing="8">
+    HopaHopa
+  </text>
+  
+  <!-- Tagline -->
+  <text x="1366" y="1880" 
+        font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
+        font-size="48" 
+        font-weight="400" 
+        fill="#4ECDC4" 
+        text-anchor="middle" 
+        letter-spacing="4"
+        opacity="0.9">
+    Track Your Adventures
+  </text>
+</svg>
+

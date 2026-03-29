@@ -1,0 +1,255 @@
+// ============================================
+// Premium Header - Fluid Glass Design
+// Floating, translucent, with micro-animations
+// ============================================
+
+.premium-header {
+  ion-toolbar {
+    --background: var(--glass-bg);
+    --border-color: transparent;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+    --min-height: 72px;
+
+    // Glassmorphism
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+
+    // Subtle bottom border
+    border-bottom: 1px solid var(--glass-border);
+
+    // Soft shadow
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+
+    // Entrance animation
+    animation: headerSlideDown 0.5s var(--ease-out-expo) both;
+  }
+}
+
+@keyframes headerSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ============================================
+// Header Content Layout
+// ============================================
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-4);
+  height: 100%;
+  gap: var(--space-4);
+}
+
+// ============================================
+// Brand Section - Logo & Title
+// ============================================
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+
+  .brand-icon {
+    font-size: 1.75rem;
+    line-height: 1;
+    filter: drop-shadow(0 2px 8px rgba(14, 165, 233, 0.3));
+    animation: brandFloat 4s ease-in-out infinite;
+  }
+
+  .brand-name {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@keyframes brandFloat {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-2px) rotate(3deg);
+  }
+  75% {
+    transform: translateY(2px) rotate(-2deg);
+  }
+}
+
+// ============================================
+// Quick Stats Badge - Pill Counter
+// ============================================
+
+.quick-stats {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.stat-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ion-color-success);
+
+  // Pill shape with gradient border
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.1),
+    rgba(16, 185, 129, 0.05)
+  );
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: var(--radius-full);
+
+  // Glow effect
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+
+  // Interaction
+  transition: all 0.3s var(--ease-out-expo);
+  cursor: default;
+
+  ion-icon {
+    font-size: 18px;
+    animation: checkPulse 2s ease-in-out infinite;
+  }
+
+  // Hover state
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 24px rgba(16, 185, 129, 0.25);
+  }
+
+  // Compact variant
+  &.stat-compact {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+}
+
+@keyframes checkPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+// Pop animation for count changes
+.stat-badge.animate-pop {
+  animation: badgePop 0.4s var(--ease-out-back);
+}
+
+@keyframes badgePop {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+// ============================================
+// Country Detail Header
+// ============================================
+
+.country-header {
+  position: relative;
+
+  .back-button-container {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    ion-back-button {
+      --color: var(--ion-color-primary);
+      --icon-font-size: 22px;
+      --min-width: 36px;
+      --min-height: 36px;
+      --padding-start: 0;
+      --padding-end: 0;
+
+      // Glass button effect
+      background: var(--tab-active-bg, rgba(14, 165, 233, 0.1));
+      border-radius: var(--radius-full);
+      transition: all 0.2s var(--ease-out-expo);
+
+      &:hover {
+        background: rgba(14, 165, 233, 0.15);
+        transform: translateX(-2px);
+      }
+    }
+
+    .back-text {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--ion-color-primary);
+    }
+  }
+
+  .header-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex: 1;
+
+    .country-flag-small {
+      font-size: 1.6rem;
+      line-height: 1;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+    }
+
+    .country-name-header {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--ion-text-color);
+    }
+  }
+
+  .header-spacer {
+    width: 80px;
+  }
+}
+
+// ============================================
+// Light Mode Overrides
+// ============================================
+
+body:not(.ion-palette-dark) {
+  .premium-header ion-toolbar {
+    --background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.03);
+  }
+
+  .stat-badge {
+    background: linear-gradient(
+      135deg,
+      rgba(16, 185, 129, 0.08),
+      rgba(16, 185, 129, 0.03)
+    );
+  }
+}

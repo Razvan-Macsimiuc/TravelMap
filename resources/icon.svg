@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <!-- Gradient for globe -->
+    <linearGradient id="globeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4ECDC4;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#44A08D;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2E7D6B;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Gradient for background -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#16213e;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Gradient for pin -->
+    <linearGradient id="pinGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#EE5A5A;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Shadow filter -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="20" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+    
+    <!-- Inner shadow for depth -->
+    <filter id="innerGlow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1024" height="1024" rx="220" fill="url(#bgGradient)"/>
+  
+  <!-- Decorative circles -->
+  <circle cx="150" cy="150" r="80" fill="#4ECDC4" opacity="0.1"/>
+  <circle cx="874" cy="874" r="100" fill="#4ECDC4" opacity="0.08"/>
+  <circle cx="900" cy="200" r="60" fill="#FF6B6B" opacity="0.1"/>
+  
+  <!-- Globe base with shadow -->
+  <g filter="url(#shadow)">
+    <circle cx="512" cy="520" r="300" fill="url(#globeGradient)"/>
+  </g>
+  
+  <!-- Globe highlight -->
+  <ellipse cx="420" cy="420" rx="120" ry="100" fill="#fff" opacity="0.15"/>
+  
+  <!-- Globe grid lines - meridians -->
+  <g stroke="#fff" stroke-width="3" fill="none" opacity="0.4">
+    <!-- Vertical lines (longitude) -->
+    <ellipse cx="512" cy="520" rx="300" ry="300"/>
+    <ellipse cx="512" cy="520" rx="200" ry="300"/>
+    <ellipse cx="512" cy="520" rx="80" ry="300"/>
+    
+    <!-- Horizontal lines (latitude) -->
+    <ellipse cx="512" cy="520" rx="300" ry="60" transform="rotate(0 512 520)"/>
+    <ellipse cx="512" cy="420" rx="280" ry="50"/>
+    <ellipse cx="512" cy="620" rx="280" ry="50"/>
+    <ellipse cx="512" cy="320" rx="200" ry="35"/>
+    <ellipse cx="512" cy="720" rx="200" ry="35"/>
+  </g>
+  
+  <!-- Simplified continent shapes -->
+  <g fill="#2E7D6B" opacity="0.6">
+    <!-- North America-ish -->
+    <path d="M320 380 Q360 350 420 360 Q480 340 500 380 Q520 420 480 460 Q440 500 380 480 Q340 450 320 380Z"/>
+    <!-- Europe-ish -->
+    <path d="M580 360 Q620 340 660 360 Q700 380 680 420 Q660 450 620 440 Q580 430 580 360Z"/>
+    <!-- Africa-ish -->
+    <path d="M560 480 Q600 460 640 490 Q670 540 650 600 Q620 660 570 640 Q530 600 540 540 Q550 500 560 480Z"/>
+    <!-- South America-ish -->
+    <path d="M380 540 Q420 520 450 550 Q470 600 450 660 Q420 710 380 680 Q350 640 360 590 Q370 560 380 540Z"/>
+    <!-- Australia-ish -->
+    <path d="M700 580 Q750 560 780 590 Q800 630 770 660 Q730 680 700 650 Q680 620 700 580Z"/>
+  </g>
+  
+  <!-- Location pin -->
+  <g transform="translate(620, 280)">
+    <!-- Pin shadow -->
+    <ellipse cx="50" cy="180" rx="30" ry="10" fill="#000" opacity="0.3"/>
+    
+    <!-- Pin body -->
+    <path d="M50 0 C80 0 100 25 100 55 C100 100 50 160 50 160 C50 160 0 100 0 55 C0 25 20 0 50 0Z" 
+          fill="url(#pinGradient)" 
+          stroke="#fff" 
+          stroke-width="4"/>
+    
+    <!-- Pin inner circle -->
+    <circle cx="50" cy="55" r="25" fill="#fff"/>
+    
+    <!-- Pin center dot -->
+    <circle cx="50" cy="55" r="12" fill="#FF6B6B"/>
+  </g>
+  
+  <!-- App name placeholder ring -->
+  <circle cx="512" cy="520" r="320" fill="none" stroke="#4ECDC4" stroke-width="2" opacity="0.2" stroke-dasharray="20 10"/>
+</svg>
+
+
+
+

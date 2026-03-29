@@ -16,12 +16,18 @@ log.txt
 /.sourcemaps
 /.versions
 /coverage
+/src/environment.ts
 
 # Ionic
 /.ionic
 /www
 /platforms
 /plugins
+
+# Capacitor — web build output copied here (`npx cap sync` / `copy`).
+# Never commit: bundles inlined env vars and will trigger GitHub secret scanning.
+ios/App/App/public/
+android/app/src/main/assets/public/
 
 # Compiled output
 /dist

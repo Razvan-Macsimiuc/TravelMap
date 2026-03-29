@@ -1,0 +1,426 @@
+// ============================================
+// Welcome/Onboarding Page Styles
+// ============================================
+
+.welcome-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  overflow: hidden;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
+
+  &.animate-in {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// ============================================
+// Animated Background
+// ============================================
+
+.background-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.gradient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.4;
+  animation: orbFloat 20s ease-in-out infinite;
+
+  &.orb-1 {
+    width: 500px;
+    height: 500px;
+    background: #0ea5e9;
+    top: -150px;
+    left: -150px;
+    animation-delay: 0s;
+  }
+
+  &.orb-2 {
+    width: 400px;
+    height: 400px;
+    background: #ff6b6b;
+    bottom: -100px;
+    right: -100px;
+    animation-delay: -7s;
+  }
+
+  &.orb-3 {
+    width: 350px;
+    height: 350px;
+    background: #fbbf24;
+    top: 40%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+    animation-delay: -14s;
+  }
+}
+
+@keyframes orbFloat {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(30px, -30px) scale(1.1);
+  }
+  50% {
+    transform: translate(-20px, 20px) scale(0.95);
+  }
+  75% {
+    transform: translate(20px, 30px) scale(1.05);
+  }
+}
+
+.grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.5;
+}
+
+// ============================================
+// Brand Section
+// ============================================
+
+.brand-section {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  margin-bottom: var(--space-10);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+
+  &.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.logo-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+  margin-bottom: var(--space-4);
+}
+
+.logo-emoji {
+  font-size: 64px;
+  z-index: 1;
+  animation: logoBounce 3s ease-in-out infinite;
+}
+
+@keyframes logoBounce {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-8px) rotate(-5deg);
+  }
+  75% {
+    transform: translateY(-4px) rotate(5deg);
+  }
+}
+
+.logo-ring {
+  position: absolute;
+  inset: 0;
+  border: 3px solid var(--color-primary);
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: ringPulse 2s ease-in-out infinite;
+}
+
+@keyframes ringPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.1;
+  }
+}
+
+.app-name {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: 800;
+  background: linear-gradient(135deg, #0ea5e9 0%, #ff6b6b 50%, #fbbf24 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0 0 var(--space-2);
+  letter-spacing: -0.02em;
+}
+
+.tagline {
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  color: var(--color-text-secondary);
+  margin: 0;
+  font-weight: 500;
+}
+
+// ============================================
+// Slides Container
+// ============================================
+
+.slides-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 340px;
+  height: 280px;
+  margin-bottom: var(--space-8);
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  opacity: 0;
+  transform: translateX(100px);
+  transition: opacity 0.5s var(--ease-out-expo), transform 0.5s var(--ease-out-expo);
+  pointer-events: none;
+
+  &.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  &.prev {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+
+  &.next {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+}
+
+.slide-icon {
+  width: 100px;
+  height: 100px;
+  border-radius: var(--radius-2xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-6);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15), 0 10px 20px rgba(0, 0, 0, 0.1);
+
+  ion-icon {
+    font-size: 48px;
+    color: white;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  }
+}
+
+.slide-title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-3);
+}
+
+.slide-description {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  margin: 0;
+  line-height: 1.6;
+  max-width: 300px;
+}
+
+// ============================================
+// Pagination
+// ============================================
+
+.pagination {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-10);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-text-tertiary);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out-expo);
+  opacity: 0.4;
+
+  &.active {
+    width: 32px;
+    border-radius: 5px;
+    background: var(--color-primary);
+    opacity: 1;
+  }
+
+  &:hover:not(.active) {
+    opacity: 0.7;
+  }
+}
+
+// ============================================
+// Action Section
+// ============================================
+
+.action-section {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+  max-width: 340px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
+  transition-delay: 0.2s;
+
+  &.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.skip-btn {
+  flex: 0 0 auto;
+  padding: var(--space-3) var(--space-5);
+  background: transparent;
+  border: none;
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--color-text-primary);
+  }
+}
+
+.next-btn,
+.start-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-6);
+  background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%);
+  border: none;
+  border-radius: var(--radius-xl);
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(14, 165, 233, 0.4), 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s var(--ease-out-expo);
+
+  ion-icon {
+    font-size: 20px;
+    transition: transform 0.3s var(--ease-out-expo);
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(14, 165, 233, 0.5), 0 6px 12px rgba(0, 0, 0, 0.1);
+
+    ion-icon {
+      transform: translateX(4px);
+    }
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.start-btn {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8a8a 100%);
+  box-shadow: 0 8px 24px rgba(255, 107, 107, 0.4), 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    box-shadow: 0 12px 32px rgba(255, 107, 107, 0.5), 0 6px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// ============================================
+// Responsive Adjustments
+// ============================================
+
+@media (max-height: 700px) {
+  .brand-section {
+    margin-bottom: var(--space-6);
+  }
+
+  .logo-container {
+    width: 80px;
+    height: 80px;
+  }
+
+  .logo-emoji {
+    font-size: 44px;
+  }
+
+  .app-name {
+    font-size: var(--text-3xl);
+  }
+
+  .slides-container {
+    height: 220px;
+    margin-bottom: var(--space-6);
+  }
+
+  .slide-icon {
+    width: 72px;
+    height: 72px;
+
+    ion-icon {
+      font-size: 36px;
+    }
+  }
+
+  .slide-title {
+    font-size: var(--text-xl);
+  }
+
+  .pagination {
+    margin-bottom: var(--space-6);
+  }
+}
+

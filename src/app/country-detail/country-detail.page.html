@@ -1,0 +1,51 @@
+<ion-header [translucent]="true" class="detail-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/map" text="Back"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ country()?.name || 'Country' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding country-detail-content">
+  <app-animated-background [subtle]="true" [showGrid]="true"></app-animated-background>
+
+  @if (isPageLoading()) {
+    <ion-card class="skeleton-card">
+      <ion-card-header>
+        <ion-skeleton-text [animated]="true" style="width: 60%; height: 24px;"></ion-skeleton-text>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" style="width: 40%;"></ion-skeleton-text>
+      </ion-card-content>
+    </ion-card>
+  } @else if (country(); as countryData) {
+    <ion-card class="country-header-card" [class.slide-in-header]="showHeader()">
+      <ion-card-header>
+        <div class="flag-container">
+          <span class="flag-emoji">{{ flagEmoji() }}</span>
+        </div>
+        <ion-card-title>{{ countryData.name }}</ion-card-title>
+        <ion-card-subtitle>{{ countryData.code }}</ion-card-subtitle>
+      </ion-card-header>
+    </ion-card>
+
+    <ion-card class="status-card">
+      <ion-card-header>
+        <ion-card-title class="section-title">My Visit Status</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item lines="none" class="toggle-item">
+          <ion-icon [name]="isVisited() ? 'checkmark-circle' : 'close-circle'" [color]="isVisited() ? 'success' : 'medium'" slot="start"></ion-icon>
+          <ion-label>
+            <h2>{{ isVisited() ? 'Visited' : 'Not Visited' }}</h2>
+          </ion-label>
+          <ion-toggle [checked]="isVisited()" (ionChange)="onVisitedToggle($event)" slot="end"></ion-toggle>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  }
+
+  <div class="bottom-spacer"></div>
+</ion-content>

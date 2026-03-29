@@ -1,0 +1,299 @@
+<ion-content [fullscreen]="true" class="ion-padding stats-content">
+  <!-- Animated Background -->
+  <app-animated-background [subtle]="true" [showGrid]="true"></app-animated-background>
+
+  <!-- Hero Stats Card -->
+  <ion-card class="hero-card">
+    <ion-card-content>
+      <div class="hero-stats">
+        <!-- Main Counter - uses real signal value for accuracy -->
+        <div class="main-stat">
+          <div class="stat-number">{{ visitedCount() }}</div>
+          <div class="stat-label">Countries Visited</div>
+        </div>
+
+        <!-- Progress Ring -->
+        <div class="progress-ring-container">
+          <svg class="progress-ring" viewBox="0 0 100 100">
+            <!-- Background circle -->
+            <circle
+              class="progress-bg"
+              cx="50"
+              cy="50"
+              r="45"
+              fill="none"
+              stroke-width="8"
+            />
+            <!-- Progress circle -->
+            <circle
+              class="progress-fill"
+              cx="50"
+              cy="50"
+              r="45"
+              fill="none"
+              stroke-width="8"
+              [style.stroke-dasharray]="'283'"
+              [style.stroke-dashoffset]="283 - (283 * visitedPercentage()) / 100"
+            />
+          </svg>
+          <div class="percentage-label">
+            <span class="percentage">{{ visitedPercentage() }}%</span>
+            <span class="of-world">of world</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Row -->
+      <div class="stats-row">
+        <div class="stat-item">
+          <ion-icon name="globe-outline"></ion-icon>
+          <span class="value">{{ totalWorldCountries }}</span>
+          <span class="label">Total Countries</span>
+        </div>
+        <div class="stat-item">
+          <ion-icon name="trophy-outline"></ion-icon>
+          <span class="value">{{ unlockedCount() }}</span>
+          <span class="label">Achievements</span>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- View Mode Toggle -->
+  <div class="view-toggle">
+    <button 
+      class="toggle-btn" 
+      [class.active]="viewMode() === 'countries'"
+      (click)="setViewMode('countries')"
+    >
+      <ion-icon name="flag-outline"></ion-icon>
+      <span>Countries</span>
+    </button>
+    <button 
+      class="toggle-btn" 
+      [class.active]="viewMode() === 'achievements'"
+      (click)="setViewMode('achievements')"
+    >
+      <ion-icon name="trophy-outline"></ion-icon>
+      <span>Trophies</span>
+    </button>
+  </div>
+
+  <!-- Countries View -->
+  @if (viewMode() === 'countries') {
+    <!-- Milestone Card -->
+    @if (milestoneReached()) {
+      <ion-card class="milestone-card">
+        <ion-card-content>
+          <div class="milestone-content">
+            <div class="milestone-icon">
+              <ion-icon name="trophy-outline"></ion-icon>
+            </div>
+            <div class="milestone-info">
+              <div class="milestone-title">{{ milestoneReached()?.label }}</div>
+              <div class="milestone-subtitle">
+                You've visited {{ milestoneReached()?.threshold }}+ countries!
+              </div>
+            </div>
+          </div>
+
+          @if (nextMilestone() <= totalWorldCountries) {
+            <div class="next-milestone">
+              <div class="next-milestone-header">
+                <span>Next: {{ nextMilestone() }} countries</span>
+                <span>{{ visitedCount() }}/{{ nextMilestone() }}</span>
+              </div>
+              <div class="progress-bar">
+                <div
+                  class="progress-fill"
+                  [style.width.%]="progressToNextMilestone()"
+                ></div>
+              </div>
+            </div>
+          }
+        </ion-card-content>
+      </ion-card>
+    } @else {
+      <ion-card class="milestone-card empty">
+        <ion-card-content>
+          <div class="milestone-content">
+            <div class="milestone-icon empty">
+              <ion-icon name="flag-outline"></ion-icon>
+            </div>
+            <div class="milestone-info">
+              <div class="milestone-title">Start Your Journey!</div>
+              <div class="milestone-subtitle">
+                Visit your first country to unlock achievements
+              </div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    }
+
+    <!-- Visited Countries List -->
+    <ion-card class="countries-card">
+      <ion-card-header>
+        <ion-card-title class="section-title">
+          <ion-icon name="flag-outline"></ion-icon>
+          Visited Countries
+        </ion-card-title>
+        <ion-card-subtitle>{{ visitedCount() }} countries</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content class="list-content">
+        @if (visitedCountries().length === 0) {
+          <div class="empty-state">
+            <ion-icon name="globe-outline" class="empty-icon"></ion-icon>
+            <p class="empty-text">No countries visited yet</p>
+            <p class="empty-hint">
+              Go to the Map tab and tap on countries you've visited
+            </p>
+          </div>
+        } @else {
+          <ion-list lines="none" class="countries-list">
+            @for (country of visitedCountries(); track country.code) {
+              <ion-item
+                button
+                detail="false"
+                (click)="navigateToCountry(country.code)"
+                class="country-item"
+              >
+                <span class="country-flag" slot="start">{{ country.flagEmoji }}</span>
+                <ion-label>
+                  <h2>{{ country.name }}</h2>
+                  <p>{{ country.code }}</p>
+                </ion-label>
+                <ion-icon name="chevron-forward-outline" slot="end" class="chevron"></ion-icon>
+              </ion-item>
+            }
+          </ion-list>
+        }
+      </ion-card-content>
+    </ion-card>
+  }
+
+  <!-- Achievements View -->
+  @if (viewMode() === 'achievements') {
+    <!-- Achievement Progress Card -->
+    <ion-card class="achievement-progress-card">
+      <ion-card-content>
+        <div class="achievement-header">
+          <div class="achievement-count">
+            <span class="count">{{ unlockedCount() }}</span>
+            <span class="total">/ {{ totalAchievements() }}</span>
+          </div>
+          <div class="achievement-label">Achievements Unlocked</div>
+        </div>
+        <div class="achievement-progress-bar">
+          <div 
+            class="achievement-progress-fill"
+            [style.width.%]="achievementProgress()"
+          ></div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Milestone Achievements -->
+    <ion-card class="achievement-category-card">
+      <ion-card-header>
+        <ion-card-title class="category-title">
+          <ion-icon name="trophy-outline"></ion-icon>
+          Milestones
+        </ion-card-title>
+        <ion-card-subtitle>Travel milestones based on countries visited</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="achievements-grid">
+          @for (achievement of milestoneAchievements(); track achievement.id) {
+            <div class="achievement-item" [class.unlocked]="achievement.unlocked">
+              <div class="achievement-icon" [style.background]="achievement.unlocked ? achievement.color : null">
+                @if (achievement.unlocked) {
+                  <span class="emoji">{{ achievement.icon }}</span>
+                } @else {
+                  <ion-icon name="lock-closed-outline"></ion-icon>
+                }
+              </div>
+              <div class="achievement-info">
+                <span class="achievement-title">{{ achievement.title }}</span>
+                <span class="achievement-desc">{{ achievement.description }}</span>
+              </div>
+              @if (achievement.unlocked) {
+                <ion-icon name="checkmark-circle-outline" class="check-icon"></ion-icon>
+              }
+            </div>
+          }
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Continent Achievements -->
+    <ion-card class="achievement-category-card">
+      <ion-card-header>
+        <ion-card-title class="category-title">
+          <ion-icon name="globe-outline"></ion-icon>
+          Continents
+        </ion-card-title>
+        <ion-card-subtitle>Explore every corner of the world</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="achievements-grid">
+          @for (achievement of continentAchievements(); track achievement.id) {
+            <div class="achievement-item" [class.unlocked]="achievement.unlocked">
+              <div class="achievement-icon" [style.background]="achievement.unlocked ? achievement.color : null">
+                @if (achievement.unlocked) {
+                  <span class="emoji">{{ achievement.icon }}</span>
+                } @else {
+                  <ion-icon name="lock-closed-outline"></ion-icon>
+                }
+              </div>
+              <div class="achievement-info">
+                <span class="achievement-title">{{ achievement.title }}</span>
+                <span class="achievement-desc">{{ achievement.description }}</span>
+              </div>
+              @if (achievement.unlocked) {
+                <ion-icon name="checkmark-circle-outline" class="check-icon"></ion-icon>
+              }
+            </div>
+          }
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Special Achievements -->
+    <ion-card class="achievement-category-card special">
+      <ion-card-header>
+        <ion-card-title class="category-title">
+          <ion-icon name="star-outline"></ion-icon>
+          Special
+        </ion-card-title>
+        <ion-card-subtitle>Rare and unique accomplishments</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="achievements-grid">
+          @for (achievement of specialAchievements(); track achievement.id) {
+            <div class="achievement-item" [class.unlocked]="achievement.unlocked">
+              <div class="achievement-icon" [style.background]="achievement.unlocked ? achievement.color : null">
+                @if (achievement.unlocked) {
+                  <span class="emoji">{{ achievement.icon }}</span>
+                } @else {
+                  <ion-icon name="lock-closed-outline"></ion-icon>
+                }
+              </div>
+              <div class="achievement-info">
+                <span class="achievement-title">{{ achievement.title }}</span>
+                <span class="achievement-desc">{{ achievement.description }}</span>
+              </div>
+              @if (achievement.unlocked) {
+                <ion-icon name="checkmark-circle-outline" class="check-icon"></ion-icon>
+              }
+            </div>
+          }
+        </div>
+      </ion-card-content>
+    </ion-card>
+  }
+
+  <!-- Bottom spacing for tab bar -->
+  <div class="bottom-spacer"></div>
+</ion-content>
