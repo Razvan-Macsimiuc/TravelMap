@@ -34,11 +34,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-display);
-  letter-spacing: -0.02em;
-}
-
 p, span, label, ion-label {
   font-family: var(--font-body);
 }
@@ -48,41 +43,8 @@ code, pre, .mono {
 }
 
 /* ============================================
-   Global Animations
-   ============================================ */
-
-// Page transition wrapper
-@keyframes pageEnter {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.page-enter {
-  animation: pageEnter 0.4s var(--ease-out-expo) both;
-}
-
-// Staggered children animation helper
-@for $i from 1 through 10 {
-  .stagger-#{$i} {
-    animation-delay: #{$i * 0.05}s;
-  }
-}
-
-/* ============================================
    Floating Tab Bar Overrides
    ============================================ */
-
-ion-tab-bar.apple-tab-bar {
-  border: none !important;
-  z-index: 1000;
-}
-
 
 ion-tab-button.apple-tab-button {
   position: relative;
@@ -279,35 +241,7 @@ ion-button.button-pressing {
 
 button:focus-visible,
 ion-button:focus-visible {
-  outline: 2px solid var(--ion-color-primary);
   outline-offset: 3px;
-}
-
-/* ============================================
-   Utility Classes
-   ============================================ */
-
-.glass-panel {
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-xl);
-}
-
-.gradient-text {
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.shadow-glow {
-  box-shadow: var(--shadow-primary);
-}
-
-.animate-in {
-  animation: pageEnter 0.4s var(--ease-out-expo) both;
 }
 
 /* ============================================

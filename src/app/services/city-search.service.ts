@@ -48,10 +48,7 @@ export class CitySearchService {
           return { name, subtitle, coordinates: feature.center };
         })
       ),
-      catchError((err) => {
-        console.warn('[CitySearchService] Geocoding failed:', err);
-        return of([]);
-      })
+      catchError(() => of([]))
     );
   }
 }

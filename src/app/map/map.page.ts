@@ -137,12 +137,6 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
   readonly showPreviewCard = signal(false);
   readonly hoveredCountry = signal<Country | null>(null);
 
-  // Long-press menu state
-  readonly showCircularMenu = signal(false);
-  readonly circularMenuPosition = signal({ x: 0, y: 0 });
-  private longPressTimer: number | null = null;
-  private readonly LONG_PRESS_DURATION = 500; // ms
-
   // Zoom level for adaptive details
   readonly currentZoom = signal(2);
 
@@ -445,8 +439,6 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
           throw new Error('Local GeoJSON is empty');
         }
       } catch {
-        // Fallback to CDN
-        console.log('Loading countries data from CDN...');
         const response = await fetch(COUNTRIES_GEOJSON_URL);
         if (!response.ok) {
           throw new Error(`Failed to load countries: HTTP ${response.status}`);
@@ -1081,22 +1073,12 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
 
   private async showCountryToast(
     countryName: string,
-    isVisited: boolean,
-    notTracked = false
+    isVisited: boolean
   ): Promise<void> {
-    let message: string;
-    let color: string;
-
-    if (notTracked) {
-      message = `${countryName}`;
-      color = 'medium';
-    } else if (isVisited) {
-      message = `✅ ${countryName} marked as visited!`;
-      color = 'success';
-    } else {
-      message = `${countryName} removed from visited`;
-      color = 'medium';
-    }
+    const message = isVisited
+      ? `✅ ${countryName} marked as visited!`
+      : `${countryName} removed from visited`;
+    const color = isVisited ? 'success' : 'medium';
 
     const toast = await this.toastController.create({
       message,

@@ -17,10 +17,10 @@ log.txt
 /.versions
 /coverage
 
-# Local secrets / tokens (copy from environment.example.ts)
+# Local dev environment — contains real token, never commit
 src/environments/environment.ts
-src/environments/environment.prod.ts
-
+# environment.prod.ts is committed as an empty stub; CI injects the real token before build
+src/app/map/ideas.txt
 # Ionic
 /.ionic
 /www

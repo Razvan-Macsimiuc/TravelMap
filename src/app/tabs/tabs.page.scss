@@ -30,7 +30,6 @@ ion-tab-bar.apple-tab-bar {
   contain: none;
 
   // Block layout — sits below content, never overlaps it
-  width: 100%;
   height: 64px;
   padding: 6px 16px;
   padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px));
@@ -39,7 +38,7 @@ ion-tab-bar.apple-tab-bar {
   background: var(--tab-bg);
   backdrop-filter: var(--glass-blur-strong);
   -webkit-backdrop-filter: var(--glass-blur-strong);
-  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+  border-radius: var(--radius-2xl);
   border-top: 1px solid var(--tab-border) !important;
 
   // Shadow lifting upward
@@ -215,13 +214,6 @@ ion-tab-button.apple-tab-button {
 // ============================================
 
 :host-context(body.ion-palette-dark) {
-  ion-tab-bar.apple-tab-bar {
-    background: rgba(20, 27, 45, 0.92) !important;
-    border-color: rgba(255, 255, 255, 0.1) !important;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
   ion-tab-bar.apple-tab-bar {
     background: rgba(20, 27, 45, 0.92) !important;
     border-color: rgba(255, 255, 255, 0.1) !important;

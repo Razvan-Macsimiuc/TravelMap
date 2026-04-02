@@ -769,35 +769,6 @@
 ::ng-deep .country-toast {
   --border-radius: var(--radius-lg);
   --box-shadow: var(--shadow-lg);
-
-  &.toast-top {
-    top: 70px;
-  }
-}
-
-// ============================================
-// Celebration Effects
-// ============================================
-
-@keyframes confettiFloat {
-  0% {
-    opacity: 1;
-    transform: translateY(0) rotate(0deg);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(120px) rotate(360deg);
-  }
-}
-
-@keyframes countryGlow {
-  0%,
-  100% {
-    filter: drop-shadow(0 0 0px rgba(16, 185, 129, 0));
-  }
-  50% {
-    filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.5));
-  }
 }
 
 // ============================================

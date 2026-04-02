@@ -35,10 +35,10 @@ import { Country } from '../../models/country.model';
     }
 
     .preview-card {
-      background: var(--glass-background);
+      background: var(--glass-bg);
       backdrop-filter: var(--glass-blur);
       -webkit-backdrop-filter: var(--glass-blur);
-      border-radius: var(--border-radius-lg);
+      border-radius: var(--radius-lg);
       border: 1px solid var(--glass-border);
       box-shadow: var(--shadow-xl);
       overflow: hidden;
@@ -57,13 +57,13 @@ import { Country } from '../../models/country.model';
     }
 
     .preview-content {
-      padding: var(--spacing-md);
+      padding: var(--space-4);
     }
 
     .preview-header {
       display: flex;
       align-items: center;
-      gap: var(--spacing-sm);
+      gap: var(--space-2);
     }
 
     .preview-flag {

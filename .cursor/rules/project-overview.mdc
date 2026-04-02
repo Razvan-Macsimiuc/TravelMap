@@ -85,7 +85,7 @@ package.json
 
 `splashGuard` is an inline guard in `app.routes.ts`; it redirects to `/splash` if `hopahopa_splash_shown` is not `'true'` in `sessionStorage`.
 
-> **Note:** `welcomeGuard` and `welcomeSeenGuard` in `src/app/guards/welcome.guard.ts` exist but are **not wired to any route** — first-run logic is handled inside `SplashPage`.
+> **Note:** First-run logic is handled entirely inside `SplashPage`. The `welcome.guard.ts` file has been deleted (it was dead code).
 
 ## Services
 
@@ -150,7 +150,6 @@ Other types: `Achievement`, `UnlockedAchievement`, `AchievementCategory` (in `Ac
 
 ## Known caveats / tech debt
 
-- `src/app/data/countries.data.ts` exports `ALL_COUNTRIES`; `CountryService` now imports and uses it as `INITIAL_COUNTRIES` — all 195 countries are available from app start
 - `StorageService.loadCountries()` currently maps only `code`, `name`, `visited`, `photoIds` — `visitCount`, `daysStayed`, `cities`, `note` may not survive a full reload
-- Existing spec files (`app.component.spec.ts`, `tabs.page.spec.ts`) use legacy `declarations: []` — they need migrating to `imports: []` for standalone components
-- `welcomeGuard` / `welcomeSeenGuard` are unused dead code
+- `src/environments/environment.ts` is gitignored (developer local copy); copy from `environment.example.ts` and fill in your Mapbox token for local dev
+- The pre-existing `Cannot find module '../../environments/environment'` lint error in `map.page.ts` is expected in CI/readonly environments where `environment.ts` is absent

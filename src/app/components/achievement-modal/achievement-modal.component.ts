@@ -71,18 +71,18 @@ import { ConfettiEffect } from '../../utils/confetti';
     .achievement-container {
       max-width: 400px;
       width: 90%;
-      padding: var(--spacing-xl);
+      padding: var(--space-8);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: var(--spacing-lg);
+      gap: var(--space-6);
     }
 
     .achievement-badge {
       position: relative;
       background: var(--ion-background-color);
-      border-radius: var(--border-radius-xl);
-      padding: var(--spacing-xl);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
       text-align: center;
       box-shadow: var(--shadow-xl);
       border: 2px solid rgba(78, 205, 196, 0.3);
@@ -115,7 +115,7 @@ import { ConfettiEffect } from '../../utils/confetti';
 
     .badge-icon {
       font-size: 5rem;
-      margin-bottom: var(--spacing-md);
+      margin-bottom: var(--space-4);
       animation: iconBounce 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.3s;
       animation-fill-mode: both;
     }
@@ -129,7 +129,7 @@ import { ConfettiEffect } from '../../utils/confetti';
     .badge-title {
       font-size: 2rem;
       font-weight: 700;
-      margin: 0 0 var(--spacing-sm);
+      margin: 0 0 var(--space-2);
       background: var(--gradient-secondary);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -139,7 +139,7 @@ import { ConfettiEffect } from '../../utils/confetti';
     .badge-message {
       font-size: 1.1rem;
       color: var(--ion-color-medium);
-      margin: 0 0 var(--spacing-lg);
+      margin: 0 0 var(--space-6);
       line-height: 1.4;
     }
 
@@ -147,9 +147,9 @@ import { ConfettiEffect } from '../../utils/confetti';
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: var(--spacing-md);
+      padding: var(--space-4);
       background: var(--ion-color-step-100);
-      border-radius: var(--border-radius-md);
+      border-radius: var(--radius-md);
       min-width: 120px;
 
       .count-number {
@@ -172,7 +172,7 @@ import { ConfettiEffect } from '../../utils/confetti';
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: var(--spacing-sm);
+      gap: var(--space-2);
       animation: slideUp 0.5s ease-out 0.8s;
       animation-fill-mode: both;
     }

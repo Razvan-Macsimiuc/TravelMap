@@ -627,7 +627,6 @@ export class AchievementService {
     Map<string, UnlockedAchievement>
   >(new Map());
   private audioContext: AudioContext | null = null;
-  private isInitialized = false;
   private suppressCelebrations = true; // Prevent celebrations during startup
 
   // Computed signals for easy access
@@ -677,14 +676,10 @@ export class AchievementService {
       .map((c) => c.code);
     this.syncAchievementsOnStartup(visitedCodes);
 
-    // Mark as initialized
-    this.isInitialized = true;
-
     // Enable celebrations after initial sync is complete
     // Small delay to ensure sync is fully processed
     setTimeout(() => {
       this.suppressCelebrations = false;
-      console.log('[AchievementService] Celebrations enabled');
     }, 100);
 
     // Set up reactive checking for future changes
@@ -707,8 +702,7 @@ export class AchievementService {
     try {
       this.audioContext = new (window.AudioContext ||
         (window as any).webkitAudioContext)();
-    } catch (error) {
-      console.warn('[AchievementService] Web Audio API not available');
+    } catch {
     }
   }
 
@@ -740,8 +734,8 @@ export class AchievementService {
 
       oscillator.start(this.audioContext.currentTime);
       oscillator.stop(this.audioContext.currentTime + 0.5);
-    } catch (error) {
-      console.warn('[AchievementService] Could not play sound:', error);
+    } catch {
+      // Sound unavailable; silently skip
     }
   }
 
@@ -784,30 +778,7 @@ export class AchievementService {
     }
 
     // Sync all special achievements
-    const specialChecks: { id: string; condition: boolean }[] = [
-      {
-        id: 'special_5_continents',
-        condition: stats.visitedContinents.size >= 5,
-      },
-      {
-        id: 'special_all_continents',
-        condition: stats.visitedContinents.size >= 6,
-      },
-      { id: 'special_island_hopper', condition: stats.islandCount >= 5 },
-      { id: 'special_first_city', condition: stats.totalCities >= 1 },
-      { id: 'special_city_wanderer', condition: stats.totalCities >= 5 },
-      { id: 'special_city_explorer', condition: stats.totalCities >= 10 },
-      { id: 'special_urban_legend', condition: stats.totalCities >= 25 },
-      { id: 'special_metropolitan', condition: stats.totalCities >= 50 },
-      { id: 'special_nordic', condition: stats.nordicCount >= 5 },
-      { id: 'special_mediterranean', condition: stats.mediterraneanCount >= 5 },
-      {
-        id: 'special_southeast_asia',
-        condition: stats.southeastAsiaCount >= 5,
-      },
-    ];
-
-    for (const check of specialChecks) {
+    for (const check of this.buildSpecialChecks(stats)) {
       const achievement = SPECIAL_ACHIEVEMENTS.find((a) => a.id === check.id);
       if (achievement) {
         if (check.condition) {
@@ -818,9 +789,6 @@ export class AchievementService {
       }
     }
 
-    console.log(
-      `[AchievementService] Synced achievements: ${this.unlockedCount()} unlocked`
-    );
   }
 
   /**
@@ -849,6 +817,22 @@ export class AchievementService {
   /**
    * Compute all stats needed for achievement checking.
    */
+  private buildSpecialChecks(stats: ReturnType<AchievementService['computeAchievementStats']>): { id: string; condition: boolean }[] {
+    return [
+      { id: 'special_5_continents',   condition: stats.visitedContinents.size >= 5 },
+      { id: 'special_all_continents', condition: stats.visitedContinents.size >= 6 },
+      { id: 'special_island_hopper',  condition: stats.islandCount >= 5 },
+      { id: 'special_first_city',     condition: stats.totalCities >= 1 },
+      { id: 'special_city_wanderer',  condition: stats.totalCities >= 5 },
+      { id: 'special_city_explorer',  condition: stats.totalCities >= 10 },
+      { id: 'special_urban_legend',   condition: stats.totalCities >= 25 },
+      { id: 'special_metropolitan',   condition: stats.totalCities >= 50 },
+      { id: 'special_nordic',         condition: stats.nordicCount >= 5 },
+      { id: 'special_mediterranean',  condition: stats.mediterraneanCount >= 5 },
+      { id: 'special_southeast_asia', condition: stats.southeastAsiaCount >= 5 },
+    ];
+  }
+
   private computeAchievementStats(visitedCodes: string[]) {
     const countries = this.countryService.countries();
     const visitedCountries = countries.filter((c) => c.visited);
@@ -922,30 +906,7 @@ export class AchievementService {
     }
 
     // Check all special achievements
-    const specialChecks: { id: string; condition: boolean }[] = [
-      {
-        id: 'special_5_continents',
-        condition: stats.visitedContinents.size >= 5,
-      },
-      {
-        id: 'special_all_continents',
-        condition: stats.visitedContinents.size >= 6,
-      },
-      { id: 'special_island_hopper', condition: stats.islandCount >= 5 },
-      { id: 'special_first_city', condition: stats.totalCities >= 1 },
-      { id: 'special_city_wanderer', condition: stats.totalCities >= 5 },
-      { id: 'special_city_explorer', condition: stats.totalCities >= 10 },
-      { id: 'special_urban_legend', condition: stats.totalCities >= 25 },
-      { id: 'special_metropolitan', condition: stats.totalCities >= 50 },
-      { id: 'special_nordic', condition: stats.nordicCount >= 5 },
-      { id: 'special_mediterranean', condition: stats.mediterraneanCount >= 5 },
-      {
-        id: 'special_southeast_asia',
-        condition: stats.southeastAsiaCount >= 5,
-      },
-    ];
-
-    for (const check of specialChecks) {
+    for (const check of this.buildSpecialChecks(stats)) {
       const achievement = SPECIAL_ACHIEVEMENTS.find((a) => a.id === check.id);
       if (achievement) {
         if (check.condition) {
@@ -964,18 +925,6 @@ export class AchievementService {
         await this.celebrateAchievement(achievement);
       }
     }
-  }
-
-  /**
-   * Legacy method for milestone checking (backwards compatibility).
-   * Note: With reactive effects, this is now called automatically.
-   * Keeping for explicit checks when needed.
-   */
-  async checkMilestone(visitedCount: number): Promise<void> {
-    const visitedCodes = this.countryService
-      .visitedCountries()
-      .map((c) => c.code);
-    await this.checkAchievements(visitedCodes);
   }
 
   /**
@@ -1032,7 +981,6 @@ export class AchievementService {
     });
 
     this.saveUnlockedAchievements();
-    console.log(`[AchievementService] Achievement revoked: ${achievementId}`);
   }
 
   /**
@@ -1133,8 +1081,8 @@ export class AchievementService {
         array.filter((a) => validIds.has(a.id)).forEach((a) => map.set(a.id, a));
         this.unlockedAchievements.set(map);
       }
-    } catch (error) {
-      console.warn('[AchievementService] Could not load achievements');
+    } catch {
+      // Ignore corrupt localStorage data
     }
   }
 
@@ -1145,8 +1093,8 @@ export class AchievementService {
     try {
       const array = Array.from(this.unlockedAchievements().values());
       localStorage.setItem('hopahopa_achievements', JSON.stringify(array));
-    } catch (error) {
-      console.warn('[AchievementService] Could not save achievements');
+    } catch {
+      // Ignore storage errors
     }
   }
 

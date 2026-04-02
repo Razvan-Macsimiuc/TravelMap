@@ -147,14 +147,6 @@
   --space-16: 64px;
   --space-20: 80px;
 
-  // Aliases
-  --spacing-xs: var(--space-1);
-  --spacing-sm: var(--space-2);
-  --spacing-md: var(--space-4);
-  --spacing-lg: var(--space-6);
-  --spacing-xl: var(--space-8);
-  --spacing-2xl: var(--space-12);
-
   // ============================================
   // BORDER RADIUS - Continuous Curves
   // ============================================
@@ -164,12 +156,6 @@
   --radius-xl: 24px;
   --radius-2xl: 32px;
   --radius-full: 9999px;
-
-  // Aliases
-  --border-radius-sm: var(--radius-sm);
-  --border-radius-md: var(--radius-md);
-  --border-radius-lg: var(--radius-lg);
-  --border-radius-xl: var(--radius-xl);
 
   // ============================================
   // SHADOWS - Layered Depth
@@ -194,9 +180,6 @@
   --glass-border: rgba(255, 255, 255, 0.3);
   --glass-blur: blur(24px);
   --glass-blur-strong: blur(40px);
-
-  // Legacy aliases
-  --glass-background: var(--glass-bg);
 
   // ============================================
   // GRADIENTS
@@ -430,8 +413,3 @@ html {
   scroll-behavior: smooth;
 }
 
-// Selection color
-::selection {
-  background: rgba(14, 165, 233, 0.2);
-  color: inherit;
-}

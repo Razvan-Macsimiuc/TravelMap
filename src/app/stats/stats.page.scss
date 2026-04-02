@@ -415,6 +415,24 @@ body:not(.ion-palette-dark) .hero-card {
   }
 }
 
+// Shared gold progress track — used by next-milestone and achievement-progress
+.next-milestone .progress-bar,
+.achievement-progress-bar {
+  height: 8px;
+  background: var(--ion-color-step-150);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.next-milestone .progress-bar .progress-fill,
+.achievement-progress-bar .achievement-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #fbbf24, #f59e0b);
+  border-radius: var(--radius-full);
+  transition: width 0.8s var(--ease-out-expo);
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
+}
+
 // Next milestone progress
 .next-milestone {
   margin-top: var(--space-4);
@@ -428,21 +446,6 @@ body:not(.ion-palette-dark) .hero-card {
     font-weight: 500;
     color: var(--ion-color-medium);
     margin-bottom: var(--space-2);
-  }
-
-  .progress-bar {
-    height: 8px;
-    background: var(--ion-color-step-150);
-    border-radius: var(--radius-full);
-    overflow: hidden;
-
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #fbbf24, #f59e0b);
-      border-radius: var(--radius-full);
-      transition: width 0.8s var(--ease-out-expo);
-      box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
-    }
   }
 }
 
@@ -707,20 +710,8 @@ body:not(.ion-palette-dark) .hero-card {
   }
 }
 
-.achievement-progress-bar {
-  height: 8px;
-  background: var(--ion-color-step-150);
-  border-radius: var(--radius-full);
-  overflow: hidden;
-
-  .achievement-progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #fbbf24, #f59e0b);
-    border-radius: var(--radius-full);
-    transition: width 0.8s var(--ease-out-expo);
-    box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
-  }
-}
+// Styles for .achievement-progress-bar and .achievement-progress-fill
+// are defined in the shared gold progress track block above.
 
 // ============================================
 // Achievement Category Card

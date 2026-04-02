@@ -29,7 +29,6 @@ export class StorageService {
         key: STORAGE_KEYS.COUNTRIES,
         value: serialized,
       });
-      console.log(`[StorageService] Saved ${countries.length} countries`);
     } catch (error) {
       console.error('[StorageService] Error saving countries:', error);
       throw error;
@@ -45,7 +44,6 @@ export class StorageService {
       const { value } = await Preferences.get({ key: STORAGE_KEYS.COUNTRIES });
 
       if (!value) {
-        console.log('[StorageService] No countries found in storage');
         return [];
       }
 
@@ -60,7 +58,6 @@ export class StorageService {
         photoIds: Array.isArray(country.photoIds) ? country.photoIds : [],
       }));
 
-      console.log(`[StorageService] Loaded ${countries.length} countries`);
       return countries;
     } catch (error) {
       console.error('[StorageService] Error loading countries:', error);
@@ -132,12 +129,11 @@ export class StorageService {
       // Also clear IndexedDB on web
       try {
         const request = indexedDB.deleteDatabase('HopaHopaDB');
-        request.onsuccess = () => console.log('[StorageService] IndexedDB cleared');
+        request.onsuccess = () => { /* IndexedDB cleared */ };
       } catch {
         // Ignore if IndexedDB not available
       }
       
-      console.log('[StorageService] All data cleared');
     } catch (error) {
       console.error('[StorageService] Error clearing data:', error);
       throw error;
@@ -175,7 +171,6 @@ export class StorageService {
       // Check if migration is needed
       const hasCapacitorData = await this.hasData();
       if (hasCapacitorData) {
-        console.log('[StorageService] Data already exists in Capacitor storage, skipping migration');
         return;
       }
 
@@ -187,11 +182,8 @@ export class StorageService {
       const oldCountries = localStorage.getItem(oldCountriesKey);
 
       if (!oldVisited && !oldCountries) {
-        console.log('[StorageService] No localStorage data to migrate');
         return;
       }
-
-      console.log('[StorageService] Migrating data from localStorage...');
 
       // Parse old data
       let visitedCodes: string[] = [];
@@ -201,7 +193,7 @@ export class StorageService {
         try {
           visitedCodes = JSON.parse(oldVisited);
         } catch {
-          console.warn('[StorageService] Could not parse old visited data');
+          // Ignore malformed data
         }
       }
 
@@ -209,7 +201,7 @@ export class StorageService {
         try {
           additionalCountries = JSON.parse(oldCountries);
         } catch {
-          console.warn('[StorageService] Could not parse old countries data');
+          // Ignore malformed data
         }
       }
 
@@ -224,7 +216,6 @@ export class StorageService {
         value: JSON.stringify(additionalCountries),
       });
 
-      console.log('[StorageService] Migration data prepared');
     } catch (error) {
       console.error('[StorageService] Migration error:', error);
     }
@@ -272,7 +263,6 @@ export class StorageService {
       localStorage.removeItem('travelmap_visited_countries');
       localStorage.removeItem('travelmap_countries');
 
-      console.log('[StorageService] Migration data cleared');
     } catch (error) {
       console.error('[StorageService] Error clearing migration data:', error);
     }

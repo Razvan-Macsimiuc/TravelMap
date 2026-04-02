@@ -25,7 +25,6 @@ export class SettingsService {
     document.documentElement.classList.add('ion-palette-dark');
     document.body.classList.add('ion-palette-dark');
     document.documentElement.style.colorScheme = 'dark';
-    console.log('[SettingsService] Dark mode applied (always on)');
   }
 
   /**
@@ -33,7 +32,6 @@ export class SettingsService {
    */
   async resetSettings(): Promise<void> {
     await Preferences.remove({ key: SETTINGS_KEY });
-    console.log('[SettingsService] Settings reset to defaults');
   }
 }
 

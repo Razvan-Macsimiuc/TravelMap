@@ -46,7 +46,6 @@ export class OverlayService {
         this.dismissAllOverlays();
       });
 
-    console.log('[OverlayService] Initialized - overlays will close on navigation');
   }
 
   /**

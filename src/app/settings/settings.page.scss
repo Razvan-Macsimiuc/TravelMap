@@ -18,10 +18,7 @@
 
 .resetting-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   z-index: 9999;
   background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(20px);
@@ -556,26 +553,6 @@
 // ============================================
 // Dark Mode Overrides
 // ============================================
-
-@media (prefers-color-scheme: dark) {
-  .settings-card {
-    background: rgba(20, 27, 45, 0.85) !important;
-    border-color: rgba(255, 255, 255, 0.1) !important;
-  }
-
-  .data-item {
-    background: rgba(255, 255, 255, 0.08) !important;
-    border-color: rgba(255, 255, 255, 0.1) !important;
-  }
-
-  .features-list {
-    background: rgba(255, 255, 255, 0.08) !important;
-  }
-
-  .app-info .app-version {
-    background: rgba(255, 255, 255, 0.1) !important;
-  }
-}
 
 :host-context(body.ion-palette-dark) {
   .settings-card {

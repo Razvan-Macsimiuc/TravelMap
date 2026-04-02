@@ -5,162 +5,6 @@ import { ALL_COUNTRIES } from '../data/countries.data';
 
 const INITIAL_COUNTRIES: Country[] = ALL_COUNTRIES;
 
-// Kept for reference — replaced by ALL_COUNTRIES import above
-const _LEGACY_PARTIAL_LIST: Country[] = [
-  // Europe
-  { code: 'GB', name: 'United Kingdom', visited: false, photoIds: [] },
-  { code: 'FR', name: 'France', visited: false, photoIds: [] },
-  { code: 'DE', name: 'Germany', visited: false, photoIds: [] },
-  { code: 'IT', name: 'Italy', visited: false, photoIds: [] },
-  { code: 'ES', name: 'Spain', visited: false, photoIds: [] },
-  { code: 'PT', name: 'Portugal', visited: false, photoIds: [] },
-  { code: 'NL', name: 'Netherlands', visited: false, photoIds: [] },
-  { code: 'BE', name: 'Belgium', visited: false, photoIds: [] },
-  { code: 'CH', name: 'Switzerland', visited: false, photoIds: [] },
-  { code: 'AT', name: 'Austria', visited: false, photoIds: [] },
-  { code: 'PL', name: 'Poland', visited: false, photoIds: [] },
-  { code: 'CZ', name: 'Czech Republic', visited: false, photoIds: [] },
-  { code: 'SE', name: 'Sweden', visited: false, photoIds: [] },
-  { code: 'NO', name: 'Norway', visited: false, photoIds: [] },
-  { code: 'DK', name: 'Denmark', visited: false, photoIds: [] },
-  { code: 'FI', name: 'Finland', visited: false, photoIds: [] },
-  { code: 'IE', name: 'Ireland', visited: false, photoIds: [] },
-  { code: 'GR', name: 'Greece', visited: false, photoIds: [] },
-  { code: 'RO', name: 'Romania', visited: false, photoIds: [] },
-  { code: 'HU', name: 'Hungary', visited: false, photoIds: [] },
-  { code: 'BG', name: 'Bulgaria', visited: false, photoIds: [] },
-  { code: 'HR', name: 'Croatia', visited: false, photoIds: [] },
-  { code: 'RS', name: 'Serbia', visited: false, photoIds: [] },
-  { code: 'SK', name: 'Slovakia', visited: false, photoIds: [] },
-  { code: 'SI', name: 'Slovenia', visited: false, photoIds: [] },
-  { code: 'BA', name: 'Bosnia and Herzegovina', visited: false, photoIds: [] },
-  { code: 'ME', name: 'Montenegro', visited: false, photoIds: [] },
-  { code: 'MK', name: 'North Macedonia', visited: false, photoIds: [] },
-  { code: 'AL', name: 'Albania', visited: false, photoIds: [] },
-  { code: 'LT', name: 'Lithuania', visited: false, photoIds: [] },
-  { code: 'LV', name: 'Latvia', visited: false, photoIds: [] },
-  { code: 'EE', name: 'Estonia', visited: false, photoIds: [] },
-  { code: 'UA', name: 'Ukraine', visited: false, photoIds: [] },
-  { code: 'BY', name: 'Belarus', visited: false, photoIds: [] },
-  { code: 'MD', name: 'Moldova', visited: false, photoIds: [] },
-  { code: 'IS', name: 'Iceland', visited: false, photoIds: [] },
-  { code: 'LU', name: 'Luxembourg', visited: false, photoIds: [] },
-  { code: 'MT', name: 'Malta', visited: false, photoIds: [] },
-  { code: 'CY', name: 'Cyprus', visited: false, photoIds: [] },
-
-  // North America
-  { code: 'US', name: 'United States', visited: false, photoIds: [] },
-  { code: 'CA', name: 'Canada', visited: false, photoIds: [] },
-  { code: 'MX', name: 'Mexico', visited: false, photoIds: [] },
-  { code: 'GT', name: 'Guatemala', visited: false, photoIds: [] },
-  { code: 'CU', name: 'Cuba', visited: false, photoIds: [] },
-  { code: 'DO', name: 'Dominican Republic', visited: false, photoIds: [] },
-  { code: 'HT', name: 'Haiti', visited: false, photoIds: [] },
-  { code: 'JM', name: 'Jamaica', visited: false, photoIds: [] },
-  { code: 'PA', name: 'Panama', visited: false, photoIds: [] },
-  { code: 'CR', name: 'Costa Rica', visited: false, photoIds: [] },
-
-  // South America
-  { code: 'BR', name: 'Brazil', visited: false, photoIds: [] },
-  { code: 'AR', name: 'Argentina', visited: false, photoIds: [] },
-  { code: 'CO', name: 'Colombia', visited: false, photoIds: [] },
-  { code: 'CL', name: 'Chile', visited: false, photoIds: [] },
-  { code: 'PE', name: 'Peru', visited: false, photoIds: [] },
-  { code: 'VE', name: 'Venezuela', visited: false, photoIds: [] },
-  { code: 'EC', name: 'Ecuador', visited: false, photoIds: [] },
-  { code: 'BO', name: 'Bolivia', visited: false, photoIds: [] },
-  { code: 'PY', name: 'Paraguay', visited: false, photoIds: [] },
-  { code: 'UY', name: 'Uruguay', visited: false, photoIds: [] },
-
-  // Asia
-  { code: 'CN', name: 'China', visited: false, photoIds: [] },
-  { code: 'JP', name: 'Japan', visited: false, photoIds: [] },
-  { code: 'KR', name: 'South Korea', visited: false, photoIds: [] },
-  { code: 'KP', name: 'North Korea', visited: false, photoIds: [] },
-  { code: 'IN', name: 'India', visited: false, photoIds: [] },
-  { code: 'TH', name: 'Thailand', visited: false, photoIds: [] },
-  { code: 'VN', name: 'Vietnam', visited: false, photoIds: [] },
-  { code: 'ID', name: 'Indonesia', visited: false, photoIds: [] },
-  { code: 'MY', name: 'Malaysia', visited: false, photoIds: [] },
-  { code: 'SG', name: 'Singapore', visited: false, photoIds: [] },
-  { code: 'PH', name: 'Philippines', visited: false, photoIds: [] },
-  { code: 'AE', name: 'United Arab Emirates', visited: false, photoIds: [] },
-  { code: 'TR', name: 'Turkey', visited: false, photoIds: [] },
-  { code: 'IL', name: 'Israel', visited: false, photoIds: [] },
-  { code: 'SA', name: 'Saudi Arabia', visited: false, photoIds: [] },
-  { code: 'IR', name: 'Iran', visited: false, photoIds: [] },
-  { code: 'IQ', name: 'Iraq', visited: false, photoIds: [] },
-  { code: 'PK', name: 'Pakistan', visited: false, photoIds: [] },
-  { code: 'BD', name: 'Bangladesh', visited: false, photoIds: [] },
-  { code: 'MM', name: 'Myanmar', visited: false, photoIds: [] },
-  { code: 'KH', name: 'Cambodia', visited: false, photoIds: [] },
-  { code: 'LA', name: 'Laos', visited: false, photoIds: [] },
-  { code: 'NP', name: 'Nepal', visited: false, photoIds: [] },
-  { code: 'LK', name: 'Sri Lanka', visited: false, photoIds: [] },
-  { code: 'KZ', name: 'Kazakhstan', visited: false, photoIds: [] },
-  { code: 'UZ', name: 'Uzbekistan', visited: false, photoIds: [] },
-  { code: 'TM', name: 'Turkmenistan', visited: false, photoIds: [] },
-  { code: 'AF', name: 'Afghanistan', visited: false, photoIds: [] },
-  { code: 'AZ', name: 'Azerbaijan', visited: false, photoIds: [] },
-  { code: 'GE', name: 'Georgia', visited: false, photoIds: [] },
-  { code: 'AM', name: 'Armenia', visited: false, photoIds: [] },
-  { code: 'JO', name: 'Jordan', visited: false, photoIds: [] },
-  { code: 'LB', name: 'Lebanon', visited: false, photoIds: [] },
-  { code: 'SY', name: 'Syria', visited: false, photoIds: [] },
-  { code: 'KW', name: 'Kuwait', visited: false, photoIds: [] },
-  { code: 'QA', name: 'Qatar', visited: false, photoIds: [] },
-  { code: 'BH', name: 'Bahrain', visited: false, photoIds: [] },
-  { code: 'OM', name: 'Oman', visited: false, photoIds: [] },
-  { code: 'YE', name: 'Yemen', visited: false, photoIds: [] },
-  { code: 'MN', name: 'Mongolia', visited: false, photoIds: [] },
-  { code: 'TW', name: 'Taiwan', visited: false, photoIds: [] },
-
-  // Africa
-  { code: 'ZA', name: 'South Africa', visited: false, photoIds: [] },
-  { code: 'EG', name: 'Egypt', visited: false, photoIds: [] },
-  { code: 'MA', name: 'Morocco', visited: false, photoIds: [] },
-  { code: 'KE', name: 'Kenya', visited: false, photoIds: [] },
-  { code: 'NG', name: 'Nigeria', visited: false, photoIds: [] },
-  { code: 'DZ', name: 'Algeria', visited: false, photoIds: [] },
-  { code: 'TN', name: 'Tunisia', visited: false, photoIds: [] },
-  { code: 'LY', name: 'Libya', visited: false, photoIds: [] },
-  { code: 'ET', name: 'Ethiopia', visited: false, photoIds: [] },
-  { code: 'TZ', name: 'Tanzania', visited: false, photoIds: [] },
-  { code: 'UG', name: 'Uganda', visited: false, photoIds: [] },
-  { code: 'GH', name: 'Ghana', visited: false, photoIds: [] },
-  { code: 'CI', name: 'Ivory Coast', visited: false, photoIds: [] },
-  { code: 'SN', name: 'Senegal', visited: false, photoIds: [] },
-  { code: 'CM', name: 'Cameroon', visited: false, photoIds: [] },
-  { code: 'ZW', name: 'Zimbabwe', visited: false, photoIds: [] },
-  { code: 'AO', name: 'Angola', visited: false, photoIds: [] },
-  { code: 'MZ', name: 'Mozambique', visited: false, photoIds: [] },
-  { code: 'MG', name: 'Madagascar', visited: false, photoIds: [] },
-  { code: 'SD', name: 'Sudan', visited: false, photoIds: [] },
-  {
-    code: 'CD',
-    name: 'Democratic Republic of the Congo',
-    visited: false,
-    photoIds: [],
-  },
-  { code: 'CG', name: 'Republic of the Congo', visited: false, photoIds: [] },
-  { code: 'ML', name: 'Mali', visited: false, photoIds: [] },
-  { code: 'NE', name: 'Niger', visited: false, photoIds: [] },
-  { code: 'TD', name: 'Chad', visited: false, photoIds: [] },
-  { code: 'MR', name: 'Mauritania', visited: false, photoIds: [] },
-  { code: 'NA', name: 'Namibia', visited: false, photoIds: [] },
-  { code: 'BW', name: 'Botswana', visited: false, photoIds: [] },
-  { code: 'ZM', name: 'Zambia', visited: false, photoIds: [] },
-  { code: 'RW', name: 'Rwanda', visited: false, photoIds: [] },
-
-  // Oceania
-  { code: 'AU', name: 'Australia', visited: false, photoIds: [] },
-  { code: 'NZ', name: 'New Zealand', visited: false, photoIds: [] },
-  { code: 'PG', name: 'Papua New Guinea', visited: false, photoIds: [] },
-  { code: 'FJ', name: 'Fiji', visited: false, photoIds: [] },
-
-  // Russia & CIS
-  { code: 'RU', name: 'Russia', visited: false, photoIds: [] },
-]; // _LEGACY_PARTIAL_LIST — no longer used
 
 @Injectable({
   providedIn: 'root',
@@ -209,10 +53,6 @@ export class CountryService {
         // Merge stored countries with initial countries
         const merged = this.mergeCountries(INITIAL_COUNTRIES, storedCountries);
         this.countriesSignal.set(merged);
-        console.log(
-          '[CountryService] Loaded countries from storage:',
-          merged.length
-        );
       } else {
         // Check for migration data
         const visitedCodes =
@@ -241,11 +81,6 @@ export class CountryService {
 
           // Clear migration data
           await this.storageService.clearMigrationData();
-          console.log('[CountryService] Migrated data from localStorage');
-        } else {
-          console.log(
-            '[CountryService] Using initial countries (no stored data)'
-          );
         }
       }
 

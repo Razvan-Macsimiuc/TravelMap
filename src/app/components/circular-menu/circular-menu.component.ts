@@ -154,7 +154,7 @@ export interface CircularMenuItem {
       font-size: 0.75rem;
       font-weight: 600;
       color: var(--ion-text-color);
-      background: var(--glass-background);
+      background: var(--glass-bg);
       padding: 4px 8px;
       border-radius: 8px;
       white-space: nowrap;

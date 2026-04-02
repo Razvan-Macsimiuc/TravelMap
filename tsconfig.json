@@ -19,8 +19,9 @@
     "target": "es2022",
     "module": "es2020",
     "lib": [
-      "es2018",
-      "dom"
+      "ES2022",
+      "dom",
+      "dom.iterable"
     ],
     "skipLibCheck": true,
     "useDefineForClassFields": false,

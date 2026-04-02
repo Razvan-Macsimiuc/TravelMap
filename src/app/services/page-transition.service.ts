@@ -36,7 +36,6 @@ export class PageTransitionService {
       countryName,
     });
 
-    console.log('[PageTransitionService] Starting transition for', countryName, 'at', position);
   }
 
   /**
