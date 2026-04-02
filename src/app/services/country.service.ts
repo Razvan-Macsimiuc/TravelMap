@@ -1,9 +1,12 @@
 import { Injectable, signal, computed, effect, inject } from '@angular/core';
 import { Country } from '../models/country.model';
 import { StorageService } from './storage.service';
+import { ALL_COUNTRIES } from '../data/countries.data';
 
-// Base countries - will be expanded dynamically when user clicks on new countries
-const INITIAL_COUNTRIES: Country[] = [
+const INITIAL_COUNTRIES: Country[] = ALL_COUNTRIES;
+
+// Kept for reference — replaced by ALL_COUNTRIES import above
+const _LEGACY_PARTIAL_LIST: Country[] = [
   // Europe
   { code: 'GB', name: 'United Kingdom', visited: false, photoIds: [] },
   { code: 'FR', name: 'France', visited: false, photoIds: [] },
@@ -157,7 +160,7 @@ const INITIAL_COUNTRIES: Country[] = [
 
   // Russia & CIS
   { code: 'RU', name: 'Russia', visited: false, photoIds: [] },
-];
+]; // _LEGACY_PARTIAL_LIST — no longer used
 
 @Injectable({
   providedIn: 'root',
@@ -298,6 +301,19 @@ export class CountryService {
   }
 
   /**
+   * Ensure a country exists in the list, adding it if not already present.
+   * Used for territories and non-UN countries found in the GeoJSON.
+   */
+  ensureCountry(code: string, name: string): void {
+    const upper = code.toUpperCase();
+    if (this.getCountryByCode(upper)) return;
+    this.countriesSignal.update((countries) => [
+      ...countries,
+      { code: upper, name, visited: false, photoIds: [] },
+    ]);
+  }
+
+  /**
    * Toggle visited status for a country.
    * If the country doesn't exist in the list, it will be added.
    */
@@ -352,7 +368,7 @@ export class CountryService {
    * @param countryCode - The country code
    * @param cityName - The name of the city to add
    */
-  addCity(countryCode: string, cityName: string): void {
+  addCity(countryCode: string, cityName: string, coordinates?: [number, number]): void {
     const upperCode = countryCode.toUpperCase();
     const trimmedCity = cityName.trim();
     if (!trimmedCity) return;
@@ -367,7 +383,10 @@ export class CountryService {
               (c) => c.toLowerCase() === trimmedCity.toLowerCase()
             )
           ) {
-            return { ...country, cities: [...currentCities, trimmedCity] };
+            const cityCoordinates = coordinates
+              ? { ...(country.cityCoordinates ?? {}), [trimmedCity]: coordinates }
+              : country.cityCoordinates;
+            return { ...country, cities: [...currentCities, trimmedCity], cityCoordinates };
           }
         }
         return country;
@@ -383,14 +402,13 @@ export class CountryService {
   removeCity(countryCode: string, cityName: string): void {
     const upperCode = countryCode.toUpperCase();
     this.countriesSignal.update((countries) =>
-      countries.map((country) =>
-        country.code.toUpperCase() === upperCode
-          ? {
-              ...country,
-              cities: (country.cities ?? []).filter((c) => c !== cityName),
-            }
-          : country
-      )
+      countries.map((country) => {
+        if (country.code.toUpperCase() !== upperCode) return country;
+        const cities = (country.cities ?? []).filter((c) => c !== cityName);
+        const cityCoordinates = { ...(country.cityCoordinates ?? {}) };
+        delete cityCoordinates[cityName];
+        return { ...country, cities, cityCoordinates };
+      })
     );
   }
 

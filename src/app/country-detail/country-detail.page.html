@@ -24,7 +24,9 @@
     <ion-card class="country-header-card" [class.slide-in-header]="showHeader()">
       <ion-card-header>
         <div class="flag-container">
-          <span class="flag-emoji">{{ flagEmoji() }}</span>
+          @if (flagUrl()) {
+            <img class="flag-img" [src]="flagUrl()!" [alt]="countryData.name" />
+          }
         </div>
         <ion-card-title>{{ countryData.name }}</ion-card-title>
         <ion-card-subtitle>{{ countryData.code }}</ion-card-subtitle>
@@ -43,6 +45,81 @@
           </ion-label>
           <ion-toggle [checked]="isVisited()" (ionChange)="onVisitedToggle($event)" slot="end"></ion-toggle>
         </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Cities Visited -->
+    <ion-card class="cities-card">
+      <ion-card-header>
+        <ion-card-title class="section-title">
+          <ion-icon name="location-outline"></ion-icon>
+          Cities Visited
+        </ion-card-title>
+        @if (cities().length > 0) {
+          <ion-card-subtitle>{{ cities().length }} {{ cities().length === 1 ? 'city' : 'cities' }} logged</ion-card-subtitle>
+        }
+      </ion-card-header>
+
+      <ion-card-content>
+        @if (!isVisited()) {
+          <div class="cities-locked">
+            <ion-icon name="lock-closed-outline"></ion-icon>
+            <p>Mark this country as visited first</p>
+          </div>
+        } @else {
+          @if (cities().length > 0) {
+            <div class="cities-list">
+              @for (city of cities(); track city; let i = $index) {
+                <div class="city-row">
+                  <span class="city-index">{{ i + 1 }}</span>
+                  <span class="city-name">{{ city }}</span>
+                  <button class="city-remove" (click)="removeCity(city)" [attr.aria-label]="'Remove ' + city">
+                    <ion-icon name="close-outline"></ion-icon>
+                  </button>
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="cities-empty">
+              <ion-icon name="location-outline"></ion-icon>
+              <p>No cities logged yet</p>
+              <span>Search for a city below</span>
+            </div>
+          }
+
+          <div class="city-search-wrapper">
+            <div class="city-input-row">
+              <ion-icon name="search-outline" class="city-search-icon"></ion-icon>
+              <ion-input
+                class="city-input"
+                [value]="newCityName()"
+                (ionInput)="onCityInput($event.detail.value || '')"
+                placeholder="Search a city…"
+                maxlength="50"
+                autocomplete="off"
+              ></ion-input>
+              @if (isCitySearching()) {
+                <span class="city-searching-spinner"></span>
+              }
+            </div>
+
+            @if (showCityDropdown()) {
+              <div class="city-dropdown">
+                @for (result of citySearchResults(); track result.name) {
+                  <button class="city-suggestion" (click)="selectCity(result.name, result.coordinates)">
+                    <ion-icon name="location-outline" class="suggestion-icon"></ion-icon>
+                    <span class="suggestion-text">
+                      <span class="suggestion-name">{{ result.name }}</span>
+                      @if (result.subtitle) {
+                        <span class="suggestion-sub">{{ result.subtitle }}</span>
+                      }
+                    </span>
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        }
       </ion-card-content>
     </ion-card>
   }

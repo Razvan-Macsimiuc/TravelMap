@@ -1,0 +1,2 @@
+interactive tutorial showing each part of the aplication(main ones)
+multi select (for faster country seelction for new users)

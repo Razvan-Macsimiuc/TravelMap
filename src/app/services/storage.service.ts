@@ -51,8 +51,9 @@ export class StorageService {
 
       const parsed: Country[] = JSON.parse(value);
 
-      // Validate and ensure proper structure
+      // Validate and ensure proper structure, preserving all optional fields
       const countries = parsed.map((country) => ({
+        ...country,
         code: country.code || '',
         name: country.name || '',
         visited: Boolean(country.visited),

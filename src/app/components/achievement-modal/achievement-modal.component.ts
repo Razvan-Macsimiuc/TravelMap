@@ -26,7 +26,7 @@ import { ConfettiEffect } from '../../utils/confetti';
           <p class="badge-message">{{ milestone?.message }}</p>
           <div class="badge-count">
             <span class="count-number">{{ visitedCount }}</span>
-            <span class="count-label">Countries Visited</span>
+            <span class="count-label">{{ milestone?.countLabel ?? 'Countries Visited' }}</span>
           </div>
         </div>
 
@@ -257,7 +257,8 @@ export class AchievementModalComponent implements OnInit, OnDestroy {
    * Share achievement via native share API or fallback.
    */
   async share(): Promise<void> {
-    const text = `I just reached ${this.milestone?.title} in HopaHopa! 🌍 ${this.visitedCount} countries visited!`;
+    const label = this.milestone?.countLabel ?? 'countries visited';
+    const text = `I just reached ${this.milestone?.title} in HopaHopa! 🌍 ${this.visitedCount} ${label.toLowerCase()}!`;
 
     try {
       const canShare = await Share.canShare();

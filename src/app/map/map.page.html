@@ -4,15 +4,55 @@
   <!-- Map Container -->
   <div #mapContainer class="map-container"></div>
 
-  <!-- Floating Stats Card -->
-  <div class="floating-stats-card">
-    <div class="stats-main">
-      <span class="stats-count">{{ visitedCount() }}</span>
-      <span class="stats-separator">/</span>
-      <span class="stats-total">195</span>
-      <span class="stats-label">countries</span>
-    </div>
+  <!-- Floating Stats + Search Card -->
+  <div class="floating-stats-card" [class.search-mode]="showSearch()">
+    @if (!showSearch()) {
+      <div class="stats-main">
+        <span class="stats-count">{{ visitedCount() }}</span>
+        <span class="stats-separator">/</span>
+        <span class="stats-total">195</span>
+        <span class="stats-label">countries</span>
+      </div>
+      <div class="stats-divider"></div>
+      <button class="stats-search-btn" (click)="openSearch()" aria-label="Search countries">
+        <ion-icon name="search-outline"></ion-icon>
+      </button>
+    } @else {
+      <ion-icon name="search-outline" class="search-icon"></ion-icon>
+      <input
+        #searchInput
+        class="search-input"
+        [value]="searchQuery()"
+        (input)="searchQuery.set($any($event.target).value)"
+        placeholder="Search countries…"
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+      />
+      <button class="search-close-btn" (click)="closeSearch()">
+        <ion-icon name="close-outline"></ion-icon>
+      </button>
+    }
   </div>
+
+  <!-- Search results dropdown (below the card) -->
+  @if (showSearch()) {
+    @if (searchResults().length > 0) {
+      <div class="search-results">
+        @for (country of searchResults(); track country.code) {
+          <button class="search-result-item" (click)="selectCountryFromSearch(country)">
+            <img class="result-flag" [src]="'https://flagcdn.com/w40/' + country.code.toLowerCase() + '.png'" [alt]="country.name" />
+            <span class="result-name">{{ country.name }}</span>
+            @if (country.visited) {
+              <ion-icon name="checkmark-circle" class="result-visited"></ion-icon>
+            }
+          </button>
+        }
+      </div>
+    } @else if (searchQuery().trim().length > 0) {
+      <div class="search-no-results">No countries found</div>
+    }
+  }
 
   <!-- Loading Overlay -->
   @if (isMapLoading() || isCountriesLoading()) {
@@ -52,7 +92,9 @@
   >
     <!-- Country info header -->
     <div class="dock-header">
-      <span class="dock-flag">{{ selectedCountryFlag() }}</span>
+      @if (selectedCountryFlag()) {
+        <img class="dock-flag" [src]="selectedCountryFlag()!" [alt]="selectedCountryName()" />
+      }
       <span class="dock-name">{{ selectedCountryName() }}</span>
     </div>
 

@@ -6,5 +6,6 @@ export interface Country {
   visitCount?: number;   // Number of times visited
   daysStayed?: number;   // Total days stayed in the country
   cities?: string[];     // List of cities visited in this country
+  cityCoordinates?: Record<string, [number, number]>; // cityName → [lng, lat]
   note?: string;         // Personal note (max 120 characters)
 }

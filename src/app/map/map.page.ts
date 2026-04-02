@@ -26,8 +26,10 @@ import {
   addCircleOutline,
   informationCircleOutline,
   closeCircleOutline,
+  closeOutline,
   refreshOutline,
   alertCircleOutline,
+  searchOutline,
 } from 'ionicons/icons';
 import { CountryService } from '../services/country.service';
 import { ErrorService } from '../services/error.service';
@@ -49,6 +51,7 @@ const UNVISITED_COLOR = '#1e293b'; // Dark slate (matches card backgrounds)
 const HOVER_VISITED_COLOR = '#38bdf8'; // Lighter cyan on hover
 const HOVER_UNVISITED_COLOR = '#334155'; // Slightly lighter slate on hover
 const BORDER_COLOR = 'rgba(255, 255, 255, 0.08)'; // Subtle white border
+const CITY_PIN_COLOR = '#facc15'; // Yellow for city pins
 
 // Set Mapbox access token
 mapboxgl.accessToken = environment.mapboxToken;
@@ -88,6 +91,8 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
   private hoveredFeatureId: number | string | null = null;
   private mapLoaded = false;
   private confetti: ConfettiEffect | null = null;
+  /** Set to true for one microtask tick when a city pin is clicked, to suppress the country handler. */
+  private cityPinJustClicked = false;
 
   // Loading and error states
   readonly isMapLoading = signal(true);
@@ -102,10 +107,25 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
   // Selected country signals
   private readonly selectedCountryCode = signal<string>('');
   readonly selectedCountryName = signal<string>('');
+  /** Tracks which country's city pins are visible; survives dock close. */
+  private readonly cityPinsCountryCode = signal<string>('');
 
-  readonly selectedCountryFlag = computed(() =>
-    this.countryCodeToFlag(this.selectedCountryCode())
-  );
+  // Country search state
+  readonly showSearch = signal(false);
+  readonly searchQuery = signal('');
+  readonly searchResults = computed(() => {
+    const q = this.searchQuery().trim().toLowerCase();
+    if (!q) return [];
+    return this.countries()
+      .filter((c) => c.name.toLowerCase().includes(q))
+      .slice(0, 8);
+  });
+
+  readonly selectedCountryFlag = computed(() => {
+    const code = this.selectedCountryCode();
+    if (!code || code.length !== 2) return null;
+    return `https://flagcdn.com/w40/${code.toLowerCase()}.png`;
+  });
 
   readonly selectedCountryVisited = computed(() => {
     const code = this.selectedCountryCode();
@@ -132,8 +152,10 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
       addCircleOutline,
       informationCircleOutline,
       closeCircleOutline,
+      closeOutline,
       refreshOutline,
       alertCircleOutline,
+      searchOutline,
     });
 
     // Effect to update map colors when visited countries change
@@ -141,6 +163,15 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
       const visited = this.visitedCountries();
       if (this.mapLoaded && this.map) {
         this.updateCountryColors(visited.map((c) => c.code));
+      }
+    });
+
+    // Effect to refresh city pins – only for the last focused country
+    effect(() => {
+      const countries = this.countries();
+      const focusedCode = this.cityPinsCountryCode();
+      if (this.mapLoaded && this.map) {
+        this.updateCityPins(countries, focusedCode);
       }
     });
   }
@@ -171,6 +202,55 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
   }
 
   // ============================================
+  // Search Public Methods (called from template)
+  // ============================================
+
+  openSearch(): void {
+    this.showSearch.set(true);
+    this.searchQuery.set('');
+  }
+
+  closeSearch(): void {
+    this.showSearch.set(false);
+    this.searchQuery.set('');
+  }
+
+  selectCountryFromSearch(country: Country): void {
+    this.closeSearch();
+
+    if (!this.map || !this.mapLoaded) {
+      this.router.navigate(['/country', country.code]);
+      return;
+    }
+
+    // Query the loaded GeoJSON source for this country's feature
+    const features = this.map.querySourceFeatures('countries', {
+      filter: [
+        'in',
+        ['coalesce', ['get', 'ISO_A2'], ['get', 'ISO3166-1-Alpha-2'], ''],
+        ['literal', [country.code.toUpperCase()]],
+      ],
+    });
+
+    if (features.length > 0) {
+      const center = this.getFeatureCenter(features[0]);
+      this.ngZone.run(() => {
+        // If dock already open, close it first then re-open
+        if (this.showDock()) {
+          this.dockAnimating.set(false);
+          this.showDock.set(false);
+          setTimeout(() => this.openDockWithCenter(country.code, country.name, center), 150);
+        } else {
+          this.openDockWithCenter(country.code, country.name, center);
+        }
+      });
+    } else {
+      // Country not in GeoJSON (e.g. Vatican) — go straight to detail
+      this.router.navigate(['/country', country.code]);
+    }
+  }
+
+  // ============================================
   // Dock Public Methods (called from template)
   // ============================================
 
@@ -197,25 +277,22 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
     const newStatus =
       this.countryService.getCountryByCode(code)?.visited ?? false;
 
-    // Celebration effects when marking as visited
+    // Visual/haptic celebrations when marking as visited
     if (!wasVisited && newStatus) {
-      // Haptic feedback
       await this.triggerHapticFeedback();
 
-      // Confetti burst at dock position (viewport coordinates)
       if (this.confetti) {
         const pos = this.dockPosition();
-        console.log('[MapPage] Triggering confetti at viewport coords:', pos);
         this.confetti.burst(pos.x, pos.y, 30);
       }
 
-      // Add ripple effect class to map
       this.addRippleEffect();
-
-      // Check for milestone achievements
-      const visitedCount = this.countryService.visitedCount();
-      await this.achievementService.checkMilestone(visitedCount);
     }
+
+    // Always sync achievements: newly earned ones celebrate,
+    // revoked ones are removed and will re-celebrate when earned again.
+    const visitedCodes = this.countryService.visitedCountries().map(c => c.code);
+    await this.achievementService.checkAchievements(visitedCodes);
 
     this.showCountryToast(name, newStatus);
   }
@@ -379,11 +456,14 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
 
       this.addCountriesSource(geojsonData);
       this.addCountriesLayers();
+      this.addCityPinsLayer();
       this.setupMapInteractions();
       this.mapLoaded = true;
 
       // Initial color update
       this.updateCountryColors(this.visitedCountries().map((c) => c.code));
+      // Initial city pins render (dock is closed at load time, so no pins shown)
+      this.updateCityPins(this.countries(), '');
 
       // Clear loading states
       this.ngZone.run(() => {
@@ -481,11 +561,96 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
     );
   }
 
+  private addCityPinsLayer(): void {
+    if (!this.map) return;
+
+    this.map.addSource('city-pins', {
+      type: 'geojson',
+      data: { type: 'FeatureCollection', features: [] },
+    });
+
+    // Outer glow ring
+    this.map.addLayer({
+      id: 'city-pins-glow',
+      type: 'circle',
+      source: 'city-pins',
+      paint: {
+        'circle-radius': 9,
+        'circle-color': CITY_PIN_COLOR,
+        'circle-opacity': 0.25,
+        'circle-blur': 1,
+      },
+    });
+
+    // Main pin dot
+    this.map.addLayer({
+      id: 'city-pins',
+      type: 'circle',
+      source: 'city-pins',
+      paint: {
+        'circle-radius': 5,
+        'circle-color': CITY_PIN_COLOR,
+        'circle-stroke-width': 1.5,
+        'circle-stroke-color': '#ffffff',
+        'circle-opacity': 1,
+      },
+    });
+  }
+
+  private updateCityPins(countries: Country[], focusedCode: string): void {
+    const source = this.map?.getSource('city-pins') as mapboxgl.GeoJSONSource | undefined;
+    if (!source) return;
+
+    const features: GeoJSON.Feature<GeoJSON.Point>[] = [];
+
+    if (focusedCode) {
+      const country = countries.find(
+        (c) => c.code.toUpperCase() === focusedCode.toUpperCase()
+      );
+      if (country?.cityCoordinates) {
+        for (const [cityName, coords] of Object.entries(country.cityCoordinates)) {
+          features.push({
+            type: 'Feature',
+            geometry: { type: 'Point', coordinates: coords },
+            properties: { cityName, countryCode: country.code, countryName: country.name },
+          });
+        }
+      }
+    }
+
+    source.setData({ type: 'FeatureCollection', features });
+  }
+
   private setupMapInteractions(): void {
     if (!this.map) return;
 
+    // City pin interactions
+    this.map.on('mouseenter', 'city-pins', () => {
+      if (this.map) this.map.getCanvas().style.cursor = 'pointer';
+    });
+    this.map.on('mouseleave', 'city-pins', () => {
+      if (this.map) this.map.getCanvas().style.cursor = '';
+    });
+    this.map.on('click', 'city-pins', (e) => {
+      this.cityPinJustClicked = true;
+      queueMicrotask(() => { this.cityPinJustClicked = false; });
+      if (!e.features?.length || !this.map) return;
+      const props = e.features[0].properties as { cityName: string; countryName: string };
+      const coords = (e.features[0].geometry as GeoJSON.Point).coordinates as [number, number];
+      new mapboxgl.Popup({ closeButton: true, offset: 14, className: 'city-pin-popup' })
+        .setLngLat(coords)
+        .setHTML(
+          `<div class="city-popup-content">
+            <span class="city-popup-name">${props['cityName']}</span>
+            <span class="city-popup-country">${props['countryName']}</span>
+          </div>`
+        )
+        .addTo(this.map);
+    });
+
     // Click handler for country selection
     this.map.on('click', 'countries-fill', (e) => {
+      if (this.cityPinJustClicked) return; // city pin already handled this click
       if (!e.features || e.features.length === 0) return;
 
       const feature = e.features[0];
@@ -506,16 +671,6 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
       ) {
         this.ngZone.run(() => {
           this.openDockWithCenter(isoCode, countryName, countryCenter);
-        });
-      } else {
-        // Country not in our tracked list, just show name
-        console.debug(
-          '[MapPage] Country without valid ISO:',
-          countryName,
-          properties
-        );
-        this.ngZone.run(() => {
-          this.showCountryToast(countryName, false, true);
         });
       }
     });
@@ -728,15 +883,20 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
     countryName: string,
     center: [number, number]
   ): void {
-    // Close existing dock if open
+    // Close existing dock if open (direct map tap toggles it off; search path handles this externally)
     if (this.showDock()) {
       this.closeDock();
       return;
     }
 
+
+    // Auto-register the country if it isn't in the list yet (territories, non-UN states, etc.)
+    this.countryService.ensureCountry(isoCode, countryName);
+
     // Set selected country
     this.selectedCountryCode.set(isoCode);
     this.selectedCountryName.set(countryName);
+    this.cityPinsCountryCode.set(isoCode);
 
     // Pan the map to center on the country with smooth animation
     if (this.map) {
@@ -777,15 +937,6 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
     this.router.navigate(['/country', countryCode.toUpperCase()]);
   }
 
-  /**
-   * Convert ISO 3166-1 alpha-2 country code to flag emoji.
-   */
-  private countryCodeToFlag(countryCode: string): string {
-    if (!countryCode || countryCode.length !== 2) return '🏳️';
-    const code = countryCode.toUpperCase();
-    const codePoints = [...code].map((char) => 127397 + char.charCodeAt(0));
-    return String.fromCodePoint(...codePoints);
-  }
 
   private updateCountryColors(visitedIsoCodes: string[]): void {
     if (!this.map || !this.mapLoaded) return;
@@ -1058,96 +1209,59 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
    * Convert ISO 3-letter code to ISO 2-letter code.
    */
   private iso3ToIso2(iso3: string): string | null {
+    // Complete ISO 3166-1 alpha-3 → alpha-2 mapping (UN members + territories)
     const iso3Map: Record<string, string> = {
-      FRA: 'FR',
-      DEU: 'DE',
-      GBR: 'GB',
-      USA: 'US',
-      ESP: 'ES',
-      ITA: 'IT',
-      PRT: 'PT',
-      NLD: 'NL',
-      BEL: 'BE',
-      CHE: 'CH',
-      AUT: 'AT',
-      POL: 'PL',
-      CZE: 'CZ',
-      GRC: 'GR',
-      TUR: 'TR',
-      RUS: 'RU',
-      UKR: 'UA',
-      NOR: 'NO',
-      SWE: 'SE',
-      FIN: 'FI',
-      DNK: 'DK',
-      IRL: 'IE',
-      HUN: 'HU',
-      ROU: 'RO',
-      BGR: 'BG',
-      HRV: 'HR',
-      SVK: 'SK',
-      SVN: 'SI',
-      SRB: 'RS',
-      ALB: 'AL',
-      MKD: 'MK',
-      MNE: 'ME',
-      BIH: 'BA',
-      LTU: 'LT',
-      LVA: 'LV',
-      EST: 'EE',
-      BLR: 'BY',
-      MDA: 'MD',
-      ISL: 'IS',
-      LUX: 'LU',
-      MLT: 'MT',
-      CYP: 'CY',
-      CHN: 'CN',
-      JPN: 'JP',
-      KOR: 'KR',
-      PRK: 'KP',
-      IND: 'IN',
-      PAK: 'PK',
-      BGD: 'BD',
-      THA: 'TH',
-      VNM: 'VN',
-      MYS: 'MY',
-      IDN: 'ID',
-      PHL: 'PH',
-      AUS: 'AU',
-      NZL: 'NZ',
-      CAN: 'CA',
-      MEX: 'MX',
-      BRA: 'BR',
-      ARG: 'AR',
-      CHL: 'CL',
-      COL: 'CO',
-      PER: 'PE',
-      VEN: 'VE',
-      ECU: 'EC',
-      BOL: 'BO',
-      PRY: 'PY',
-      URY: 'UY',
-      EGY: 'EG',
-      ZAF: 'ZA',
-      MAR: 'MA',
-      DZA: 'DZ',
-      TUN: 'TN',
-      LBY: 'LY',
-      NGA: 'NG',
-      KEN: 'KE',
-      ETH: 'ET',
-      TZA: 'TZ',
-      SAU: 'SA',
-      ARE: 'AE',
-      ISR: 'IL',
-      IRN: 'IR',
-      IRQ: 'IQ',
-      JOR: 'JO',
-      LBN: 'LB',
-      SYR: 'SY',
-      KAZ: 'KZ',
-      UZB: 'UZ',
-      AFG: 'AF',
+      // Europe
+      ALB: 'AL', AND: 'AD', AUT: 'AT', BLR: 'BY', BEL: 'BE', BIH: 'BA',
+      BGR: 'BG', HRV: 'HR', CYP: 'CY', CZE: 'CZ', DNK: 'DK', EST: 'EE',
+      FIN: 'FI', FRA: 'FR', DEU: 'DE', GRC: 'GR', HUN: 'HU', ISL: 'IS',
+      IRL: 'IE', ITA: 'IT', XKX: 'XK', KOS: 'XK', LVA: 'LV', LIE: 'LI', LTU: 'LT',
+      LUX: 'LU', MLT: 'MT', MDA: 'MD', MCO: 'MC', MNE: 'ME', NLD: 'NL',
+      MKD: 'MK', NOR: 'NO', POL: 'PL', PRT: 'PT', ROU: 'RO', RUS: 'RU',
+      SMR: 'SM', SRB: 'RS', SVK: 'SK', SVN: 'SI', ESP: 'ES', SWE: 'SE',
+      CHE: 'CH', UKR: 'UA', GBR: 'GB', VAT: 'VA',
+      // Asia
+      AFG: 'AF', ARM: 'AM', AZE: 'AZ', BHR: 'BH', BGD: 'BD', BTN: 'BT',
+      BRN: 'BN', KHM: 'KH', CHN: 'CN', GEO: 'GE', IND: 'IN', IDN: 'ID',
+      IRN: 'IR', IRQ: 'IQ', ISR: 'IL', JPN: 'JP', JOR: 'JO', KAZ: 'KZ',
+      KWT: 'KW', KGZ: 'KG', LAO: 'LA', LBN: 'LB', MYS: 'MY', MDV: 'MV',
+      MNG: 'MN', MMR: 'MM', NPL: 'NP', PRK: 'KP', OMN: 'OM', PAK: 'PK',
+      PSE: 'PS', PHL: 'PH', QAT: 'QA', SAU: 'SA', SGP: 'SG', KOR: 'KR',
+      LKA: 'LK', SYR: 'SY', TWN: 'TW', TJK: 'TJ', THA: 'TH', TLS: 'TL',
+      TUR: 'TR', TKM: 'TM', ARE: 'AE', UZB: 'UZ', VNM: 'VN', YEM: 'YE',
+      HKG: 'HK', MAC: 'MO',
+      // Africa
+      DZA: 'DZ', AGO: 'AO', BEN: 'BJ', BWA: 'BW', BFA: 'BF', BDI: 'BI',
+      CMR: 'CM', CPV: 'CV', CAF: 'CF', TCD: 'TD', COM: 'KM', COD: 'CD',
+      COG: 'CG', CIV: 'CI', DJI: 'DJ', EGY: 'EG', GNQ: 'GQ', ERI: 'ER',
+      ETH: 'ET', GAB: 'GA', GMB: 'GM', GHA: 'GH', GIN: 'GN', GNB: 'GW',
+      KEN: 'KE', LSO: 'LS', LBR: 'LR', LBY: 'LY', MDG: 'MG', MWI: 'MW',
+      MLI: 'ML', MRT: 'MR', MUS: 'MU', MAR: 'MA', MOZ: 'MZ', NAM: 'NA',
+      NER: 'NE', NGA: 'NG', RWA: 'RW', STP: 'ST', SEN: 'SN', SYC: 'SC',
+      SLE: 'SL', SOM: 'SO', ZAF: 'ZA', SSD: 'SS', SDN: 'SD', SWZ: 'SZ',
+      TZA: 'TZ', TGO: 'TG', TUN: 'TN', UGA: 'UG', ZMB: 'ZM', ZWE: 'ZW',
+      ESH: 'EH',
+      // North America
+      ATG: 'AG', BHS: 'BS', BRB: 'BB', BLZ: 'BZ', CAN: 'CA', CRI: 'CR',
+      CUB: 'CU', DMA: 'DM', DOM: 'DO', SLV: 'SV', GRD: 'GD', GTM: 'GT',
+      HTI: 'HT', HND: 'HN', JAM: 'JM', MEX: 'MX', NIC: 'NI', PAN: 'PA',
+      KNA: 'KN', LCA: 'LC', VCT: 'VC', TTO: 'TT', USA: 'US',
+      // South America
+      ARG: 'AR', BOL: 'BO', BRA: 'BR', CHL: 'CL', COL: 'CO', ECU: 'EC',
+      GUY: 'GY', PRY: 'PY', PER: 'PE', SUR: 'SR', URY: 'UY', VEN: 'VE',
+      // Oceania
+      AUS: 'AU', FJI: 'FJ', KIR: 'KI', MHL: 'MH', FSM: 'FM', NRU: 'NR',
+      NZL: 'NZ', PLW: 'PW', PNG: 'PG', WSM: 'WS', SLB: 'SB', TON: 'TO',
+      TUV: 'TV', VUT: 'VU',
+      // Territories & dependencies
+      ABW: 'AW', AIA: 'AI', ASM: 'AS', ATA: 'AQ', ATF: 'TF', BES: 'BQ',
+      BMU: 'BM', BVT: 'BV', CCK: 'CC', COK: 'CK', CUW: 'CW', CXR: 'CX',
+      CYM: 'KY', FLK: 'FK', FRO: 'FO', GIB: 'GI', GLP: 'GP', GRL: 'GL',
+      GUF: 'GF', GUM: 'GU', HMD: 'HM', IOT: 'IO', MSR: 'MS', MTQ: 'MQ',
+      MYT: 'YT', MNP: 'MP', NCL: 'NC', NFK: 'NF', NIU: 'NU', PCN: 'PN',
+      PRI: 'PR', PYF: 'PF', REU: 'RE', SGS: 'GS', SHN: 'SH', SJM: 'SJ',
+      SPM: 'PM', SXM: 'SX', TCA: 'TC', TKL: 'TK', UMI: 'UM', VGB: 'VG',
+      VIR: 'VI', WLF: 'WF', WLF2: 'WF', XKK: 'XK',
     };
     return iso3Map[iso3.toUpperCase()] || null;
   }
@@ -1157,6 +1271,15 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
    */
   private nameToIso2(name: string): string | null {
     const nameMap: Record<string, string> = {
+      kosovo: 'XK',
+      'republic of kosovo': 'XK',
+      taiwan: 'TW',
+      'republic of china': 'TW',
+      'western sahara': 'EH',
+      'northern mariana islands': 'MP',
+      'hong kong': 'HK',
+      'macao': 'MO',
+      'macau': 'MO',
       france: 'FR',
       germany: 'DE',
       'united kingdom': 'GB',

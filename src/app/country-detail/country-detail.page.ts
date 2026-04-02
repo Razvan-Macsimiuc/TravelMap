@@ -5,7 +5,10 @@ import {
   computed,
   signal,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Subject, switchMap, debounceTime, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
+
 import { ActivatedRoute } from '@angular/router';
 import {
   IonHeader,
@@ -24,14 +27,23 @@ import {
   IonToggle,
   IonIcon,
   IonSkeletonText,
+  IonInput,
   NavController,
 } from '@ionic/angular/standalone';
 import { AnimatedBackgroundComponent } from '../components/animated-background/animated-background.component';
 import { addIcons } from 'ionicons';
-import { checkmarkCircle, closeCircle } from 'ionicons/icons';
+import {
+  checkmarkCircle,
+  closeCircle,
+  closeOutline,
+  locationOutline,
+  searchOutline,
+  lockClosedOutline,
+} from 'ionicons/icons';
 import { CountryService } from '../services/country.service';
 import { PageTransitionService } from '../services/page-transition.service';
 import { AchievementService } from '../services/achievement.service';
+import { CitySearchService, CityResult } from '../services/city-search.service';
 import { Country } from '../models/country.model';
 
 @Component({
@@ -56,6 +68,7 @@ import { Country } from '../models/country.model';
     IonToggle,
     IonIcon,
     IonSkeletonText,
+    IonInput,
     AnimatedBackgroundComponent,
   ],
 })
@@ -64,6 +77,7 @@ export class CountryDetailPage implements OnInit {
   private readonly countryService = inject(CountryService);
   private readonly pageTransitionService = inject(PageTransitionService);
   private readonly achievementService = inject(AchievementService);
+  private readonly citySearchService = inject(CitySearchService);
   private readonly navController = inject(NavController);
 
   private readonly countryCode = signal<string>('');
@@ -73,19 +87,47 @@ export class CountryDetailPage implements OnInit {
     return code ? this.countryService.getCountryByCode(code) : undefined;
   });
 
-  readonly flagEmoji = computed(() => {
+  readonly flagUrl = computed(() => {
     const code = this.countryCode();
-    return code ? this.countryCodeToFlag(code) : '🏳️';
+    if (!code || code.length !== 2) return null;
+    return `https://flagcdn.com/w160/${code.toLowerCase()}.png`;
   });
 
   readonly isVisited = computed(() => this.country()?.visited ?? false);
 
-  readonly isPageLoading = signal(true);
+  readonly cities = computed(() => this.country()?.cities ?? []);
 
+  readonly newCityName = signal('');
+  readonly citySearchResults = signal<CityResult[]>([]);
+  readonly isCitySearching = signal(false);
+  readonly showCityDropdown = signal(false);
+
+  readonly isPageLoading = signal(true);
   readonly showHeader = signal(false);
 
+  private readonly cityQuery$ = new Subject<string>();
+
   constructor() {
-    addIcons({ checkmarkCircle, closeCircle });
+    addIcons({ checkmarkCircle, closeCircle, closeOutline, locationOutline, searchOutline, lockClosedOutline });
+
+    this.cityQuery$.pipe(
+      debounceTime(350),
+      switchMap((query) => {
+        if (query.trim().length < 2) {
+          this.isCitySearching.set(false);
+          this.citySearchResults.set([]);
+          this.showCityDropdown.set(false);
+          return of([]);
+        }
+        this.isCitySearching.set(true);
+        return this.citySearchService.searchCities(query, this.countryCode());
+      }),
+      takeUntilDestroyed(),
+    ).subscribe((results) => {
+      this.citySearchResults.set(results);
+      this.showCityDropdown.set(results.length > 0);
+      this.isCitySearching.set(false);
+    });
   }
 
   ngOnInit(): void {
@@ -110,16 +152,49 @@ export class CountryDetailPage implements OnInit {
     const code = this.countryCode();
     const country = this.country();
     if (code && country) {
-      const wasVisited = country.visited;
       this.countryService.toggleVisited(code, country.name);
-      const newStatus =
-        this.countryService.getCountryByCode(code)?.visited ?? false;
-
-      if (!wasVisited && newStatus) {
-        const visitedCount = this.countryService.visitedCount();
-        await this.achievementService.checkMilestone(visitedCount);
-      }
+      // Check achievements in both directions: newly earned ones celebrate,
+      // revoked ones are removed and will re-celebrate when earned again.
+      const visitedCodes = this.countryService.visitedCountries().map(c => c.code);
+      await this.achievementService.checkAchievements(visitedCodes);
     }
+  }
+
+  onCityInput(value: string): void {
+    this.newCityName.set(value);
+    this.cityQuery$.next(value);
+  }
+
+  selectCity(cityName: string, coordinates?: [number, number]): void {
+    if (!this.isVisited()) return;
+    this.showCityDropdown.set(false);
+    this.citySearchResults.set([]);
+    this.newCityName.set('');
+    this.commitCity(cityName, coordinates);
+  }
+
+  addCity(): void {
+    const name = this.newCityName().trim();
+    this.showCityDropdown.set(false);
+    this.citySearchResults.set([]);
+    this.newCityName.set('');
+    this.commitCity(name);
+  }
+
+  private commitCity(name: string, coordinates?: [number, number]): void {
+    const code = this.countryCode();
+    if (!name || !code) return;
+    this.countryService.addCity(code, name, coordinates);
+    const visitedCodes = this.countryService.visitedCountries().map(c => c.code);
+    this.achievementService.checkAchievements(visitedCodes);
+  }
+
+  removeCity(cityName: string): void {
+    const code = this.countryCode();
+    if (!code) return;
+    this.countryService.removeCity(code, cityName);
+    const visitedCodes = this.countryService.visitedCountries().map(c => c.code);
+    this.achievementService.checkAchievements(visitedCodes);
   }
 
   goBack(): void {
@@ -140,11 +215,4 @@ export class CountryDetailPage implements OnInit {
     }, 800);
   }
 
-  private countryCodeToFlag(countryCode: string): string {
-    const code = countryCode.toUpperCase();
-    if (code.length !== 2) return '🏳️';
-
-    const codePoints = [...code].map((char) => 127397 + char.charCodeAt(0));
-    return String.fromCodePoint(...codePoints);
-  }
 }

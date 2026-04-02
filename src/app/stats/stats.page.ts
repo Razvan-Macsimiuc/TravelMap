@@ -34,7 +34,7 @@ import { Country } from '../models/country.model';
 const TOTAL_WORLD_COUNTRIES = 195;
 
 interface VisitedCountryItem extends Country {
-  flagEmoji: string;
+  flagUrl: string;
 }
 
 type ViewMode = 'countries' | 'achievements';
@@ -81,7 +81,7 @@ export class StatsPage implements ViewWillEnter {
     return countries
       .map((country) => ({
         ...country,
-        flagEmoji: this.countryCodeToFlag(country.code),
+        flagUrl: this.countryToFlagUrl(country.code),
       }))
       .sort((a, b) => a.name.localeCompare(b.name));
   });
@@ -111,33 +111,29 @@ export class StatsPage implements ViewWillEnter {
     this.achievementService.progressPercentage()
   );
 
-  // Milestone achievements (legacy support for the card)
+  // Full ordered milestone thresholds — derived from the service so they always stay in sync
+  private readonly milestoneThresholds = this.achievementService
+    .getMilestones()
+    .map((m) => m.count); // [1, 5, 10, 25, 50, 75, 100, 150, 195]
+
   readonly milestoneReached = computed(() => {
     const count = this.visitedCount();
-    if (count >= 100) return { label: 'Century Traveler', threshold: 100 };
-    if (count >= 50) return { label: 'Globe Trotter', threshold: 50 };
-    if (count >= 25) return { label: 'Explorer', threshold: 25 };
-    if (count >= 10) return { label: 'Adventurer', threshold: 10 };
-    if (count >= 5) return { label: 'Wanderer', threshold: 5 };
-    if (count >= 1) return { label: 'First Steps', threshold: 1 };
-    return null;
+    const milestones = this.achievementService.getMilestones();
+    const reached = [...milestones].reverse().find((m) => count >= m.count);
+    return reached ? { label: reached.title, threshold: reached.count } : null;
   });
 
   readonly nextMilestone = computed(() => {
     const count = this.visitedCount();
-    if (count < 1) return 1;
-    if (count < 5) return 5;
-    if (count < 10) return 10;
-    if (count < 25) return 25;
-    if (count < 50) return 50;
-    if (count < 100) return 100;
-    return 195;
+    const next = this.milestoneThresholds.find((t) => t > count);
+    return next ?? this.milestoneThresholds[this.milestoneThresholds.length - 1];
   });
 
   readonly progressToNextMilestone = computed(() => {
     const count = this.visitedCount();
     const next = this.nextMilestone();
-    const prev = this.getPreviousMilestone(next);
+    const nextIdx = this.milestoneThresholds.indexOf(next);
+    const prev = nextIdx > 0 ? this.milestoneThresholds[nextIdx - 1] : 0;
     return Math.round(((count - prev) / (next - prev)) * 100);
   });
 
@@ -179,22 +175,9 @@ export class StatsPage implements ViewWillEnter {
     this.router.navigate(['/country', countryCode]);
   }
 
-  private countryCodeToFlag(countryCode: string): string {
-    const code = countryCode.toUpperCase();
-    if (code.length !== 2) return '🏳️';
-
-    const codePoints = [...code].map((char) => 127397 + char.charCodeAt(0));
-    return String.fromCodePoint(...codePoints);
-  }
-
-  private getPreviousMilestone(next: number): number {
-    if (next <= 1) return 0;
-    if (next === 5) return 1;
-    if (next === 10) return 5;
-    if (next === 25) return 10;
-    if (next === 50) return 25;
-    if (next === 100) return 50;
-    return 100;
+  private countryToFlagUrl(countryCode: string): string {
+    const code = countryCode.toLowerCase();
+    return `https://flagcdn.com/w40/${code}.png`;
   }
 
   getCategoryLabel(category: AchievementCategory): string {

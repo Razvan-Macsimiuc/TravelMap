@@ -31,6 +31,7 @@ export interface Milestone {
   icon: string;
   color: string;
   message: string;
+  countLabel?: string; // e.g. "Countries Visited", "Cities Logged", "Continents Explored"
 }
 
 // ============================================
@@ -51,7 +52,7 @@ const MILESTONE_ACHIEVEMENTS: Achievement[] = [
     id: 'milestone_5',
     title: 'Wanderer',
     description: 'Visit 5 countries',
-    icon: '🌟',
+    icon: '🗺️',
     category: 'milestone',
     requirement: 5,
     color: '#4ECDC4',
@@ -232,6 +233,26 @@ const SPECIAL_ACHIEVEMENTS: Achievement[] = [
   },
   // City-based achievements
   {
+    id: 'special_first_city',
+    title: 'First Stop',
+    description: 'Log your first city',
+    icon: '📍',
+    category: 'special',
+    requirement: 1,
+    color: '#6366F1',
+    unlockedMessage: 'You logged your first city!',
+  },
+  {
+    id: 'special_city_wanderer',
+    title: 'City Wanderer',
+    description: 'Log 5 cities across your travels',
+    icon: '🗺️',
+    category: 'special',
+    requirement: 5,
+    color: '#4F46E5',
+    unlockedMessage: 'You have logged 5 cities across your travels!',
+  },
+  {
     id: 'special_city_explorer',
     title: 'City Explorer',
     description: 'Add 10 cities across your travels',
@@ -239,7 +260,7 @@ const SPECIAL_ACHIEVEMENTS: Achievement[] = [
     category: 'special',
     requirement: 10,
     color: '#7C3AED',
-    unlockedMessage: '10 cities explored! Urban adventurer!',
+    unlockedMessage: 'You have explored 10 cities across your travels!',
   },
   {
     id: 'special_urban_legend',
@@ -260,90 +281,6 @@ const SPECIAL_ACHIEVEMENTS: Achievement[] = [
     requirement: 50,
     color: '#A855F7',
     unlockedMessage: '50 cities conquered! Legendary explorer!',
-  },
-  // Visit frequency achievements
-  {
-    id: 'special_frequent_flyer',
-    title: 'Frequent Flyer',
-    description: 'Visit any country 3 or more times',
-    icon: '✈️',
-    category: 'special',
-    requirement: 3,
-    color: '#0EA5E9',
-    unlockedMessage: 'You found a favorite destination!',
-  },
-  {
-    id: 'special_dedicated_traveler',
-    title: 'Dedicated Traveler',
-    description: 'Visit any country 5 or more times',
-    icon: '🎯',
-    category: 'special',
-    requirement: 5,
-    color: '#0284C7',
-    unlockedMessage: 'True dedication to your favorite place!',
-  },
-  // Days stayed achievements
-  {
-    id: 'special_week_abroad',
-    title: 'Week Abroad',
-    description: 'Spend 7+ days in a single country',
-    icon: '📅',
-    category: 'special',
-    requirement: 7,
-    color: '#10B981',
-    unlockedMessage: 'A week well spent!',
-  },
-  {
-    id: 'special_month_abroad',
-    title: 'Month Abroad',
-    description: 'Spend 30+ days in a single country',
-    icon: '🗓️',
-    category: 'special',
-    requirement: 30,
-    color: '#059669',
-    unlockedMessage: 'A month of adventure!',
-  },
-  {
-    id: 'special_world_resident',
-    title: 'World Resident',
-    description: 'Accumulate 100+ total days traveled',
-    icon: '🌐',
-    category: 'special',
-    requirement: 100,
-    color: '#047857',
-    unlockedMessage: '100 days exploring the world!',
-  },
-  // Notes achievements
-  {
-    id: 'special_storyteller',
-    title: 'Storyteller',
-    description: 'Add personal notes to 5 countries',
-    icon: '📝',
-    category: 'special',
-    requirement: 5,
-    color: '#F59E0B',
-    unlockedMessage: 'Your stories are taking shape!',
-  },
-  {
-    id: 'special_travel_journalist',
-    title: 'Travel Journalist',
-    description: 'Add personal notes to 10 countries',
-    icon: '✍️',
-    category: 'special',
-    requirement: 10,
-    color: '#D97706',
-    unlockedMessage: 'A true chronicler of adventures!',
-  },
-  // Perfect country achievement
-  {
-    id: 'special_perfect_trip',
-    title: 'Perfect Trip',
-    description: 'Complete a country with cities and a note',
-    icon: '⭐',
-    category: 'special',
-    requirement: 1,
-    color: '#FBBF24',
-    unlockedMessage: 'A perfectly documented journey!',
   },
   // Regional achievements
   {
@@ -857,20 +794,11 @@ export class AchievementService {
         condition: stats.visitedContinents.size >= 6,
       },
       { id: 'special_island_hopper', condition: stats.islandCount >= 5 },
+      { id: 'special_first_city', condition: stats.totalCities >= 1 },
+      { id: 'special_city_wanderer', condition: stats.totalCities >= 5 },
       { id: 'special_city_explorer', condition: stats.totalCities >= 10 },
       { id: 'special_urban_legend', condition: stats.totalCities >= 25 },
       { id: 'special_metropolitan', condition: stats.totalCities >= 50 },
-      { id: 'special_frequent_flyer', condition: stats.maxVisitCount >= 3 },
-      { id: 'special_dedicated_traveler', condition: stats.maxVisitCount >= 5 },
-      { id: 'special_week_abroad', condition: stats.maxDaysInCountry >= 7 },
-      { id: 'special_month_abroad', condition: stats.maxDaysInCountry >= 30 },
-      { id: 'special_world_resident', condition: stats.totalDays >= 100 },
-      { id: 'special_storyteller', condition: stats.countriesWithNotes >= 5 },
-      {
-        id: 'special_travel_journalist',
-        condition: stats.countriesWithNotes >= 10,
-      },
-      { id: 'special_perfect_trip', condition: stats.hasPerfectTrip },
       { id: 'special_nordic', condition: stats.nordicCount >= 5 },
       { id: 'special_mediterranean', condition: stats.mediterraneanCount >= 5 },
       {
@@ -938,33 +866,6 @@ export class AchievementService {
       totalCities += c.cities?.length ?? 0;
     });
 
-    // Visit frequency (max visits to any country)
-    let maxVisitCount = 0;
-    visitedCountries.forEach((c) => {
-      maxVisitCount = Math.max(maxVisitCount, c.visitCount ?? 1);
-    });
-
-    // Days stayed
-    let maxDaysInCountry = 0;
-    let totalDays = 0;
-    visitedCountries.forEach((c) => {
-      const days = c.daysStayed ?? 0;
-      maxDaysInCountry = Math.max(maxDaysInCountry, days);
-      totalDays += days;
-    });
-
-    // Notes count
-    const countriesWithNotes = visitedCountries.filter(
-      (c) => c.note && c.note.trim().length > 0
-    ).length;
-
-    const hasPerfectTrip = visitedCountries.some(
-      (c) =>
-        (c.cities?.length ?? 0) > 0 &&
-        c.note &&
-        c.note.trim().length > 0
-    );
-
     // Regional counts
     const nordicCount = visitedCodes.filter((c) =>
       NORDIC_COUNTRIES.has(c)
@@ -981,11 +882,6 @@ export class AchievementService {
       visitedContinents,
       islandCount,
       totalCities,
-      maxVisitCount,
-      maxDaysInCountry,
-      totalDays,
-      countriesWithNotes,
-      hasPerfectTrip,
       nordicCount,
       mediterraneanCount,
       southeastAsiaCount,
@@ -1036,20 +932,11 @@ export class AchievementService {
         condition: stats.visitedContinents.size >= 6,
       },
       { id: 'special_island_hopper', condition: stats.islandCount >= 5 },
+      { id: 'special_first_city', condition: stats.totalCities >= 1 },
+      { id: 'special_city_wanderer', condition: stats.totalCities >= 5 },
       { id: 'special_city_explorer', condition: stats.totalCities >= 10 },
       { id: 'special_urban_legend', condition: stats.totalCities >= 25 },
       { id: 'special_metropolitan', condition: stats.totalCities >= 50 },
-      { id: 'special_frequent_flyer', condition: stats.maxVisitCount >= 3 },
-      { id: 'special_dedicated_traveler', condition: stats.maxVisitCount >= 5 },
-      { id: 'special_week_abroad', condition: stats.maxDaysInCountry >= 7 },
-      { id: 'special_month_abroad', condition: stats.maxDaysInCountry >= 30 },
-      { id: 'special_world_resident', condition: stats.totalDays >= 100 },
-      { id: 'special_storyteller', condition: stats.countriesWithNotes >= 5 },
-      {
-        id: 'special_travel_journalist',
-        condition: stats.countriesWithNotes >= 10,
-      },
-      { id: 'special_perfect_trip', condition: stats.hasPerfectTrip },
       { id: 'special_nordic', condition: stats.nordicCount >= 5 },
       { id: 'special_mediterranean', condition: stats.mediterraneanCount >= 5 },
       {
@@ -1071,9 +958,11 @@ export class AchievementService {
       }
     }
 
-    // Show celebration for the first newly unlocked achievement (skip during startup)
+    // Show celebration for every newly unlocked achievement sequentially (skip during startup)
     if (newlyUnlocked.length > 0 && !this.suppressCelebrations) {
-      await this.celebrateAchievement(newlyUnlocked[0]);
+      for (const achievement of newlyUnlocked) {
+        await this.celebrateAchievement(achievement);
+      }
     }
   }
 
@@ -1162,6 +1051,25 @@ export class AchievementService {
       '../components/achievement-modal/achievement-modal.component'
     );
 
+    const visited = this.countryService.visitedCountries();
+    let countLabel = 'Countries Visited';
+    let displayCount = visited.length;
+
+    if (['special_first_city', 'special_city_wanderer', 'special_city_explorer', 'special_urban_legend', 'special_metropolitan'].includes(achievement.id)) {
+      countLabel = 'Cities Logged';
+      displayCount = visited.reduce((sum, c) => sum + (c.cities?.length ?? 0), 0);
+    } else if (['special_5_continents', 'special_all_continents'].includes(achievement.id)) {
+      countLabel = 'Continents Explored';
+      displayCount = new Set(
+        visited.map((c) => CONTINENT_MAP[c.code]).filter(Boolean)
+      ).size;
+    } else if (['special_island_hopper'].includes(achievement.id)) {
+      countLabel = 'Island Nations Visited';
+      displayCount = visited.filter((c) => ISLAND_NATIONS.has(c.code)).length;
+    } else if (['special_nordic', 'special_mediterranean', 'special_southeast_asia'].includes(achievement.id)) {
+      countLabel = 'Countries Visited';
+    }
+
     const modal = await this.modalController.create({
       component: AchievementModalComponent,
       componentProps: {
@@ -1171,8 +1079,9 @@ export class AchievementService {
           icon: achievement.icon,
           color: achievement.color,
           message: achievement.unlockedMessage,
+          countLabel,
         },
-        visitedCount: achievement.requirement,
+        visitedCount: displayCount,
       },
       cssClass: 'achievement-modal',
       backdropDismiss: true,
@@ -1180,6 +1089,7 @@ export class AchievementService {
     });
 
     await modal.present();
+    await modal.onDidDismiss();
   }
 
   /**
@@ -1218,8 +1128,9 @@ export class AchievementService {
       const stored = localStorage.getItem('hopahopa_achievements');
       if (stored) {
         const array: UnlockedAchievement[] = JSON.parse(stored);
+        const validIds = new Set(ALL_ACHIEVEMENTS.map((a) => a.id));
         const map = new Map<string, UnlockedAchievement>();
-        array.forEach((a) => map.set(a.id, a));
+        array.filter((a) => validIds.has(a.id)).forEach((a) => map.set(a.id, a));
         this.unlockedAchievements.set(map);
       }
     } catch (error) {

@@ -1,0 +1,156 @@
+---
+description: Comprehensive reference for the HopaHopa (TravelMap) project — always loaded so the agent always has full project context.
+alwaysApply: true
+---
+
+# HopaHopa – Project Overview
+
+## Identity
+
+- **App name:** HopaHopa ("Track your travels around the world with an interactive map")
+- **Repo / workspace folder:** `TravelMap`
+- **App ID (Capacitor):** `com.hopahopa.app`
+- **iOS scheme:** `TravelMap`
+
+## Stack
+
+| Layer | Technology | Version |
+|---|---|---|
+| Framework | Angular (standalone, zoneless) | 20 |
+| UI shell | Ionic | 8 |
+| Native wrapper | Capacitor | 8 |
+| Map | Mapbox GL JS | ~2.15 |
+| Language | TypeScript | ~5.9 |
+| Reactive | RxJS | ~7.8 |
+| Tests | Karma + Jasmine | — |
+| Linter | Angular ESLint | — |
+
+**Zoneless change detection** is enabled via `provideZonelessChangeDetection()` in `src/app/app.config.ts`.  
+**All components are standalone** — never use `declarations: []` in modules.
+
+## Build & output
+
+- Build command: `ng build` → output directory **`www`** (`www/browser` for Capacitor `webDir`)
+- Serve: `ng serve` / `npm start`
+- Production env file (`environment.prod.ts`) replaces `environment.ts` via `angular.json` `fileReplacements`
+- Test: `ng test` (Karma)
+- Lint: `ng lint`
+
+## Directory layout
+
+```
+src/
+  app/
+    map/               # MapPage – Mapbox map, country interaction
+    stats/             # StatsPage – visited list, progress, achievements
+    settings/          # SettingsPage – reset, version, links
+    country-detail/    # CountryDetailPage – per-country detail & toggle
+    splash/            # SplashPage – launch screen, session init
+    welcome/           # WelcomePage – multi-slide onboarding
+    tabs/              # TabsPage – bottom-tab shell
+    components/        # Shared standalone UI components
+    services/          # Injectable services
+    models/            # TypeScript interfaces
+    data/              # Static data (countries.data.ts)
+    guards/            # Route guards
+    utils/             # confetti.ts, counter-animation.ts
+    styles/            # Shared SCSS (premium-header.scss)
+    app.routes.ts      # Route definitions
+    app.config.ts      # Bootstrap config
+  assets/
+    countries.geojson  # Offline fallback GeoJSON
+  environments/
+    environment.ts          # dev – mapboxToken committed
+    environment.prod.ts     # prod – mapboxToken: '' (set via CI)
+  main.ts              # bootstrapApplication(AppComponent, appConfig)
+  global.scss
+  theme/variables.scss
+capacitor.config.ts
+angular.json
+package.json
+```
+
+## Routing
+
+```
+/splash                     SplashPage (sets sessionStorage hopahopa_splash_shown)
+/welcome                    WelcomePage (sets localStorage hopahopa_welcome_seen)
+'' (root, splashGuard)
+  map                       MapPage        (tab)
+  stats                     StatsPage      (tab)
+  settings                  SettingsPage   (tab)
+  country/:code             CountryDetailPage
+  ''                        → redirect to map
+```
+
+`splashGuard` is an inline guard in `app.routes.ts`; it redirects to `/splash` if `hopahopa_splash_shown` is not `'true'` in `sessionStorage`.
+
+> **Note:** `welcomeGuard` and `welcomeSeenGuard` in `src/app/guards/welcome.guard.ts` exist but are **not wired to any route** — first-run logic is handled inside `SplashPage`.
+
+## Services
+
+| Service | File | Responsibility |
+|---|---|---|
+| `CountryService` | `services/country.service.ts` | Source of truth for all ~195 countries; Angular **signals + computed** for counts; load/merge from storage; toggle visited; update stats/cities/notes; auto-save via `effect()` |
+| `StorageService` | `services/storage.service.ts` | **Capacitor Preferences** key `travelmap_countries`; generic JSON get/set/remove; migration from legacy localStorage; optional IndexedDB `HopaHopaDB` cleanup |
+| `AchievementService` | `services/achievement.service.ts` | Milestone / continent / special achievements; sync unlock state with `CountryService`; celebrations (sound, haptics, modal); persists to `localStorage` key `hopahopa_achievements` |
+| `SettingsService` | `services/settings.service.ts` | Forces dark mode on `documentElement` / `body`; `resetSettings()` removes preferences key |
+| `OverlayService` | `services/overlay.service.ts` | On `NavigationStart`, dismisses modals, popovers, alerts, action sheets; initialized from `AppComponent` |
+| `PageTransitionService` | `services/page-transition.service.ts` | Shared state (position, country id/name) for map → country-detail transition animation |
+| `ErrorService` | `services/error.service.ts` | User-facing toasts/alerts for categorized errors; logging helper |
+| `CitySearchService` | `services/city-search.service.ts` | Wraps Mapbox Geocoding API (`/geocoding/v5/mapbox.places`) to return city suggestions filtered by country ISO code; used by `CountryDetailPage` autocomplete |
+
+## Shared components
+
+| Component | Purpose |
+|---|---|
+| `AnimatedBackgroundComponent` | Decorative background used on several pages |
+| `AchievementModalComponent` | Celebration modal (lazy-imported by `AchievementService`) |
+| `CircularMenuComponent` | Long-press radial menu on the map |
+| `CountryPreviewCardComponent` | Hover/tap preview card on map |
+
+**Directive:** `ButtonPressDirective` (`appButtonPress`) — press animation + Capacitor haptics.
+
+## Domain models (`src/app/models/country.model.ts`)
+
+```typescript
+interface Country {
+  code: string;       // ISO alpha-2
+  name: string;
+  visited: boolean;
+  photoIds: string[];
+  visitCount?: number;
+  daysStayed?: number;
+  cities?: string[];
+  cityCoordinates?: Record<string, [number, number]>; // city name → [lng, lat] for map pins
+  note?: string;      // max 120 chars enforced in CountryService
+}
+```
+
+Other types: `Achievement`, `UnlockedAchievement`, `AchievementCategory` (in `AchievementService`); `TransitionState` (in `PageTransitionService`); `AppSettings` (in `SettingsService`); `ErrorContext` / `ErrorType` (in `ErrorService`).
+
+## Storage keys
+
+| Key | Storage | Content |
+|---|---|---|
+| `travelmap_countries` | Capacitor Preferences | Serialized country array |
+| `hopahopa_achievements` | `localStorage` | Unlocked achievement IDs |
+| `hopahopa_welcome_seen` | `localStorage` | `'true'` after onboarding |
+| `hopahopa_splash_shown` | `sessionStorage` | `'true'` per session |
+
+## External APIs
+
+- **Mapbox:** map tiles + dark style (`mapbox://styles/mapbox/dark-v11`); token from `environment.mapboxToken`
+- **GeoJSON (countries):** `https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson` with fallback to `assets/countries.geojson`
+- **No custom REST backend** — fully offline-first; all data lives on-device
+
+## Capacitor plugins in use
+
+`@capacitor/app`, `@capacitor/camera`, `@capacitor/filesystem`, `@capacitor/haptics`, `@capacitor/keyboard`, `@capacitor/preferences`, `@capacitor/share`, `@capacitor/splash-screen`, `@capacitor/status-bar`
+
+## Known caveats / tech debt
+
+- `src/app/data/countries.data.ts` exports `ALL_COUNTRIES`; `CountryService` now imports and uses it as `INITIAL_COUNTRIES` — all 195 countries are available from app start
+- `StorageService.loadCountries()` currently maps only `code`, `name`, `visited`, `photoIds` — `visitCount`, `daysStayed`, `cities`, `note` may not survive a full reload
+- Existing spec files (`app.component.spec.ts`, `tabs.page.spec.ts`) use legacy `declarations: []` — they need migrating to `imports: []` for standalone components
+- `welcomeGuard` / `welcomeSeenGuard` are unused dead code

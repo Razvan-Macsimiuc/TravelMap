@@ -1,0 +1,45 @@
+---
+description: Enforce that project-overview.mdc is always kept in sync with code changes made in this project.
+alwaysApply: true
+---
+
+# Keep project-overview.mdc Up to Date
+
+Whenever you make **any** of the changes listed below, you **must** also update the relevant section(s) in `.cursor/rules/project-overview.mdc` **in the same session**, before finishing your response.
+
+## Triggers — update the docs when you:
+
+- **Add, rename, or delete** a service, component, directive, pipe, or guard
+- **Add, rename, or delete** a route or change its path / guard
+- **Add or remove** a domain model, interface, or type
+- **Add or rename** a storage key (Capacitor Preferences, localStorage, sessionStorage)
+- **Add or remove** an environment variable (e.g. in `environment.ts` / `environment.prod.ts`)
+- **Add or remove** a Capacitor plugin or any `package.json` dependency that changes the stack
+- **Move or restructure** a folder that is listed in the Directory layout section
+- **Resolve** one of the listed "Known caveats / tech debt" items
+- **Introduce** a new noteworthy caveat or architectural decision
+
+## What to update
+
+Match the trigger to the section in `project-overview.mdc`:
+
+| Trigger | Section to update |
+|---|---|
+| Service change | **Services** table |
+| Component / directive change | **Shared components** table |
+| Route change | **Routing** block |
+| Model / interface change | **Domain models** block |
+| Storage key change | **Storage keys** table |
+| Environment variable change | **External APIs** or **Environment** note |
+| Capacitor plugin change | **Capacitor plugins in use** list |
+| Dependency / stack change | **Stack** table |
+| Folder restructure | **Directory layout** tree |
+| Caveat resolved or added | **Known caveats / tech debt** list |
+
+## How to update
+
+1. Open `.cursor/rules/project-overview.mdc`.
+2. Find the matching section using the table above.
+3. Edit only that section — keep every other section intact.
+4. Do **not** rewrite unrelated sections or change the file structure.
+5. Confirm the update in your response so the user knows the docs were kept in sync.

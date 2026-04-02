@@ -159,7 +159,7 @@
                 (click)="navigateToCountry(country.code)"
                 class="country-item"
               >
-                <span class="country-flag" slot="start">{{ country.flagEmoji }}</span>
+                <img class="country-flag" [src]="country.flagUrl" [alt]="country.name" slot="start" />
                 <ion-label>
                   <h2>{{ country.name }}</h2>
                   <p>{{ country.code }}</p>

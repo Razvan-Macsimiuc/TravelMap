@@ -1,5 +1,5 @@
 // ============================================
-// Floating Island Tab Bar - Fluid Glass Design
+// Glass Tab Bar - Block Layout, No Overlap
 // ============================================
 
 :host {
@@ -19,7 +19,7 @@ body.ion-palette-dark :host {
 }
 
 // ============================================
-// Tab Bar Container - Floating Island
+// Tab Bar Container
 // ============================================
 
 ion-tab-bar.apple-tab-bar {
@@ -29,29 +29,21 @@ ion-tab-bar.apple-tab-bar {
   border: none !important;
   contain: none;
 
-  // Floating island positioning
-  position: fixed;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
+  // Block layout — sits below content, never overlaps it
+  width: 100%;
+  height: 64px;
+  padding: 6px 16px;
+  padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px));
 
-  // Size & shape - Compact
-  width: auto;
-  min-width: 200px;
-  max-width: 280px;
-  height: 56px;
-  padding: 6px;
-
-  // Glassmorphism island
+  // Glassmorphism bar
   background: var(--tab-bg);
   backdrop-filter: var(--glass-blur-strong);
   -webkit-backdrop-filter: var(--glass-blur-strong);
-  border-radius: var(--radius-2xl);
-  border: 1px solid var(--tab-border);
+  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+  border-top: 1px solid var(--tab-border) !important;
 
-  // Layered shadow for depth
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08),
+  // Shadow lifting upward
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.1), 0 -1px 8px rgba(0, 0, 0, 0.06),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 
   // Smooth entrance animation
@@ -62,11 +54,11 @@ ion-tab-bar.apple-tab-bar {
 @keyframes tabBarSlideUp {
   from {
     opacity: 0;
-    transform: translateX(-50%) translateY(40px) scale(0.9);
+    transform: translateY(40px) scale(0.98);
   }
   to {
     opacity: 1;
-    transform: translateX(-50%) translateY(0) scale(1);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -83,12 +75,10 @@ ion-tab-button.apple-tab-button {
   --padding-start: 0;
   --padding-end: 0;
 
-  // Layout - Compact
+  // Layout — equal columns across full bar width
   flex: 1;
-  min-width: 54px;
-  max-width: 76px;
   height: 44px;
-  margin: 0 3px;
+  margin: 0 4px;
 
   // Shape
   border-radius: var(--radius-lg);
@@ -186,13 +176,12 @@ ion-tab-button.apple-tab-button {
 // Small screens
 @media (max-width: 360px) {
   ion-tab-bar.apple-tab-bar {
-    min-width: 180px;
-    padding: 4px;
-    height: 50px;
+    height: 56px;
+    padding: 4px 8px;
+    padding-bottom: calc(4px + env(safe-area-inset-bottom, 0px));
   }
 
   ion-tab-button.apple-tab-button {
-    min-width: 48px;
     height: 40px;
 
     ion-icon {
@@ -207,15 +196,8 @@ ion-tab-button.apple-tab-button {
 
 // Larger screens
 @media (min-width: 600px) {
-  ion-tab-bar.apple-tab-bar {
-    max-width: 320px;
-    height: 64px;
-    padding: 8px 10px;
-    bottom: 24px;
-  }
 
   ion-tab-button.apple-tab-button {
-    max-width: 90px;
     height: 48px;
 
     ion-icon {
@@ -225,13 +207,6 @@ ion-tab-button.apple-tab-button {
     ion-label {
       font-size: 10px;
     }
-  }
-}
-
-// Safe area for notched devices
-@supports (padding-bottom: env(safe-area-inset-bottom)) {
-  ion-tab-bar.apple-tab-bar {
-    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
   }
 }
 

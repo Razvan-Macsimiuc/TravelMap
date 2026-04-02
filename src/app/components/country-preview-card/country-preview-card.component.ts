@@ -11,7 +11,9 @@ import { Country } from '../../models/country.model';
       <div class="preview-card" [class.visible]="visible()">
         <div class="preview-content">
           <div class="preview-header">
-            <span class="preview-flag">{{ flagEmoji() }}</span>
+            @if (flagUrl()) {
+              <img class="preview-flag" [src]="flagUrl()!" [alt]="country?.name" />
+            }
             <div class="preview-info">
               <h3 class="preview-name">{{ country?.name }}</h3>
               <p class="preview-code">{{ country?.code }}</p>
@@ -65,9 +67,11 @@ import { Country } from '../../models/country.model';
     }
 
     .preview-flag {
-      font-size: 2rem;
-      line-height: 1;
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+      width: 40px;
+      height: auto;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      flex-shrink: 0;
     }
 
     .preview-info {
@@ -100,12 +104,9 @@ export class CountryPreviewCardComponent implements OnInit {
   readonly show = signal(false);
   readonly visible = signal(false);
 
-  readonly flagEmoji = computed(() => {
-    if (!this.country) return '🏳️';
-    const code = this.country.code.toUpperCase();
-    if (code.length !== 2) return '🏳️';
-    const codePoints = [...code].map((char) => 127397 + char.charCodeAt(0));
-    return String.fromCodePoint(...codePoints);
+  readonly flagUrl = computed(() => {
+    if (!this.country || this.country.code.length !== 2) return null;
+    return `https://flagcdn.com/w40/${this.country.code.toLowerCase()}.png`;
   });
 
   ngOnInit(): void {
