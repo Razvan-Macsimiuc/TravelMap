@@ -1,4 +1,18 @@
-import { Component, inject, signal, computed } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  computed,
+  OnDestroy,
+  afterNextRender,
+  ComponentRef,
+  Injector,
+  ViewContainerRef,
+  viewChild,
+  NgZone,
+} from '@angular/core';
+import { outputToObservable } from '@angular/core/rxjs-interop';
+import { take } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import {
   IonContent,
@@ -20,6 +34,7 @@ import {
   mapOutline,
   statsChartOutline,
   refreshOutline,
+  playCircleOutline,
 } from 'ionicons/icons';
 import { SettingsService } from '../services/settings.service';
 import { StorageService } from '../services/storage.service';
@@ -45,18 +60,28 @@ const APP_VERSION = '0.0.1';
     AnimatedBackgroundComponent,
   ],
 })
-export class SettingsPage {
+export class SettingsPage implements OnDestroy {
   private readonly settingsService = inject(SettingsService);
   private readonly storageService = inject(StorageService);
   private readonly countryService = inject(CountryService);
   private readonly achievementService = inject(AchievementService);
   private readonly alertController = inject(AlertController);
   private readonly toastController = inject(ToastController);
+  private readonly injector = inject(Injector);
+  private readonly ngZone = inject(NgZone);
+
+  private readonly reelOutlet = viewChild('reelOutlet', { read: ViewContainerRef });
+  private reelComponentRef: ComponentRef<unknown> | null = null;
 
   readonly appVersion = APP_VERSION;
 
   // Stats for display
   readonly visitedCount = computed(() => this.countryService.visitedCount());
+
+  /** Travel reel records stats/achievements; needs at least one visited country for meaningful output. */
+  readonly reelRecordAvailable = computed(() => this.visitedCount() > 0);
+
+  readonly showReel = signal(false);
 
   // Reset state
   readonly isResetting = signal(false);
@@ -69,7 +94,51 @@ export class SettingsPage {
       mapOutline,
       statsChartOutline,
       refreshOutline,
+      playCircleOutline,
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.reelComponentRef) {
+      this.reelComponentRef.destroy();
+      this.reelComponentRef = null;
+    }
+  }
+
+  openTravelReel(): void {
+    if (!this.reelRecordAvailable()) return;
+    if (this.reelComponentRef) return;
+    void (async () => {
+      const { TravelReelComponent } = await import(
+        '../components/travel-reel/travel-reel.component'
+      );
+      this.showReel.set(true);
+      afterNextRender(
+        () => {
+          const vc = this.reelOutlet();
+          if (!vc || this.reelComponentRef) {
+            return;
+          }
+          vc.clear();
+          const ref = vc.createComponent(TravelReelComponent);
+          ref.setInput('mapInstance', null);
+          ref.changeDetectorRef.detectChanges();
+          outputToObservable(
+            ref.instance.closed as import('@angular/core').OutputRef<void>
+          )
+            .pipe(take(1))
+            .subscribe(() => {
+              this.ngZone.run(() => {
+                ref.destroy();
+                this.reelComponentRef = null;
+                this.showReel.set(false);
+              });
+            });
+          this.reelComponentRef = ref;
+        },
+        { injector: this.injector }
+      );
+    })();
   }
 
   /**

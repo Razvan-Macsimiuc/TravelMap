@@ -4,12 +4,7 @@
   <!-- Map Container -->
   <div #mapContainer class="map-container"></div>
 
-  <!-- Travel Reel: component created dynamically after chunk load (see openReel) -->
-  @if (showReel()) {
-    <ng-container #reelOutlet></ng-container>
-  }
-
-  <!-- Wordmark row, then play + stats row (FAB aligns with search pill only) -->
+  <!-- Wordmark row, then stats row (balanced layout) -->
   <div class="map-top-bar">
     @if (!showSearch()) {
       <div class="map-top-bar-wordmark">
@@ -17,9 +12,7 @@
       </div>
     }
     <div class="map-top-bar-row">
-      <button type="button" class="reel-fab" (click)="openReel()" aria-label="Create travel reel">
-        <ion-icon name="play-circle-outline"></ion-icon>
-      </button>
+      <div class="map-top-bar-start" aria-hidden="true"></div>
       <div class="map-top-bar-center">
         <div class="floating-stats-card" [class.search-mode]="showSearch()">
           @if (!showSearch()) {

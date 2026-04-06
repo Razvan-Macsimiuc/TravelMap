@@ -113,7 +113,7 @@ package.json
 | `AchievementModalComponent` | Celebration modal (lazy-imported by `AchievementService`) |
 | `CircularMenuComponent` | Long-press radial menu on the map |
 | `CountryPreviewCardComponent` | Hover/tap preview card on map |
-| `TravelReelComponent` | Full-screen ~21 s canvas animation (intro globe → stats → countries → achievements → outro) recorded via `MediaRecorder` and shared as a video file; **dynamic-imported** when opened from the map FAB |
+| `TravelReelComponent` | Full-screen ~21 s canvas animation (intro globe → stats → countries → achievements → outro) recorded via `MediaRecorder` and shared as a video file; opened from **Settings** (“Record travel reel”); enabled once **at least one country** is visited; **dynamic-imported**; `mapInstance` optional (procedural globe if null) |
 
 **Directive:** `ButtonPressDirective` (`appButtonPress`) — press animation + Capacitor haptics.
 

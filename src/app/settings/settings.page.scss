@@ -220,6 +220,26 @@
   }
 }
 
+.reel-description {
+  margin: 0 0 var(--space-4);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--ion-color-medium);
+}
+
+.reel-card .reel-record-btn {
+  --background: linear-gradient(135deg, #4ecdc4, #45b7d1);
+  --background-activated: linear-gradient(135deg, #3dbdb5, #3ca5c4);
+  font-weight: 600;
+}
+
+.reel-locked-hint {
+  margin: var(--space-3) 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--ion-color-medium);
+}
+
 // ============================================
 // Settings List - Interactive Items
 // ============================================

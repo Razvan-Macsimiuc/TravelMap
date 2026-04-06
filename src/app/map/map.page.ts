@@ -9,13 +9,7 @@ import {
   effect,
   signal,
   computed,
-  afterNextRender,
-  ComponentRef,
-  Injector,
-  ViewContainerRef,
 } from '@angular/core';
-import { outputToObservable } from '@angular/core/rxjs-interop';
-import { take } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import {
@@ -36,7 +30,6 @@ import {
   refreshOutline,
   alertCircleOutline,
   searchOutline,
-  playCircleOutline,
 } from 'ionicons/icons';
 import { CountryService } from '../services/country.service';
 import { ErrorService } from '../services/error.service';
@@ -81,7 +74,6 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
   private readonly ngZone = inject(NgZone);
   private readonly toastController = inject(ToastController);
   private readonly router = inject(Router);
-  private readonly injector = inject(Injector);
 
   private readonly mapContainer =
     viewChild.required<ElementRef<HTMLDivElement>>('mapContainer');
@@ -95,20 +87,12 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
   /** Loaded mapbox-gl module (set when map initializes). */
   /** Runtime mapbox module (dynamic import). */
   private mapboxglLib: typeof import('mapbox-gl') | null = null;
-  /** Exposes the map instance to the travel-reel overlay (read-only). */
-  get mapRef(): mapboxgl.Map | null { return this.map; }
-
-  private readonly reelOutlet = viewChild('reelOutlet', { read: ViewContainerRef });
-  private reelComponentRef: ComponentRef<unknown> | null = null;
   private resizeObserver: ResizeObserver | null = null;
   private hoveredFeatureId: number | string | null = null;
   private mapLoaded = false;
   private confetti: ConfettiEffect | null = null;
   /** Set to true for one microtask tick when a city pin is clicked, to suppress the country handler. */
   private cityPinJustClicked = false;
-
-  // Travel reel overlay
-  readonly showReel = signal(false);
 
   // Loading and error states
   readonly isMapLoading = signal(true);
@@ -166,7 +150,6 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
       refreshOutline,
       alertCircleOutline,
       searchOutline,
-      playCircleOutline,
     });
 
     // Effect to update map colors when visited countries change
@@ -196,10 +179,6 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
   }
 
   ngOnDestroy(): void {
-    if (this.reelComponentRef) {
-      this.reelComponentRef.destroy();
-      this.reelComponentRef = null;
-    }
     this.resizeObserver?.disconnect();
     this.confetti?.destroy();
     this.map?.remove();
@@ -376,7 +355,6 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
         maxZoom: 8,
         attributionControl: true, // Required by Mapbox ToS
         projection: 'globe', // Use globe projection for 3D effect
-        preserveDrawingBuffer: true, // Required so getCanvas() can be read by travel reel
       });
 
       this.map.on('load', () => {
@@ -443,43 +421,6 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
     this.mapLoaded = false;
     this.mapboxglLib = null;
     void this.initializeMap().catch((err) => this.handleMapError(err));
-  }
-
-  openReel(): void {
-    if (this.reelComponentRef) {
-      return;
-    }
-    void (async () => {
-      const { TravelReelComponent } = await import(
-        '../components/travel-reel/travel-reel.component'
-      );
-      this.showReel.set(true);
-      afterNextRender(
-        () => {
-          const vc = this.reelOutlet();
-          if (!vc || this.reelComponentRef) {
-            return;
-          }
-          vc.clear();
-          const ref = vc.createComponent(TravelReelComponent);
-          ref.setInput('mapInstance', this.mapRef);
-          ref.changeDetectorRef.detectChanges();
-          outputToObservable(
-            ref.instance.closed as import('@angular/core').OutputRef<void>
-          )
-            .pipe(take(1))
-            .subscribe(() => {
-              this.ngZone.run(() => {
-                ref.destroy();
-                this.reelComponentRef = null;
-                this.showReel.set(false);
-              });
-            });
-          this.reelComponentRef = ref;
-        },
-        { injector: this.injector }
-      );
-    })();
   }
 
   private async loadCountriesLayer(): Promise<void> {

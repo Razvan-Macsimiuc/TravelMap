@@ -26,6 +26,35 @@
   </div>
   }
 
+  <!-- Travel reel (record & share) -->
+  <ion-card class="settings-card reel-card">
+    <ion-card-header>
+      <ion-card-title class="section-title">
+        <ion-icon name="play-circle-outline"></ion-icon>
+        Travel reel
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p class="reel-description">
+        Create a short vertical video of your progress—visited countries, stats, and
+        achievements—then save or share it like any other video.
+      </p>
+      <ion-button
+        expand="block"
+        class="reel-record-btn"
+        (click)="openTravelReel()"
+        [disabled]="!reelRecordAvailable() || isResetting()"
+      >
+        <ion-icon name="play-circle-outline" slot="start"></ion-icon>
+        Record travel reel
+      </ion-button>
+      @if (!reelRecordAvailable()) {
+        <p class="reel-locked-hint">Mark at least one country as visited on the map to unlock recording.</p>
+      }
+    </ion-card-content>
+  </ion-card>
+
   <!-- Data Management Section -->
   <ion-card class="settings-card danger-card">
     <ion-card-header>
@@ -109,6 +138,10 @@
       </div>
     </ion-card-content>
   </ion-card>
+
+  @if (showReel()) {
+    <ng-container #reelOutlet></ng-container>
+  }
 
   <!-- Bottom spacer for tab bar -->
   <div class="bottom-spacer"></div>
