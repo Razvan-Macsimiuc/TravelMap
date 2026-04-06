@@ -38,9 +38,8 @@
     <ion-card-content>
       <p class="reel-description">
         Create a short vertical video of your progress—visited countries, stats, and
-        achievements—then save or share it like any other video. Open the Map tab once
-        so the intro can use the same live Mapbox globe as the app; otherwise a simple
-        fallback globe is drawn.
+        achievements—then save or share it like any other video. Recording opens the Map
+        tab so the intro uses the same live globe as the map (not a separate graphic).
       </p>
       <ion-button
         expand="block"
@@ -140,10 +139,6 @@
       </div>
     </ion-card-content>
   </ion-card>
-
-  @if (showReel()) {
-    <ng-container #reelOutlet></ng-container>
-  }
 
   <!-- Bottom spacer for tab bar -->
   <div class="bottom-spacer"></div>

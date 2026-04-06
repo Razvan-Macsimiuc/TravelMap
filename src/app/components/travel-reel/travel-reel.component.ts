@@ -14,6 +14,7 @@ import {
 // Minimal duck-typed interface — only what we need from mapboxgl.Map
 interface SpinnableMap {
   getCanvas(): HTMLCanvasElement;
+  resize(): void;
   setBearing(bearing: number): void;
   getBearing(): number;
   getCenter(): { lng: number; lat: number };
@@ -462,8 +463,6 @@ export class TravelReelComponent implements OnInit, AfterViewInit, OnDestroy {
   private initialCenterLng = 0;
   private initialCenterLat = 20;
   private initialZoom = 1.8;
-  /** Zoom used only during intro — pulled back so the full globe fits the frame. */
-  private reelIntroZoom = 1.15;
   private flagImages = new Map<string, HTMLImageElement>();
   private unlockedAchievements: Array<{ icon: string; title: string; color: string }> = [];
   private visitedCount = 0;
@@ -509,12 +508,11 @@ export class TravelReelComponent implements OnInit, AfterViewInit, OnDestroy {
     const m = this.mapInstance();
     this.initialBearing = m?.getBearing() ?? 0;
     if (m) {
+      m.resize();
       const c = m.getCenter();
       this.initialCenterLng = c.lng;
       this.initialCenterLat = c.lat;
       this.initialZoom = m.getZoom();
-      // Between full-world and tight crop — pairs with `fit` in drawIntro.
-      this.reelIntroZoom = Math.max(1, Math.min(8, this.initialZoom - 0.78));
     }
     const visited = this.countryService.visitedCountries();
     this.visitedList = visited.map(c => c.code);
@@ -724,8 +722,20 @@ export class TravelReelComponent implements OnInit, AfterViewInit, OnDestroy {
       this.drawOutro(t);
     }
 
-    this.drawStarsLayer();
-    this.drawSparklesLayer();
+    // Decorative stars/sparkles would sit on top of the Mapbox globe and read as a "different design".
+    const cleanLiveGlobeIntro = t < 6 && this.usingLiveMapGlobe();
+    if (!cleanLiveGlobeIntro) {
+      this.drawStarsLayer();
+      this.drawSparklesLayer();
+    }
+  }
+
+  /** True when we are sampling the real Mapbox canvas (same globe as the map page). */
+  private usingLiveMapGlobe(): boolean {
+    const map = this.mapInstance();
+    if (!map) return false;
+    const c = map.getCanvas();
+    return c.width > 0 && c.height > 0;
   }
 
   // ── Stars + sparkles layers (drawn on top of every scene) ───────────────────
@@ -802,17 +812,18 @@ export class TravelReelComponent implements OnInit, AfterViewInit, OnDestroy {
       // Bearing stays fixed — we are not yawing the camera.
       const degPerSec = 22;
       const lng = this.wrapLongitude(this.initialCenterLng + t * degPerSec);
-      map.setZoom(this.reelIntroZoom);
+      // Same camera as the map page (saved at reel start) — only longitude spins for the intro.
+      map.setZoom(this.initialZoom);
       map.setBearing(this.initialBearing);
       map.setCenter({ lng, lat: this.initialCenterLat });
 
       const mapCanvas = map.getCanvas();
       if (mapCanvas.width > 0 && mapCanvas.height > 0) {
-        // Match the map view: letterbox, then scale like contain + modest zoom so framing matches the in-app globe.
+        // Full framebuffer, letterboxed into 9:16 — same framing as a screenshot of the live map (no extra crop/zoom).
         this.fillBg(ctx);
         const mw = mapCanvas.width;
         const mh = mapCanvas.height;
-        const fit = Math.min(W / mw, H / mh) * 1.35;
+        const fit = Math.min(W / mw, H / mh);
         const dw = mw * fit;
         const dh = mh * fit;
         const dx = (W - dw) / 2;
@@ -822,19 +833,7 @@ export class TravelReelComponent implements OnInit, AfterViewInit, OnDestroy {
         this.fillBg(ctx);
       }
 
-      // Top vignette (keeps text readable)
-      const topV = ctx.createLinearGradient(0, 0, 0, H * 0.28);
-      topV.addColorStop(0, 'rgba(0,0,0,0.55)');
-      topV.addColorStop(1, 'transparent');
-      ctx.fillStyle = topV;
-      ctx.fillRect(0, 0, W, H);
-
-      // Bottom vignette (text area)
-      const botV = ctx.createLinearGradient(0, H * 0.6, 0, H);
-      botV.addColorStop(0, 'transparent');
-      botV.addColorStop(1, 'rgba(0,0,0,0.88)');
-      ctx.fillStyle = botV;
-      ctx.fillRect(0, 0, W, H);
+      // No vignettes on the live map — they made the intro look like a separate graphic vs the map page.
 
     } else {
       // ── Fallback: procedural globe (no map available) ─────────────────────

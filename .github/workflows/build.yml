@@ -33,13 +33,17 @@ jobs:
       - name: Create environment.ts
         run: cp src/environments/environment.example.ts src/environments/environment.ts
 
+      # Requires repository secret MAPBOX_TOKEN (pk.…). In Mapbox account → token → URL restrictions,
+      # allow your GitHub Pages origin, e.g. https://*.github.io/* (or the exact user.github.io/Repo/ URL),
+      # or tiles/styles will fail while localhost still works.
       - name: Inject Mapbox token
         run: |
           sed -i "s/mapboxToken: ''/mapboxToken: '${{ secrets.MAPBOX_TOKEN }}'/" \
             src/environments/environment.prod.ts
 
+      # Base href must match the project Pages path: https://<user>.github.io/<repo>/
       - name: Build
-        run: npm run build -- --configuration=production --base-href=/TravelMap/
+        run: npm run build -- --configuration=production --base-href=/${{ github.event.repository.name }}/
 
       - name: Capacitor sync
         run: npx cap sync

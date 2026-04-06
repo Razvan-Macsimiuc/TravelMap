@@ -94,6 +94,11 @@
   </div>
   }
 
+  <!-- Travel reel (full-screen); must mount here so it samples the live map canvas -->
+  @if (showTravelReel()) {
+    <ng-container #travelReelOutlet></ng-container>
+  }
+
   <!-- Country Dock - Emerges from clicked country -->
   @if (showDock()) {
   <div class="country-dock-overlay" (click)="closeDock()"></div>

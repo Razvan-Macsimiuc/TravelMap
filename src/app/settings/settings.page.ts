@@ -1,19 +1,6 @@
-import {
-  Component,
-  inject,
-  signal,
-  computed,
-  OnDestroy,
-  afterNextRender,
-  ComponentRef,
-  Injector,
-  ViewContainerRef,
-  viewChild,
-  NgZone,
-} from '@angular/core';
-import { outputToObservable } from '@angular/core/rxjs-interop';
-import { take } from 'rxjs/operators';
+import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import {
   IonContent,
   IonIcon,
@@ -40,8 +27,6 @@ import { SettingsService } from '../services/settings.service';
 import { StorageService } from '../services/storage.service';
 import { CountryService } from '../services/country.service';
 import { AchievementService } from '../services/achievement.service';
-import { MapInstanceBridgeService } from '../services/map-instance-bridge.service';
-
 // App version from package.json - will be replaced at build time
 const APP_VERSION = '0.0.1';
 
@@ -61,19 +46,14 @@ const APP_VERSION = '0.0.1';
     AnimatedBackgroundComponent,
   ],
 })
-export class SettingsPage implements OnDestroy {
+export class SettingsPage {
   private readonly settingsService = inject(SettingsService);
   private readonly storageService = inject(StorageService);
   private readonly countryService = inject(CountryService);
   private readonly achievementService = inject(AchievementService);
-  private readonly mapInstanceBridge = inject(MapInstanceBridgeService);
+  private readonly router = inject(Router);
   private readonly alertController = inject(AlertController);
   private readonly toastController = inject(ToastController);
-  private readonly injector = inject(Injector);
-  private readonly ngZone = inject(NgZone);
-
-  private readonly reelOutlet = viewChild('reelOutlet', { read: ViewContainerRef });
-  private reelComponentRef: ComponentRef<unknown> | null = null;
 
   readonly appVersion = APP_VERSION;
 
@@ -82,8 +62,6 @@ export class SettingsPage implements OnDestroy {
 
   /** Travel reel records stats/achievements; needs at least one visited country for meaningful output. */
   readonly reelRecordAvailable = computed(() => this.visitedCount() > 0);
-
-  readonly showReel = signal(false);
 
   // Reset state
   readonly isResetting = signal(false);
@@ -100,47 +78,13 @@ export class SettingsPage implements OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
-    if (this.reelComponentRef) {
-      this.reelComponentRef.destroy();
-      this.reelComponentRef = null;
-    }
-  }
-
+  /**
+   * Recording needs the live Mapbox map on the Map tab (visible, sized canvas).
+   * We navigate there and MapPage opens the reel when `travelReel=1` is in the query string.
+   */
   openTravelReel(): void {
     if (!this.reelRecordAvailable()) return;
-    if (this.reelComponentRef) return;
-    void (async () => {
-      const { TravelReelComponent } = await import(
-        '../components/travel-reel/travel-reel.component'
-      );
-      this.showReel.set(true);
-      afterNextRender(
-        () => {
-          const vc = this.reelOutlet();
-          if (!vc || this.reelComponentRef) {
-            return;
-          }
-          vc.clear();
-          const ref = vc.createComponent(TravelReelComponent);
-          ref.setInput('mapInstance', this.mapInstanceBridge.getMap());
-          ref.changeDetectorRef.detectChanges();
-          outputToObservable(
-            ref.instance.closed as import('@angular/core').OutputRef<void>
-          )
-            .pipe(take(1))
-            .subscribe(() => {
-              this.ngZone.run(() => {
-                ref.destroy();
-                this.reelComponentRef = null;
-                this.showReel.set(false);
-              });
-            });
-          this.reelComponentRef = ref;
-        },
-        { injector: this.injector }
-      );
-    })();
+    void this.router.navigate(['/map'], { queryParams: { travelReel: '1' } });
   }
 
   /**

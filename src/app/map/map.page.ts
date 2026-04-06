@@ -5,13 +5,20 @@ import {
   inject,
   ElementRef,
   viewChild,
+  ViewContainerRef,
+  ComponentRef,
+  Injector,
+  afterNextRender,
+  DestroyRef,
   NgZone,
   effect,
   signal,
   computed,
 } from '@angular/core';
+import { outputToObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { take } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   IonContent,
   IonIcon,
@@ -75,10 +82,23 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
   private readonly ngZone = inject(NgZone);
   private readonly toastController = inject(ToastController);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly injector = inject(Injector);
   private readonly mapInstanceBridge = inject(MapInstanceBridgeService);
 
   private readonly mapContainer =
     viewChild.required<ElementRef<HTMLDivElement>>('mapContainer');
+  private readonly travelReelOutlet = viewChild('travelReelOutlet', {
+    read: ViewContainerRef,
+  });
+
+  /** Lazy-mounted travel reel (opened from Settings via `?travelReel=1`). */
+  readonly showTravelReel = signal(false);
+  private travelReelComponentRef: ComponentRef<unknown> | null = null;
+  private pendingTravelReelFromQuery = false;
+  private travelReelCanvasRetries = 0;
+  private travelReelOutletRetries = 0;
 
   readonly countries = this.countryService.countries;
   readonly visitedCountries = this.countryService.visitedCountries;
@@ -170,6 +190,19 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
         this.updateCityPins(countries, focusedCode);
       }
     });
+
+    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      if (params.get('travelReel') !== '1') return;
+      if (this.travelReelComponentRef) return;
+      this.pendingTravelReelFromQuery = true;
+      void this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { travelReel: null },
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+      });
+      this.tryMountTravelReel();
+    });
   }
 
   ngAfterViewInit(): void {
@@ -181,6 +214,10 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
   }
 
   ngOnDestroy(): void {
+    if (this.travelReelComponentRef) {
+      this.travelReelComponentRef.destroy();
+      this.travelReelComponentRef = null;
+    }
     this.resizeObserver?.disconnect();
     this.confetti?.destroy();
     this.mapInstanceBridge.registerMap(null);
@@ -197,6 +234,77 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
     if (this.showDock()) {
       this.closeDock();
     }
+  }
+
+  /**
+   * Settings opens the reel via `/map?travelReel=1` so the Map tab is active and the reel
+   * reads pixels from the same Mapbox globe as the map page (not the procedural fallback).
+   */
+  private tryMountTravelReel(): void {
+    if (!this.pendingTravelReelFromQuery) return;
+    if (this.countryService.visitedCount() < 1) {
+      this.pendingTravelReelFromQuery = false;
+      return;
+    }
+    if (!this.mapLoaded || !this.map) return;
+    if (this.travelReelComponentRef) return;
+
+    const canvas = this.map.getCanvas();
+    if (canvas.width < 2 || canvas.height < 2) {
+      this.map.resize();
+      this.travelReelCanvasRetries++;
+      if (this.travelReelCanvasRetries > 120) {
+        this.pendingTravelReelFromQuery = false;
+        this.travelReelCanvasRetries = 0;
+        return;
+      }
+      requestAnimationFrame(() => this.ngZone.run(() => this.tryMountTravelReel()));
+      return;
+    }
+    this.travelReelCanvasRetries = 0;
+
+    this.showTravelReel.set(true);
+    afterNextRender(
+      () => {
+        const vc = this.travelReelOutlet();
+        if (!vc) {
+          this.showTravelReel.set(false);
+          this.travelReelOutletRetries++;
+          if (this.travelReelOutletRetries > 40) {
+            this.pendingTravelReelFromQuery = false;
+            this.travelReelOutletRetries = 0;
+            return;
+          }
+          requestAnimationFrame(() => this.ngZone.run(() => this.tryMountTravelReel()));
+          return;
+        }
+        this.travelReelOutletRetries = 0;
+        if (this.travelReelComponentRef) return;
+        this.pendingTravelReelFromQuery = false;
+        void (async () => {
+          const { TravelReelComponent } = await import(
+            '../components/travel-reel/travel-reel.component'
+          );
+          vc.clear();
+          const ref = vc.createComponent(TravelReelComponent);
+          ref.setInput('mapInstance', this.mapInstanceBridge.getMap());
+          ref.changeDetectorRef.detectChanges();
+          outputToObservable(
+            ref.instance.closed as import('@angular/core').OutputRef<void>
+          )
+            .pipe(take(1))
+            .subscribe(() => {
+              this.ngZone.run(() => {
+                ref.destroy();
+                this.travelReelComponentRef = null;
+                this.showTravelReel.set(false);
+              });
+            });
+          this.travelReelComponentRef = ref;
+        })();
+      },
+      { injector: this.injector }
+    );
   }
 
   // ============================================
@@ -475,6 +583,7 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
       this.ngZone.run(() => {
         this.isMapLoading.set(false);
         this.isCountriesLoading.set(false);
+        this.tryMountTravelReel();
       });
     } catch (error) {
       this.errorService.logError('MapPage.loadCountriesLayer', error);
