@@ -139,8 +139,16 @@ const CENTROIDS: Record<string, [number, number]> = {
                 <!-- Native or mobile-web file share -->
                 <ion-button expand="block" class="reel-share-btn" (click)="share()" [disabled]="sharing()">
                   <ion-icon name="share-outline" slot="start"></ion-icon>
-                  {{ sharing() ? 'Sharing…' : 'Share Reel' }}
+                  {{ sharing() ? 'Opening share…' : 'Share or save video' }}
                 </ion-button>
+                <p class="reel-social-hint">
+                  In the next sheet, pick WhatsApp, Instagram, Messages, or your gallery app. If they’re not listed, tap “More”.
+                  @if (recordingFormat() === 'webm') {
+                    <span class="reel-social-hint-warn">
+                      This device saved the reel as WebM (most Android browsers). WhatsApp usually accepts it; Instagram often works best if you use “Save to Photos” or “Save to Files” here, then upload from inside Instagram.
+                    </span>
+                  }
+                </p>
                 @if (shareError()) {
                   <p class="reel-error-text reel-share-err">{{ shareError() }}</p>
                 }
@@ -244,6 +252,22 @@ const CENTROIDS: Record<string, [number, number]> = {
     .reel-share-err {
       font-size: 13px;
       line-height: 1.45;
+    }
+
+    .reel-social-hint {
+      color: rgba(200, 200, 220, 0.92);
+      font-size: 12.5px;
+      line-height: 1.45;
+      text-align: center;
+      margin: 0;
+    }
+
+    .reel-social-hint-warn {
+      display: block;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      color: rgba(255, 200, 120, 0.95);
     }
 
     .reel-progress-track {
@@ -413,6 +437,8 @@ export class TravelReelComponent implements OnInit, AfterViewInit, OnDestroy {
   readonly downloadStatus = signal('');
   /** Native share failed (e.g. Android FileProvider / URI issues). */
   readonly shareError = signal<string | null>(null);
+  /** Chrome/Android usually record WebM; Safari often MP4 — matters for Instagram / some apps. */
+  readonly recordingFormat = signal<'mp4' | 'webm' | 'unknown'>('unknown');
 
   private ctx!: CanvasRenderingContext2D;
   private viewReady = false;
@@ -425,6 +451,8 @@ export class TravelReelComponent implements OnInit, AfterViewInit, OnDestroy {
   private recorder: MediaRecorder | null = null;
   private chunks: Blob[] = [];
   private videoBlob: Blob | null = null;
+  private resolveRecorderStopped: (() => void) | null = null;
+  private recorderStoppedPromise = Promise.resolve();
 
   // Travel data
   private visitedCodes = new Set<string>();
@@ -561,30 +589,54 @@ export class TravelReelComponent implements OnInit, AfterViewInit, OnDestroy {
   // ── MediaRecorder ───────────────────────────────────────────────────────────
 
   private setupRecorder(): void {
-    if (typeof MediaRecorder === 'undefined') return;
+    this.recorderStoppedPromise = new Promise<void>((resolve) => {
+      this.resolveRecorderStopped = resolve;
+    });
+
+    if (typeof MediaRecorder === 'undefined') {
+      this.resolveRecorderStopped?.();
+      this.resolveRecorderStopped = null;
+      return;
+    }
     try {
       const stream = this.canvasRef().nativeElement.captureStream(30);
+      // WhatsApp / Instagram generally prefer H.264 in MP4; Chrome/Edge often only offer WebM from canvas.
       const types = [
+        'video/mp4;codecs=avc1.42E01E',
+        'video/mp4;codecs=avc1.4D401E',
+        'video/mp4',
         'video/webm;codecs=vp9',
         'video/webm;codecs=vp8',
         'video/webm',
-        'video/mp4',
       ];
-      const mimeType = types.find(t => MediaRecorder.isTypeSupported(t)) ?? '';
+      const mimeType = types.find((t) => MediaRecorder.isTypeSupported(t)) ?? '';
       this.recorder = new MediaRecorder(stream, {
         mimeType,
-        videoBitsPerSecond: 4_000_000,
+        videoBitsPerSecond: 2_500_000,
       });
-      this.recorder.ondataavailable = e => {
+      this.recorder.ondataavailable = (e) => {
         if (e.data.size > 0) this.chunks.push(e.data);
       };
       this.recorder.onstop = () => {
-        this.videoBlob = new Blob(this.chunks, { type: mimeType || 'video/webm' });
+        const mime = (this.recorder?.mimeType || mimeType || '').trim();
+        const blobType = mime || 'video/webm';
+        this.videoBlob = new Blob(this.chunks, { type: blobType });
+        const low = blobType.toLowerCase();
+        if (low.includes('mp4') || low.includes('mpeg4') || low.includes('avc1')) {
+          this.recordingFormat.set('mp4');
+        } else if (low.includes('webm')) {
+          this.recordingFormat.set('webm');
+        } else {
+          this.recordingFormat.set('unknown');
+        }
         this.videoReady.set(true);
+        this.resolveRecorderStopped?.();
+        this.resolveRecorderStopped = null;
       };
       this.recorder.start(100);
     } catch {
-      // Recording unavailable – animation still plays
+      this.resolveRecorderStopped?.();
+      this.resolveRecorderStopped = null;
     }
   }
 
@@ -601,9 +653,11 @@ export class TravelReelComponent implements OnInit, AfterViewInit, OnDestroy {
     this.drawFrame(t);
 
     if (t < TOTAL_S) {
-      this.animFrame = requestAnimationFrame(nts => this.animate(nts));
+      this.animFrame = requestAnimationFrame((nts) => this.animate(nts));
     } else {
-      this.onAnimationEnd();
+      void this.onAnimationEnd().catch(() => {
+        this.phase.set('done');
+      });
     }
   }
 
@@ -643,9 +697,14 @@ export class TravelReelComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private onAnimationEnd(): void {
+  private async onAnimationEnd(): Promise<void> {
     if (this.recorder?.state === 'recording') this.recorder.stop();
-    setTimeout(() => this.phase.set('done'), 300);
+    await Promise.race([
+      this.recorderStoppedPromise,
+      new Promise<void>((r) => setTimeout(r, 8000)),
+    ]);
+    await new Promise<void>((r) => setTimeout(r, 120));
+    this.phase.set('done');
   }
 
   // ── Scene dispatcher ────────────────────────────────────────────────────────
@@ -1500,7 +1559,7 @@ export class TravelReelComponent implements OnInit, AfterViewInit, OnDestroy {
     this.shareError.set(null);
     this.sharing.set(true);
     try {
-      const ext = this.videoBlob.type.includes('mp4') ? 'mp4' : 'webm';
+      const ext = this.fileExtensionForBlob(this.videoBlob);
       const fileName = `hopahopa-travel-reel-${Date.now()}.${ext}`;
       if (Capacitor.isNativePlatform()) {
         await this.nativeShare(fileName);
@@ -1524,30 +1583,54 @@ export class TravelReelComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  private fileExtensionForBlob(blob: Blob): string {
+    const t = blob.type.toLowerCase();
+    if (t.includes('mp4') || t.includes('mpeg4') || t.includes('avc1')) return 'mp4';
+    if (t.includes('webm')) return 'webm';
+    if (t.includes('quicktime')) return 'mov';
+    return 'mp4';
+  }
+
   private async nativeShare(fileName: string): Promise<void> {
     if (!this.videoBlob) return;
     const { Filesystem, Directory } = await import('@capacitor/filesystem');
     const base64 = await this.blobToBase64(this.videoBlob);
 
     let fileUri: string;
+    let cleanupPath = fileName;
+    let cleanupDir = Directory.Cache;
+
     try {
+      const extPath = `HopaHopa/${fileName}`;
       const writeResult = await Filesystem.writeFile({
-        path: fileName,
+        path: extPath,
         data: base64,
-        directory: Directory.Cache,
+        directory: Directory.External,
+        recursive: true,
       });
       fileUri = writeResult.uri;
+      cleanupPath = extPath;
+      cleanupDir = Directory.External;
     } catch (err) {
-      console.error('[TravelReel] writeFile failed', err);
-      this.shareError.set('Could not save the video to app storage. Try freeing space or try again.');
-      return;
+      try {
+        const writeResult = await Filesystem.writeFile({
+          path: fileName,
+          data: base64,
+          directory: Directory.Cache,
+        });
+        fileUri = writeResult.uri;
+        cleanupPath = fileName;
+        cleanupDir = Directory.Cache;
+      } catch (err2) {
+        console.error('[TravelReel] writeFile failed', err, err2);
+        this.shareError.set('Could not save the video to app storage. Try freeing space or try again.');
+        return;
+      }
     }
 
     const scheduleCleanup = (): void => {
       window.setTimeout(() => {
-        void Filesystem.deleteFile({ path: fileName, directory: Directory.Cache }).catch(
-          () => {}
-        );
+        void Filesystem.deleteFile({ path: cleanupPath, directory: cleanupDir }).catch(() => {});
       }, 120_000);
     };
 
@@ -1605,7 +1688,7 @@ export class TravelReelComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private triggerDownload(): void {
     if (!this.videoBlob) return;
-    const ext = this.videoBlob.type.includes('mp4') ? 'mp4' : 'webm';
+    const ext = this.fileExtensionForBlob(this.videoBlob);
     const url = URL.createObjectURL(this.videoBlob);
     const a = document.createElement('a');
     a.href = url;
