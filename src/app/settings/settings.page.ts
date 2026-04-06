@@ -40,6 +40,7 @@ import { SettingsService } from '../services/settings.service';
 import { StorageService } from '../services/storage.service';
 import { CountryService } from '../services/country.service';
 import { AchievementService } from '../services/achievement.service';
+import { MapInstanceBridgeService } from '../services/map-instance-bridge.service';
 
 // App version from package.json - will be replaced at build time
 const APP_VERSION = '0.0.1';
@@ -65,6 +66,7 @@ export class SettingsPage implements OnDestroy {
   private readonly storageService = inject(StorageService);
   private readonly countryService = inject(CountryService);
   private readonly achievementService = inject(AchievementService);
+  private readonly mapInstanceBridge = inject(MapInstanceBridgeService);
   private readonly alertController = inject(AlertController);
   private readonly toastController = inject(ToastController);
   private readonly injector = inject(Injector);
@@ -121,7 +123,7 @@ export class SettingsPage implements OnDestroy {
           }
           vc.clear();
           const ref = vc.createComponent(TravelReelComponent);
-          ref.setInput('mapInstance', null);
+          ref.setInput('mapInstance', this.mapInstanceBridge.getMap());
           ref.changeDetectorRef.detectChanges();
           outputToObservable(
             ref.instance.closed as import('@angular/core').OutputRef<void>

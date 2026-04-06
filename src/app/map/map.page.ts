@@ -32,6 +32,7 @@ import {
   searchOutline,
 } from 'ionicons/icons';
 import { CountryService } from '../services/country.service';
+import { MapInstanceBridgeService } from '../services/map-instance-bridge.service';
 import { ErrorService } from '../services/error.service';
 import { AchievementService } from '../services/achievement.service';
 import { PageTransitionService } from '../services/page-transition.service';
@@ -74,6 +75,7 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
   private readonly ngZone = inject(NgZone);
   private readonly toastController = inject(ToastController);
   private readonly router = inject(Router);
+  private readonly mapInstanceBridge = inject(MapInstanceBridgeService);
 
   private readonly mapContainer =
     viewChild.required<ElementRef<HTMLDivElement>>('mapContainer');
@@ -181,6 +183,7 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
   ngOnDestroy(): void {
     this.resizeObserver?.disconnect();
     this.confetti?.destroy();
+    this.mapInstanceBridge.registerMap(null);
     this.map?.remove();
     this.map = null;
     this.mapboxglLib = null;
@@ -355,7 +358,10 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
         maxZoom: 8,
         attributionControl: true, // Required by Mapbox ToS
         projection: 'globe', // Use globe projection for 3D effect
+        preserveDrawingBuffer: true, // Travel reel reads map canvas (Settings + bridge)
       });
+
+      this.mapInstanceBridge.registerMap(this.map);
 
       this.map.on('load', () => {
         this.setupGlobeAtmosphere();
@@ -416,6 +422,7 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
    */
   retryMapLoad(): void {
     this.mapLoadError.set(null);
+    this.mapInstanceBridge.registerMap(null);
     this.map?.remove();
     this.map = null;
     this.mapLoaded = false;
