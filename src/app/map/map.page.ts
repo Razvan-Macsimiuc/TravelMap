@@ -9,7 +9,13 @@ import {
   effect,
   signal,
   computed,
+  afterNextRender,
+  ComponentRef,
+  Injector,
+  ViewContainerRef,
 } from '@angular/core';
+import { outputToObservable } from '@angular/core/rxjs-interop';
+import { take } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import {
@@ -30,6 +36,7 @@ import {
   refreshOutline,
   alertCircleOutline,
   searchOutline,
+  playCircleOutline,
 } from 'ionicons/icons';
 import { CountryService } from '../services/country.service';
 import { ErrorService } from '../services/error.service';
@@ -37,7 +44,7 @@ import { AchievementService } from '../services/achievement.service';
 import { PageTransitionService } from '../services/page-transition.service';
 import { Country } from '../models/country.model';
 import { environment } from '../../environments/environment';
-import mapboxgl from 'mapbox-gl';
+import type mapboxgl from 'mapbox-gl';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { ConfettiEffect } from '../utils/confetti';
 
@@ -52,9 +59,6 @@ const HOVER_VISITED_COLOR = '#38bdf8'; // Lighter cyan on hover
 const HOVER_UNVISITED_COLOR = '#334155'; // Slightly lighter slate on hover
 const BORDER_COLOR = 'rgba(255, 255, 255, 0.08)'; // Subtle white border
 const CITY_PIN_COLOR = '#facc15'; // Yellow for city pins
-
-// Set Mapbox access token
-mapboxgl.accessToken = environment.mapboxToken;
 
 @Component({
   selector: 'app-map',
@@ -77,6 +81,7 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
   private readonly ngZone = inject(NgZone);
   private readonly toastController = inject(ToastController);
   private readonly router = inject(Router);
+  private readonly injector = inject(Injector);
 
   private readonly mapContainer =
     viewChild.required<ElementRef<HTMLDivElement>>('mapContainer');
@@ -87,12 +92,23 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
   readonly totalCount = this.countryService.totalCount;
 
   private map: mapboxgl.Map | null = null;
+  /** Loaded mapbox-gl module (set when map initializes). */
+  /** Runtime mapbox module (dynamic import). */
+  private mapboxglLib: typeof import('mapbox-gl') | null = null;
+  /** Exposes the map instance to the travel-reel overlay (read-only). */
+  get mapRef(): mapboxgl.Map | null { return this.map; }
+
+  private readonly reelOutlet = viewChild('reelOutlet', { read: ViewContainerRef });
+  private reelComponentRef: ComponentRef<unknown> | null = null;
   private resizeObserver: ResizeObserver | null = null;
   private hoveredFeatureId: number | string | null = null;
   private mapLoaded = false;
   private confetti: ConfettiEffect | null = null;
   /** Set to true for one microtask tick when a city pin is clicked, to suppress the country handler. */
   private cityPinJustClicked = false;
+
+  // Travel reel overlay
+  readonly showReel = signal(false);
 
   // Loading and error states
   readonly isMapLoading = signal(true);
@@ -150,6 +166,7 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
       refreshOutline,
       alertCircleOutline,
       searchOutline,
+      playCircleOutline,
     });
 
     // Effect to update map colors when visited countries change
@@ -171,7 +188,7 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
   }
 
   ngAfterViewInit(): void {
-    this.initializeMap();
+    void this.initializeMap().catch((err) => this.handleMapError(err));
 
     // Initialize confetti effect
     const container = this.mapContainer().nativeElement;
@@ -179,10 +196,15 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
   }
 
   ngOnDestroy(): void {
+    if (this.reelComponentRef) {
+      this.reelComponentRef.destroy();
+      this.reelComponentRef = null;
+    }
     this.resizeObserver?.disconnect();
     this.confetti?.destroy();
     this.map?.remove();
     this.map = null;
+    this.mapboxglLib = null;
   }
 
   /**
@@ -333,12 +355,17 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
   // Private Methods
   // ============================================
 
-  private initializeMap(): void {
+  private async initializeMap(): Promise<void> {
     const container = this.mapContainer().nativeElement;
 
     try {
       this.isMapLoading.set(true);
       this.mapLoadError.set(null);
+
+      const mod = await import('mapbox-gl');
+      const mapboxgl = (mod as { default?: typeof import('mapbox-gl') }).default ?? (mod as unknown as typeof import('mapbox-gl'));
+      mapboxgl.accessToken = environment.mapboxToken;
+      this.mapboxglLib = mapboxgl;
 
       this.map = new mapboxgl.Map({
         container,
@@ -349,6 +376,7 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
         maxZoom: 8,
         attributionControl: true, // Required by Mapbox ToS
         projection: 'globe', // Use globe projection for 3D effect
+        preserveDrawingBuffer: true, // Required so getCanvas() can be read by travel reel
       });
 
       this.map.on('load', () => {
@@ -413,7 +441,45 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
     this.map?.remove();
     this.map = null;
     this.mapLoaded = false;
-    this.initializeMap();
+    this.mapboxglLib = null;
+    void this.initializeMap().catch((err) => this.handleMapError(err));
+  }
+
+  openReel(): void {
+    if (this.reelComponentRef) {
+      return;
+    }
+    void (async () => {
+      const { TravelReelComponent } = await import(
+        '../components/travel-reel/travel-reel.component'
+      );
+      this.showReel.set(true);
+      afterNextRender(
+        () => {
+          const vc = this.reelOutlet();
+          if (!vc || this.reelComponentRef) {
+            return;
+          }
+          vc.clear();
+          const ref = vc.createComponent(TravelReelComponent);
+          ref.setInput('mapInstance', this.mapRef);
+          ref.changeDetectorRef.detectChanges();
+          outputToObservable(
+            ref.instance.closed as import('@angular/core').OutputRef<void>
+          )
+            .pipe(take(1))
+            .subscribe(() => {
+              this.ngZone.run(() => {
+                ref.destroy();
+                this.reelComponentRef = null;
+                this.showReel.set(false);
+              });
+            });
+          this.reelComponentRef = ref;
+        },
+        { injector: this.injector }
+      );
+    })();
   }
 
   private async loadCountriesLayer(): Promise<void> {
@@ -629,7 +695,7 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
       if (!e.features?.length || !this.map) return;
       const props = e.features[0].properties as { cityName: string; countryName: string };
       const coords = (e.features[0].geometry as GeoJSON.Point).coordinates as [number, number];
-      new mapboxgl.Popup({ closeButton: true, offset: 14, className: 'city-pin-popup' })
+      new this.mapboxglLib!.Popup({ closeButton: true, offset: 14, className: 'city-pin-popup' })
         .setLngLat(coords)
         .setHTML(
           `<div class="city-popup-content">

@@ -30,7 +30,8 @@ export const routes: Routes = [
     children: [
       {
         path: 'map',
-        loadComponent: () => import('./map/map.page').then(m => m.MapPage)
+        loadComponent: () => import('./map/map.page').then(m => m.MapPage),
+        data: { preload: true },
       },
       {
         path: 'stats',

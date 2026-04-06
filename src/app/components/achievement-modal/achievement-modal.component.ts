@@ -8,6 +8,7 @@ import {
 import { addIcons } from 'ionicons';
 import { closeOutline, shareOutline } from 'ionicons/icons';
 import { Share } from '@capacitor/share';
+import { Capacitor } from '@capacitor/core';
 import { Milestone } from '../../services/achievement.service';
 import { ConfettiEffect } from '../../utils/confetti';
 
@@ -36,10 +37,11 @@ import { ConfettiEffect } from '../../utils/confetti';
             expand="block"
             fill="outline"
             (click)="share()"
+            [disabled]="sharing()"
             class="share-button"
           >
             <ion-icon name="share-outline" slot="start"></ion-icon>
-            Share Achievement
+            {{ sharing() ? 'Preparing...' : 'Share Achievement' }}
           </ion-button>
 
           <ion-button
@@ -208,21 +210,18 @@ export class AchievementModalComponent implements OnInit, OnDestroy {
   private confetti: ConfettiEffect | null = null;
 
   readonly animateIn = signal(false);
+  readonly sharing = signal(false);
 
   constructor() {
     addIcons({ closeOutline, shareOutline });
   }
 
   ngOnInit(): void {
-    // Trigger entrance animation
     setTimeout(() => {
       this.animateIn.set(true);
     }, 100);
 
-    // Create full-screen confetti
     this.confetti = new ConfettiEffect(document.body);
-    
-    // Trigger confetti bursts
     this.triggerFullScreenConfetti();
   }
 
@@ -230,18 +229,14 @@ export class AchievementModalComponent implements OnInit, OnDestroy {
     this.confetti?.destroy();
   }
 
-  /**
-   * Trigger full-screen confetti explosion.
-   */
   private triggerFullScreenConfetti(): void {
     if (!this.confetti) return;
 
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
 
-    // Multiple bursts for full-screen effect
     this.confetti.burst(centerX, centerY, 50);
-    
+
     setTimeout(() => {
       this.confetti?.burst(centerX - 100, centerY - 50, 30);
       this.confetti?.burst(centerX + 100, centerY - 50, 30);
@@ -254,41 +249,240 @@ export class AchievementModalComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Share achievement via native share API or fallback.
+   * Draws a standalone achievement card to a canvas and returns its data URL.
+   * The card is self-contained (no DOM references) so it can be saved/shared.
    */
-  async share(): Promise<void> {
-    const label = this.milestone?.countLabel ?? 'countries visited';
-    const text = `I just reached ${this.milestone?.title} in HopaHopa! 🌍 ${this.visitedCount} ${label.toLowerCase()}!`;
+  private buildAchievementCard(): string {
+    const W = 600;
+    const H = 720;
+    const canvas = document.createElement('canvas');
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext('2d')!;
+    const accent = this.milestone?.color ?? '#4ecdc4';
 
-    try {
-      const canShare = await Share.canShare();
-      if (canShare.value) {
-        await Share.share({
-          title: `HopaHopa Achievement: ${this.milestone?.title}`,
-          text: text,
-          dialogTitle: 'Share Your Achievement',
-        });
+    // ── Background ───────────────────────────────────────────
+    const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+    bgGrad.addColorStop(0, '#0a0a14');
+    bgGrad.addColorStop(1, '#13132a');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, W, H);
+
+    // Radial accent glow behind the card
+    const glow = ctx.createRadialGradient(W / 2, H * 0.42, 0, W / 2, H * 0.42, W * 0.65);
+    glow.addColorStop(0, accent + '28');
+    glow.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, W, H);
+
+    // ── App name header ──────────────────────────────────────
+    ctx.font = 'bold 26px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+    ctx.fillStyle = accent;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('✈  HopaHopa', W / 2, 38);
+
+    // ── Card ─────────────────────────────────────────────────
+    const cx = 32, cy = 68, cw = W - 64, ch = H - 68 - 52;
+
+    // Card drop shadow / glow
+    ctx.save();
+    ctx.shadowColor = accent;
+    ctx.shadowBlur = 48;
+    this.roundRect(ctx, cx, cy, cw, ch, 28);
+    ctx.fillStyle = '#161626';
+    ctx.fill();
+    ctx.restore();
+
+    // Card border
+    this.roundRect(ctx, cx, cy, cw, ch, 28);
+    ctx.strokeStyle = accent + '55';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // ── Achievement icon ─────────────────────────────────────
+    ctx.font = '80px serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const iconY = cy + 115;
+    ctx.fillText(this.milestone?.icon ?? '🌍', W / 2, iconY);
+
+    // ── Title ────────────────────────────────────────────────
+    const titleGrad = ctx.createLinearGradient(cx, 0, cx + cw, 0);
+    titleGrad.addColorStop(0, '#4ecdc4');
+    titleGrad.addColorStop(1, '#45b7d1');
+    ctx.font = 'bold 36px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+    ctx.fillStyle = titleGrad;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const titleY = iconY + 80;
+    ctx.fillText(this.milestone?.title ?? 'Achievement Unlocked', W / 2, titleY);
+
+    // ── Message (wrapped) ─────────────────────────────────────
+    ctx.font = '19px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+    ctx.fillStyle = '#8888aa';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const msgLines = this.wrapText(ctx, this.milestone?.message ?? '', cw - 80);
+    let msgY = titleY + 50;
+    for (const line of msgLines) {
+      ctx.fillText(line, W / 2, msgY);
+      msgY += 30;
+    }
+
+    // ── Count bubble ─────────────────────────────────────────
+    const bw = 180, bh = 88, bx = (W - bw) / 2, by = msgY + 20;
+
+    this.roundRect(ctx, bx, by, bw, bh, 16);
+    ctx.fillStyle = accent + '18';
+    ctx.fill();
+    ctx.strokeStyle = accent + '45';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    ctx.font = 'bold 42px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+    ctx.fillStyle = accent;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(String(this.visitedCount), W / 2, by + 42);
+
+    const countLabel = (this.milestone?.countLabel ?? 'Countries Visited').toUpperCase();
+    ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+    ctx.fillStyle = '#55556a';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(countLabel, W / 2, by + 72);
+
+    // ── Bottom tagline ────────────────────────────────────────
+    ctx.font = '14px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+    ctx.fillStyle = '#333348';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('Track your travels around the world  •  hopahopa.app', W / 2, H - 24);
+
+    return canvas.toDataURL('image/png');
+  }
+
+  private roundRect(
+    ctx: CanvasRenderingContext2D,
+    x: number, y: number,
+    w: number, h: number,
+    r: number,
+  ): void {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.arcTo(x + w, y, x + w, y + r, r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+    ctx.lineTo(x + r, y + h);
+    ctx.arcTo(x, y + h, x, y + h - r, r);
+    ctx.lineTo(x, y + r);
+    ctx.arcTo(x, y, x + r, y, r);
+    ctx.closePath();
+  }
+
+  private wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
+    const words = text.split(' ');
+    const lines: string[] = [];
+    let current = '';
+    for (const word of words) {
+      const test = current ? `${current} ${word}` : word;
+      if (ctx.measureText(test).width > maxWidth && current) {
+        lines.push(current);
+        current = word;
       } else {
-        // Fallback: Copy to clipboard
-        await navigator.clipboard.writeText(text);
-        console.log('[AchievementModal] Achievement text copied to clipboard');
-      }
-    } catch (error) {
-      console.warn('[AchievementModal] Share not available:', error);
-      // Fallback: Try clipboard
-      try {
-        await navigator.clipboard.writeText(text);
-      } catch {
-        // Ignore
+        current = test;
       }
     }
+    if (current) lines.push(current);
+    return lines;
+  }
+
+  /**
+   * Renders the achievement card to a PNG and shares it.
+   *
+   * On native (iOS / Android) the image is written to the cache directory
+   * so that the OS share sheet can read it as a real file URI.
+   * On web the image never touches Capacitor Filesystem — we hand a File
+   * blob straight to the Web Share API (or fall back to a download).
+   */
+  async share(): Promise<void> {
+    if (this.sharing()) return;
+    this.sharing.set(true);
+
+    try {
+      const dataUrl = this.buildAchievementCard();
+
+      if (Capacitor.isNativePlatform()) {
+        await this.nativeShare(dataUrl);
+      } else {
+        await this.webShare(dataUrl);
+      }
+    } finally {
+      this.sharing.set(false);
+    }
+  }
+
+  private async nativeShare(dataUrl: string): Promise<void> {
+    const base64Data = dataUrl.split(',')[1];
+    const fileName = `hopahopa-achievement-${Date.now()}.png`;
+    const { Filesystem, Directory } = await import('@capacitor/filesystem');
+
+    await Filesystem.writeFile({
+      path: fileName,
+      data: base64Data,
+      directory: Directory.Cache,
+    });
+
+    const { uri } = await Filesystem.getUri({
+      path: fileName,
+      directory: Directory.Cache,
+    });
+
+    try {
+      await Share.share({
+        files: [uri],
+        title: `HopaHopa – ${this.milestone?.title}`,
+        dialogTitle: 'Share Your Achievement',
+      });
+    } finally {
+      try {
+        await Filesystem.deleteFile({ path: fileName, directory: Directory.Cache });
+      } catch {
+        // cleanup is best-effort
+      }
+    }
+  }
+
+  private async webShare(dataUrl: string): Promise<void> {
+    const res = await fetch(dataUrl);
+    const blob = await res.blob();
+    const file = new File([blob], 'hopahopa-achievement.png', { type: 'image/png' });
+
+    // Web Share API Level 2 — supported on Chrome Android, Safari 15+, Edge
+    const nav = navigator as Navigator & {
+      canShare?: (data: ShareData) => boolean;
+    };
+    if (nav.canShare?.({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file], title: `HopaHopa – ${this.milestone?.title}` });
+        return;
+      } catch (err) {
+        // User cancelled or share failed — fall through to download
+        if ((err as DOMException).name === 'AbortError') return;
+      }
+    }
+
+    // Desktop fallback: download the PNG
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = 'hopahopa-achievement.png';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   }
 
   dismiss(): void {
     this.modalController.dismiss();
   }
 }
-
-
-
-

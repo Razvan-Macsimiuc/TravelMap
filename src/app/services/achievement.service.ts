@@ -1,4 +1,4 @@
-import { Injectable, inject, signal, computed, effect } from '@angular/core';
+import { Injectable, inject, signal, computed, effect, Injector, runInInjectionContext } from '@angular/core';
 import { ModalController } from '@ionic/angular/standalone';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { CountryService } from './country.service';
@@ -364,7 +364,7 @@ const ALL_ACHIEVEMENTS: Achievement[] = [
 ];
 
 // Continent mapping for countries
-const CONTINENT_MAP: Record<string, string> = {
+export const CONTINENT_MAP: Record<string, string> = {
   // Europe
   AL: 'europe',
   AD: 'europe',
@@ -623,6 +623,7 @@ const ISLAND_NATIONS = new Set([
 export class AchievementService {
   private readonly modalController = inject(ModalController);
   private readonly countryService = inject(CountryService);
+  private readonly injector = inject(Injector);
   private readonly unlockedAchievements = signal<
     Map<string, UnlockedAchievement>
   >(new Map());
@@ -682,16 +683,20 @@ export class AchievementService {
       this.suppressCelebrations = false;
     }, 100);
 
-    // Set up reactive checking for future changes
-    effect(() => {
-      const visitedCountries = this.countryService.visitedCountries();
+    // Set up reactive checking for future changes.
+    // runInInjectionContext is required because this method is called from
+    // a setTimeout callback, which runs outside Angular's injection context.
+    runInInjectionContext(this.injector, () => {
+      effect(() => {
+        const visitedCountries = this.countryService.visitedCountries();
 
-      if (this.suppressCelebrations) {
-        return;
-      }
+        if (this.suppressCelebrations) {
+          return;
+        }
 
-      const codes = visitedCountries.map((c) => c.code);
-      this.checkAchievementsReactive(codes);
+        const codes = visitedCountries.map((c) => c.code);
+        this.checkAchievementsReactive(codes);
+      });
     });
   }
 

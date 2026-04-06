@@ -11,6 +11,113 @@
 }
 
 // ============================================
+// Top bar: Travel Reel FAB + centered stats (aligned row)
+// ============================================
+
+.map-top-bar {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 0px) + var(--space-4));
+  left: 0;
+  right: 0;
+  z-index: 500;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0 var(--space-4);
+  pointer-events: none;
+}
+
+.map-top-bar-wordmark {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-2);
+  pointer-events: none;
+
+  .app-wordmark {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+    text-align: center;
+    background: linear-gradient(100deg, var(--ion-color-primary), #5eead4, #45b7d1);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+}
+
+/* Play FAB + stats/search pill + balancing spacer — single row, vertically aligned */
+.map-top-bar-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  pointer-events: none;
+
+  animation: floatIn 0.6s var(--ease-out-expo) 0.3s both;
+
+  .reel-fab {
+    pointer-events: auto;
+  }
+
+  .map-top-bar-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    min-width: 0;
+    pointer-events: none;
+  }
+
+  .map-top-bar-end {
+    width: 52px;
+    flex-shrink: 0;
+    pointer-events: none;
+  }
+}
+
+.reel-fab {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(78, 205, 196, 0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #4ecdc4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s var(--ease-out-back, ease), background 0.2s ease;
+  box-shadow: 0 4px 16px rgba(78, 205, 196, 0.25);
+
+  ion-icon {
+    font-size: 26px;
+  }
+
+  &:hover {
+    background: rgba(78, 205, 196, 0.3);
+    transform: scale(1.08);
+  }
+
+  &:active {
+    transform: scale(0.93);
+  }
+
+  // Subtle idle pulse to draw attention
+  animation: reelFabPulse 3s ease-in-out infinite;
+}
+
+@keyframes reelFabPulse {
+  0%, 100% { box-shadow: 0 4px 16px rgba(78, 205, 196, 0.25); }
+  50%       { box-shadow: 0 4px 24px rgba(78, 205, 196, 0.55); }
+}
+
+// ============================================
 // Map Container - Full Screen Canvas
 // ============================================
 
@@ -40,16 +147,12 @@
 }
 
 // ============================================
-// Floating Stats + Search Card (unified)
+// Floating Stats + Search pill
 // ============================================
 
 .floating-stats-card {
-  position: absolute;
-  top: calc(env(safe-area-inset-top, 0px) + var(--space-4));
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
   z-index: 200;
-
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -62,10 +165,9 @@
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
-  pointer-events: all;
+  pointer-events: auto;
   white-space: nowrap;
 
-  animation: floatIn 0.6s var(--ease-out-expo) 0.3s both;
   transition: width 0.2s var(--ease-out-expo);
 
   &.search-mode {
@@ -144,11 +246,11 @@
 @keyframes floatIn {
   from {
     opacity: 0;
-    transform: translateX(-50%) translateY(-20px);
+    transform: translateY(-12px);
   }
   to {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
   }
 }
 

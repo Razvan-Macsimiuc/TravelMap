@@ -4,6 +4,7 @@ import {
   inject,
   computed,
   signal,
+  DestroyRef,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject, switchMap, debounceTime, of } from 'rxjs';
@@ -33,18 +34,24 @@ import {
 import { AnimatedBackgroundComponent } from '../components/animated-background/animated-background.component';
 import { addIcons } from 'ionicons';
 import {
+  bagCheckOutline,
   checkmarkCircle,
   closeCircle,
   closeOutline,
+  globeOutline,
   locationOutline,
-  searchOutline,
   lockClosedOutline,
+  restaurantOutline,
+  searchOutline,
+  sparklesOutline,
 } from 'ionicons/icons';
 import { CountryService } from '../services/country.service';
 import { PageTransitionService } from '../services/page-transition.service';
 import { AchievementService } from '../services/achievement.service';
 import { CitySearchService, CityResult } from '../services/city-search.service';
 import { Country } from '../models/country.model';
+import type { CountryInsights } from '../data/country-insights.types';
+import { CountryInsightsLoaderService } from '../services/country-insights-loader.service';
 
 @Component({
   selector: 'app-country-detail',
@@ -79,6 +86,8 @@ export class CountryDetailPage implements OnInit {
   private readonly achievementService = inject(AchievementService);
   private readonly citySearchService = inject(CitySearchService);
   private readonly navController = inject(NavController);
+  private readonly insightsLoader = inject(CountryInsightsLoaderService);
+  private readonly destroyRef = inject(DestroyRef);
 
   private readonly countryCode = signal<string>('');
 
@@ -86,6 +95,10 @@ export class CountryDetailPage implements OnInit {
     const code = this.countryCode();
     return code ? this.countryService.getCountryByCode(code) : undefined;
   });
+
+  readonly insights = signal<CountryInsights | null>(null);
+  readonly insightsLoading = signal(true);
+  readonly insightsFromWikipedia = signal(false);
 
   readonly flagUrl = computed(() => {
     const code = this.countryCode();
@@ -108,7 +121,18 @@ export class CountryDetailPage implements OnInit {
   private readonly cityQuery$ = new Subject<string>();
 
   constructor() {
-    addIcons({ checkmarkCircle, closeCircle, closeOutline, locationOutline, searchOutline, lockClosedOutline });
+    addIcons({
+      bagCheckOutline,
+      checkmarkCircle,
+      closeCircle,
+      closeOutline,
+      globeOutline,
+      locationOutline,
+      lockClosedOutline,
+      restaurantOutline,
+      searchOutline,
+      sparklesOutline,
+    });
 
     this.cityQuery$.pipe(
       debounceTime(350),
@@ -131,21 +155,40 @@ export class CountryDetailPage implements OnInit {
   }
 
   ngOnInit(): void {
-    const code = this.route.snapshot.paramMap.get('code');
-    if (code) {
-      this.countryCode.set(code.toUpperCase());
+    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((pm) => {
+      const code = pm.get('code');
+      if (code) {
+        this.countryCode.set(code.toUpperCase());
 
-      const transitionState = this.pageTransitionService.getTransitionState();
-      if (transitionState.isTransitioning && transitionState.fromPosition) {
-        this.triggerEntranceAnimations();
+        const transitionState = this.pageTransitionService.getTransitionState();
+        if (transitionState.isTransitioning && transitionState.fromPosition) {
+          this.triggerEntranceAnimations();
+        } else {
+          this.showHeader.set(true);
+        }
+
+        this.isPageLoading.set(false);
       } else {
-        this.showHeader.set(true);
+        this.isPageLoading.set(false);
       }
+      void this.loadInsights();
+    });
+  }
 
-      this.isPageLoading.set(false);
-    } else {
-      this.isPageLoading.set(false);
+  private async loadInsights(): Promise<void> {
+    const code = this.countryCode();
+    const c = this.country();
+    if (!code || !c) {
+      this.insights.set(null);
+      this.insightsLoading.set(false);
+      this.insightsFromWikipedia.set(false);
+      return;
     }
+    this.insightsLoading.set(true);
+    await this.insightsLoader.ensureLoaded();
+    this.insights.set(this.insightsLoader.getBundle(code, c.name));
+    this.insightsFromWikipedia.set(this.insightsLoader.hasBundledEntry(code));
+    this.insightsLoading.set(false);
   }
 
   async onVisitedToggle(event: CustomEvent): Promise<void> {

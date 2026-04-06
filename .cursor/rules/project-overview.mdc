@@ -51,14 +51,16 @@ src/
     components/        # Shared standalone UI components
     services/          # Injectable services
     models/            # TypeScript interfaces
-    data/              # Static data (countries.data.ts)
+    data/              # Static data (`countries.data.ts`, `country-insights.data.ts`, `country-insights.types.ts`; generated JSON at `assets/data/country-insights.json` via `npm run generate:insights`)
+    selective-preload.strategy.ts  # Route preloading: only routes with `data: { preload: true }` (map tab)
     guards/            # Route guards
     utils/             # confetti.ts, counter-animation.ts
     styles/            # Shared SCSS (premium-header.scss)
     app.routes.ts      # Route definitions
     app.config.ts      # Bootstrap config
   assets/
-    countries.geojson  # Offline fallback GeoJSON
+    countries.geojson       # Offline fallback GeoJSON
+    data/country-insights.json  # Per-country travel sections (generated; loaded at runtime on Country Detail)
   environments/
     environment.ts          # dev – mapboxToken committed
     environment.prod.ts     # prod – mapboxToken: '' (set via CI)
@@ -85,6 +87,8 @@ package.json
 
 `splashGuard` is an inline guard in `app.routes.ts`; it redirects to `/splash` if `hopahopa_splash_shown` is not `'true'` in `sessionStorage`.
 
+**Preloading:** `SelectivePreloadStrategy` (in `app.config.ts`) preloads only lazy routes marked with `data: { preload: true }` (the **map** tab). Stats, settings, and country detail load on first navigation.
+
 > **Note:** First-run logic is handled entirely inside `SplashPage`. The `welcome.guard.ts` file has been deleted (it was dead code).
 
 ## Services
@@ -99,6 +103,7 @@ package.json
 | `PageTransitionService` | `services/page-transition.service.ts` | Shared state (position, country id/name) for map → country-detail transition animation |
 | `ErrorService` | `services/error.service.ts` | User-facing toasts/alerts for categorized errors; logging helper |
 | `CitySearchService` | `services/city-search.service.ts` | Wraps Mapbox Geocoding API (`/geocoding/v5/mapbox.places`) to return city suggestions filtered by country ISO code; used by `CountryDetailPage` autocomplete |
+| `CountryInsightsLoaderService` | `services/country-insights-loader.service.ts` | One-time `HttpClient` load of `assets/data/country-insights.json`; per-code bundles + regional fallbacks from `country-insights.data.ts` |
 
 ## Shared components
 
@@ -108,6 +113,7 @@ package.json
 | `AchievementModalComponent` | Celebration modal (lazy-imported by `AchievementService`) |
 | `CircularMenuComponent` | Long-press radial menu on the map |
 | `CountryPreviewCardComponent` | Hover/tap preview card on map |
+| `TravelReelComponent` | Full-screen ~21 s canvas animation (intro globe → stats → countries → achievements → outro) recorded via `MediaRecorder` and shared as a video file; **dynamic-imported** when opened from the map FAB |
 
 **Directive:** `ButtonPressDirective` (`appButtonPress`) — press animation + Capacitor haptics.
 
@@ -142,6 +148,7 @@ Other types: `Achievement`, `UnlockedAchievement`, `AchievementCategory` (in `Ac
 
 - **Mapbox:** map tiles + dark style (`mapbox://styles/mapbox/dark-v11`); token from `environment.mapboxToken`
 - **GeoJSON (countries):** `https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson` with fallback to `assets/countries.geojson`
+- **Wikipedia (dev-time only):** `npm run generate:insights` builds `assets/data/country-insights.json` from English Wikipedia REST API summaries (CC BY-SA 4.0) for “At a glance” plus curated visitor sections; regenerate after changing `countries.data.ts`
 - **No custom REST backend** — fully offline-first; all data lives on-device
 
 ## Capacitor plugins in use
@@ -150,6 +157,8 @@ Other types: `Achievement`, `UnlockedAchievement`, `AchievementCategory` (in `Ac
 
 ## Known caveats / tech debt
 
+- Adding or renaming countries in `countries.data.ts` requires re-running `npm run generate:insights` and committing `assets/data/country-insights.json` so detail blurbs stay in sync
+- `zone.js` remains a devDependency for Karma (`src/test.ts`); the app runtime is zoneless (`provideZonelessChangeDetection`)
 - `StorageService.loadCountries()` currently maps only `code`, `name`, `visited`, `photoIds` — `visitCount`, `daysStayed`, `cities`, `note` may not survive a full reload
 - `src/environments/environment.ts` is gitignored (developer local copy); copy from `environment.example.ts` and fill in your Mapbox token for local dev
 - The pre-existing `Cannot find module '../../environments/environment'` lint error in `map.page.ts` is expected in CI/readonly environments where `environment.ts` is absent

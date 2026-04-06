@@ -4,35 +4,55 @@
   <!-- Map Container -->
   <div #mapContainer class="map-container"></div>
 
-  <!-- Floating Stats + Search Card -->
-  <div class="floating-stats-card" [class.search-mode]="showSearch()">
+  <!-- Travel Reel: component created dynamically after chunk load (see openReel) -->
+  @if (showReel()) {
+    <ng-container #reelOutlet></ng-container>
+  }
+
+  <!-- Wordmark row, then play + stats row (FAB aligns with search pill only) -->
+  <div class="map-top-bar">
     @if (!showSearch()) {
-      <div class="stats-main">
-        <span class="stats-count">{{ visitedCount() }}</span>
-        <span class="stats-separator">/</span>
-        <span class="stats-total">195</span>
-        <span class="stats-label">countries</span>
+      <div class="map-top-bar-wordmark">
+        <span class="app-wordmark">HopaHopa</span>
       </div>
-      <div class="stats-divider"></div>
-      <button class="stats-search-btn" (click)="openSearch()" aria-label="Search countries">
-        <ion-icon name="search-outline"></ion-icon>
-      </button>
-    } @else {
-      <ion-icon name="search-outline" class="search-icon"></ion-icon>
-      <input
-        #searchInput
-        class="search-input"
-        [value]="searchQuery()"
-        (input)="searchQuery.set($any($event.target).value)"
-        placeholder="Search countries…"
-        autocomplete="off"
-        autocorrect="off"
-        spellcheck="false"
-      />
-      <button class="search-close-btn" (click)="closeSearch()">
-        <ion-icon name="close-outline"></ion-icon>
-      </button>
     }
+    <div class="map-top-bar-row">
+      <button type="button" class="reel-fab" (click)="openReel()" aria-label="Create travel reel">
+        <ion-icon name="play-circle-outline"></ion-icon>
+      </button>
+      <div class="map-top-bar-center">
+        <div class="floating-stats-card" [class.search-mode]="showSearch()">
+          @if (!showSearch()) {
+            <div class="stats-main">
+              <span class="stats-count">{{ visitedCount() }}</span>
+              <span class="stats-separator">/</span>
+              <span class="stats-total">195</span>
+              <span class="stats-label">countries</span>
+            </div>
+            <div class="stats-divider"></div>
+            <button class="stats-search-btn" (click)="openSearch()" aria-label="Search countries">
+              <ion-icon name="search-outline"></ion-icon>
+            </button>
+          } @else {
+            <ion-icon name="search-outline" class="search-icon"></ion-icon>
+            <input
+              #searchInput
+              class="search-input"
+              [value]="searchQuery()"
+              (input)="searchQuery.set($any($event.target).value)"
+              placeholder="Search countries…"
+              autocomplete="off"
+              autocorrect="off"
+              spellcheck="false"
+            />
+            <button class="search-close-btn" (click)="closeSearch()">
+              <ion-icon name="close-outline"></ion-icon>
+            </button>
+          }
+        </div>
+      </div>
+      <div class="map-top-bar-end" aria-hidden="true"></div>
+    </div>
   </div>
 
   <!-- Search results dropdown (below the card) -->
