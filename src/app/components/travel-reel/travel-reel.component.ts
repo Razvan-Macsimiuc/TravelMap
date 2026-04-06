@@ -141,6 +141,9 @@ const CENTROIDS: Record<string, [number, number]> = {
                   <ion-icon name="share-outline" slot="start"></ion-icon>
                   {{ sharing() ? 'Sharing…' : 'Share Reel' }}
                 </ion-button>
+                @if (shareError()) {
+                  <p class="reel-error-text reel-share-err">{{ shareError() }}</p>
+                }
               } @else {
                 <!-- Desktop: download + status message -->
                 <ion-button expand="block" class="reel-share-btn" (click)="saveToDevice()" [disabled]="sharing()">
@@ -236,6 +239,11 @@ const CENTROIDS: Record<string, [number, number]> = {
       text-align: center;
       margin: 0;
       line-height: 1.5;
+    }
+
+    .reel-share-err {
+      font-size: 13px;
+      line-height: 1.45;
     }
 
     .reel-progress-track {
@@ -403,6 +411,8 @@ export class TravelReelComponent implements OnInit, AfterViewInit, OnDestroy {
   readonly canNativeShare = signal(false);
   /** Set to a confirmation string after a successful desktop download. */
   readonly downloadStatus = signal('');
+  /** Native share failed (e.g. Android FileProvider / URI issues). */
+  readonly shareError = signal<string | null>(null);
 
   private ctx!: CanvasRenderingContext2D;
   private viewReady = false;
@@ -1487,6 +1497,7 @@ export class TravelReelComponent implements OnInit, AfterViewInit, OnDestroy {
   /** Used when canNativeShare() is true — native app or mobile web. */
   async share(): Promise<void> {
     if (!this.videoBlob || this.sharing()) return;
+    this.shareError.set(null);
     this.sharing.set(true);
     try {
       const ext = this.videoBlob.type.includes('mp4') ? 'mp4' : 'webm';
@@ -1517,18 +1528,65 @@ export class TravelReelComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.videoBlob) return;
     const { Filesystem, Directory } = await import('@capacitor/filesystem');
     const base64 = await this.blobToBase64(this.videoBlob);
-    await Filesystem.writeFile({ path: fileName, data: base64, directory: Directory.Cache });
-    const { uri } = await Filesystem.getUri({ path: fileName, directory: Directory.Cache });
+
+    let fileUri: string;
     try {
-      await Share.share({
-        files: [uri],
-        title: 'My HopaHopa Travel Reel',
-        dialogTitle: 'Share Your Travel Reel',
+      const writeResult = await Filesystem.writeFile({
+        path: fileName,
+        data: base64,
+        directory: Directory.Cache,
       });
-    } finally {
+      fileUri = writeResult.uri;
+    } catch (err) {
+      console.error('[TravelReel] writeFile failed', err);
+      this.shareError.set('Could not save the video to app storage. Try freeing space or try again.');
+      return;
+    }
+
+    const scheduleCleanup = (): void => {
+      window.setTimeout(() => {
+        void Filesystem.deleteFile({ path: fileName, directory: Directory.Cache }).catch(
+          () => {}
+        );
+      }, 120_000);
+    };
+
+    const isUserCancelled = (err: unknown): boolean => {
+      const msg = err instanceof Error ? err.message : String(err);
+      return /cancel|canceled|abort/i.test(msg);
+    };
+
+    try {
+      // Android Share only accepts file:// URLs; use `url` for a single file (Capacitor docs).
+      await Share.share({
+        title: 'My HopaHopa Travel Reel',
+        dialogTitle: 'Share or save video',
+        url: fileUri,
+      });
+      scheduleCleanup();
+    } catch (e: unknown) {
+      if (isUserCancelled(e)) {
+        scheduleCleanup();
+        return;
+      }
       try {
-        await Filesystem.deleteFile({ path: fileName, directory: Directory.Cache });
-      } catch { /* ignore */ }
+        await Share.share({
+          title: 'My HopaHopa Travel Reel',
+          dialogTitle: 'Share or save video',
+          files: [fileUri],
+        });
+        scheduleCleanup();
+      } catch (e2: unknown) {
+        if (isUserCancelled(e2)) {
+          scheduleCleanup();
+          return;
+        }
+        console.error('[TravelReel] Share failed', e, e2);
+        scheduleCleanup();
+        this.shareError.set(
+          'Could not open the share sheet. From Share, choose Photos, Drive, or Files to save the video.'
+        );
+      }
     }
   }
 

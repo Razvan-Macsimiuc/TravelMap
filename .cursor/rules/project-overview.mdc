@@ -156,6 +156,8 @@ Other types: `Achievement`, `UnlockedAchievement`, `AchievementCategory` (in `Ac
 
 `@capacitor/app`, `@capacitor/camera`, `@capacitor/filesystem`, `@capacitor/haptics`, `@capacitor/keyboard`, `@capacitor/preferences`, `@capacitor/share`, `@capacitor/splash-screen`, `@capacitor/status-bar`
 
+**Android:** `TravelReelComponent` shares the recorded file via `@capacitor/share` using the URI from `Filesystem.writeFile` (`url` first, then `files`). `android/app/src/main/res/xml/file_paths.xml` must expose **cache**, **files**, and **external-files** paths for `FileProvider` so other apps can read the shared file.
+
 ## Known caveats / tech debt
 
 - Adding or renaming countries in `countries.data.ts` requires re-running `npm run generate:insights` and committing `assets/data/country-insights.json` so detail blurbs stay in sync
