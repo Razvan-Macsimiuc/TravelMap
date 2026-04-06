@@ -808,11 +808,10 @@ export class TravelReelComponent implements OnInit, AfterViewInit, OnDestroy {
 
       const mapCanvas = map.getCanvas();
       if (mapCanvas.width > 0 && mapCanvas.height > 0) {
-        // Letterbox background, then contain-fit the map (full globe visible, not cropped).
+        // Match the map view: letterbox, then scale like contain + modest zoom so framing matches the in-app globe.
         this.fillBg(ctx);
         const mw = mapCanvas.width;
         const mh = mapCanvas.height;
-        // Slightly larger than contain (~1.35×) — modest edge crop, not dominating the frame
         const fit = Math.min(W / mw, H / mh) * 1.35;
         const dw = mw * fit;
         const dh = mh * fit;
