@@ -1,0 +1,153 @@
+<ion-content [fullscreen]="true" [scrollY]="flowPhase() === 'birthplace'">
+  <div class="welcome-container" [class.animate-in]="animateIn()">
+    <div class="background-layer">
+      <div class="gradient-orb orb-1"></div>
+      <div class="gradient-orb orb-2"></div>
+      <div class="gradient-orb orb-3"></div>
+      <div class="grid-overlay"></div>
+    </div>
+
+    <div class="brand-section" [class.show]="showBrand()">
+      <div class="logo-container">
+        <span class="logo-emoji">🌍</span>
+        <div class="logo-ring"></div>
+      </div>
+      <h1 class="app-name">HopaHopa</h1>
+      <p class="tagline">Track Your World Adventures</p>
+    </div>
+
+    @if (flowPhase() === 'slides') {
+      <div class="slides-container">
+        @for (slide of slides; track slide.title; let i = $index) {
+          <div
+            class="slide"
+            [class.active]="currentSlide() === i"
+            [class.prev]="currentSlide() > i"
+            [class.next]="currentSlide() < i"
+          >
+            <div class="slide-icon" [style.background]="slide.gradient">
+              <ion-icon [name]="slide.icon"></ion-icon>
+            </div>
+            <h2 class="slide-title">{{ slide.title }}</h2>
+            <p class="slide-description">{{ slide.description }}</p>
+          </div>
+        }
+      </div>
+
+      <div class="pagination">
+        @for (slide of slides; track slide.title; let i = $index) {
+          <button
+            type="button"
+            class="dot"
+            [class.active]="currentSlide() === i"
+            (click)="goToSlide(i)"
+          ></button>
+        }
+      </div>
+
+      <div class="action-section" [class.show]="showActions()">
+        @if (currentSlide() < slides.length - 1) {
+          <button type="button" class="skip-btn" (click)="skip()">Skip</button>
+          <button type="button" class="next-btn" (click)="nextSlide()">
+            <span>Next</span>
+            <ion-icon name="arrow-forward-outline"></ion-icon>
+          </button>
+        } @else {
+          <button type="button" class="skip-btn" (click)="skip()">Skip</button>
+          <button type="button" class="start-btn" (click)="goToBirthplaceStep()">
+            <span>Continue</span>
+            <ion-icon name="arrow-forward-outline"></ion-icon>
+          </button>
+        }
+      </div>
+    } @else {
+      <div class="birthplace-step" [class.show]="showActions()">
+        <div class="birthplace-header">
+          <button type="button" class="back-to-slides" (click)="backToSlides()">
+            <ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon>
+            <span>Back</span>
+          </button>
+          <h2 class="birthplace-title">Where were you born?</h2>
+          <p class="birthplace-subtitle">
+            Pick your country and city so we can place a pin on your map.
+          </p>
+        </div>
+
+        <ion-searchbar
+          class="country-search"
+          placeholder="Search country"
+          [value]="countryFilter()"
+          (ionInput)="onCountryFilter($event)"
+          animated="true"
+        ></ion-searchbar>
+
+        <div class="birthplace-lists">
+          <div class="list-block">
+            <span class="list-label">Country</span>
+            <ion-list class="scroll-list" lines="none">
+              @for (c of filteredCountries(); track c.code) {
+                <ion-item
+                  button
+                  detail="false"
+                  [class.selected]="selectedCountry()?.code === c.code"
+                  (click)="selectCountry(c)"
+                >
+                  <ion-label>{{ c.name }}</ion-label>
+                </ion-item>
+              }
+            </ion-list>
+          </div>
+
+          <div class="list-block">
+            <span class="list-label">City</span>
+            @if (!selectedCountry()) {
+              <p class="hint-muted">Select a country first.</p>
+            } @else {
+              <ion-searchbar
+                class="city-search"
+                placeholder="Search city (min. 2 letters)"
+                [debounce]="0"
+                [value]="cityQueryText()"
+                (ionInput)="onCityQuery($event)"
+                animated="true"
+              ></ion-searchbar>
+              @if (citySearching()) {
+                <div class="city-loading">
+                  <ion-spinner name="crescent"></ion-spinner>
+                </div>
+              }
+              <ion-list class="scroll-list" lines="none">
+                @for (r of cityResults(); track r.name + r.subtitle) {
+                  <ion-item
+                    button
+                    detail="false"
+                    [class.selected]="isSelectedCity(r)"
+                    (click)="selectCity(r)"
+                  >
+                    <ion-label>
+                      <div class="city-line">{{ r.name }}</div>
+                      <div class="city-sub">{{ r.subtitle }}</div>
+                    </ion-label>
+                  </ion-item>
+                }
+              </ion-list>
+            }
+          </div>
+        </div>
+
+        <div class="birthplace-actions">
+          <button type="button" class="skip-btn" (click)="skipBirthplace()">Skip</button>
+          <button
+            type="button"
+            class="next-btn"
+            [disabled]="!canSaveBirthplace()"
+            (click)="saveBirthplaceAndFinish()"
+          >
+            <span>Start exploring</span>
+            <ion-icon name="arrow-forward-outline"></ion-icon>
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</ion-content>

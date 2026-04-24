@@ -1,0 +1,4188 @@
+[
+    {
+      "code": "AL",
+      "name": "Albania",
+      "mustKnow": [
+        "Very affordable travel destination in Europe",
+        "Coastal areas are summer hotspots",
+        "Cash is widely used outside cities"
+      ],
+      "mustDo": [
+        "Albanian Riviera (Ksamil beaches)",
+        "Berat city of a thousand windows",
+        "Tirana street café culture"
+      ],
+      "myths": [
+        "Besa: sacred honor code deeply rooted in culture",
+        "Mountain legends of invisible fairy guardians"
+      ],
+      "adventureHighlights": [
+        "Accursed Mountains trekking",
+        "Hidden beaches along the Riviera",
+        "Cold War bunker exploration"
+      ]
+    },
+    {
+      "code": "DZ",
+      "name": "Algeria",
+      "mustKnow": [
+        "Largest country in Africa",
+        "Sahara dominates most of the land",
+        "French widely spoken in cities"
+      ],
+      "mustDo": [
+        "Sahara desert dunes in Djanet",
+        "Casbah of Algiers",
+        "Roman ruins of Timgad"
+      ],
+      "myths": [
+        "Djinn spirits in desert folklore",
+        "Lost Saharan caravan city legends"
+      ],
+      "adventureHighlights": [
+        "Tassili n’Ajjer rock formations",
+        "Sahara expeditions",
+        "Roman archaeological routes"
+      ]
+    },
+    {
+      "code": "AD",
+      "name": "Andorra",
+      "mustKnow": [
+        "Small mountain country between France and Spain",
+        "Tax-free shopping destination",
+        "Ski tourism is major economy"
+      ],
+      "mustDo": [
+        "Grandvalira skiing",
+        "Caldea thermal spa",
+        "Pyrenees hiking trails"
+      ],
+      "myths": [
+        "Mountain spirits guarding valleys",
+        "Hidden shepherd kingdom legends"
+      ],
+      "adventureHighlights": [
+        "High-altitude hiking",
+        "Snow sports resorts",
+        "Mountain villages"
+      ]
+    },
+    {
+      "code": "AO",
+      "name": "Angola",
+      "mustKnow": [
+        "Portuguese-speaking African nation",
+        "Post-war rebuilding economy",
+        "Rich natural resources"
+      ],
+      "mustDo": [
+        "Kalandula Falls",
+        "Luanda coastline",
+        "Kissama National Park safari"
+      ],
+      "myths": [
+        "Forest guardian spirits",
+        "Ancestral nature worship traditions"
+      ],
+      "adventureHighlights": [
+        "Savannah safaris",
+        "Atlantic coastline exploration",
+        "Waterfall trekking"
+      ]
+    },
+    {
+      "code": "AG",
+      "name": "Antigua and Barbuda",
+      "mustKnow": [
+        "Caribbean island nation",
+        "Tourism-based economy",
+        "365 beaches tradition"
+      ],
+      "mustDo": [
+        "Nelson’s Dockyard",
+        "Half Moon Bay",
+        "Snorkeling coral reefs"
+      ],
+      "myths": [
+        "Pirate treasure legends",
+        "Sea spirit folklore"
+      ],
+      "adventureHighlights": [
+        "Island sailing",
+        "Coral reef diving",
+        "Beach exploration"
+      ]
+    },
+    {
+      "code": "AR",
+      "name": "Argentina",
+      "mustKnow": [
+        "Huge geographic diversity",
+        "Spanish-speaking country",
+        "Football is national identity"
+      ],
+      "mustDo": [
+        "Iguazu Falls",
+        "Patagonia glaciers",
+        "Buenos Aires tango districts"
+      ],
+      "myths": [
+        "La Luz Mala ghost light",
+        "El Pombero forest spirit"
+      ],
+      "adventureHighlights": [
+        "Andes trekking",
+        "Glacier walking",
+        "Patagonian wilderness"
+      ]
+    },
+    {
+      "code": "AM",
+      "name": "Armenia",
+      "mustKnow": [
+        "One of the oldest civilizations",
+        "First Christian nation",
+        "Mountainous terrain"
+      ],
+      "mustDo": [
+        "Mount Ararat views",
+        "Tatev Monastery",
+        "Yerevan city walks"
+      ],
+      "myths": [
+        "Aralez resurrection spirits",
+        "Mountain dragon legends"
+      ],
+      "adventureHighlights": [
+        "Caucasus hiking",
+        "Monastery exploration",
+        "Remote village travel"
+      ]
+    },
+    {
+      "code": "AU",
+      "name": "Australia",
+      "mustKnow": [
+        "Entire continent-country",
+        "Unique wildlife (some dangerous)",
+        "Extreme climate diversity"
+      ],
+      "mustDo": [
+        "Great Barrier Reef",
+        "Sydney Opera House",
+        "Outback road trips"
+      ],
+      "myths": [
+        "Aboriginal Dreamtime stories",
+        "Rainbow Serpent creation myth"
+      ],
+      "adventureHighlights": [
+        "Reef diving",
+        "Uluru desert experience",
+        "Rainforest trekking"
+      ]
+    },
+    {
+      "code": "AT",
+      "name": "Austria",
+      "mustKnow": [
+        "Alpine European country",
+        "Classical music heritage",
+        "High quality of life"
+      ],
+      "mustDo": [
+        "Vienna music halls",
+        "Hallstatt village",
+        "Alps skiing"
+      ],
+      "myths": [
+        "Krampus winter folklore",
+        "Alpine mountain spirits"
+      ],
+      "adventureHighlights": [
+        "Alpine hiking",
+        "Glacier skiing",
+        "Lake exploration"
+      ]
+    },
+    {
+      "code": "AZ",
+      "name": "Azerbaijan",
+      "mustKnow": [
+        "Between Europe and Asia",
+        "Oil-rich economy",
+        "Modern + ancient blend"
+      ],
+      "mustDo": [
+        "Baku Flame Towers",
+        "Gobustan rock art",
+        "Caspian Sea coast"
+      ],
+      "myths": [
+        "Fire worship traditions",
+        "Mountain spirit legends"
+      ],
+      "adventureHighlights": [
+        "Mud volcano fields",
+        "Caucasus trekking",
+        "Desert-sea landscapes"
+      ]
+    },
+    {
+      "code": "BS",
+      "name": "Bahamas",
+      "mustKnow": [
+        "Caribbean island chain",
+        "Tourism + banking economy",
+        "Crystal clear waters"
+      ],
+      "mustDo": [
+        "Exuma swimming pigs",
+        "Nassau beaches",
+        "Blue holes diving"
+      ],
+      "myths": [
+        "Lusca sea monster",
+        "Pirate treasure legends"
+      ],
+      "adventureHighlights": [
+        "Coral reef diving",
+        "Island hopping",
+        "Underwater caves"
+      ]
+    },
+    {
+      "code": "BH",
+      "name": "Bahrain",
+      "mustKnow": [
+        "Small Gulf island nation",
+        "Ancient trading hub",
+        "Modern financial center"
+      ],
+      "mustDo": [
+        "Bahrain Fort",
+        "Tree of Life desert tree",
+        "Manama souq"
+      ],
+      "myths": [
+        "Dilmun paradise myth",
+        "Pearl diving spirits"
+      ],
+      "adventureHighlights": [
+        "Desert driving",
+        "Pearl diving heritage",
+        "Coastal exploration"
+      ]
+    },
+    {
+      "code": "BD",
+      "name": "Bangladesh",
+      "mustKnow": [
+        "Extremely dense population",
+        "River-based geography",
+        "Monsoon climate"
+      ],
+      "mustDo": [
+        "Sundarbans mangroves",
+        "Cox’s Bazar beach",
+        "Dhaka street life"
+      ],
+      "myths": [
+        "River goddess legends",
+        "Bengal tiger symbolism"
+      ],
+      "adventureHighlights": [
+        "Mangrove safaris",
+        "River journeys",
+        "Village exploration"
+      ]
+    },
+    {
+      "code": "BB",
+      "name": "Barbados",
+      "mustKnow": [
+        "Caribbean island nation",
+        "British colonial history",
+        "Rum culture"
+      ],
+      "mustDo": [
+        "Harrison’s Cave",
+        "Carlisle Bay",
+        "Bridgetown historic district"
+      ],
+      "myths": [
+        "Flying fish legends",
+        "Sea spirit folklore"
+      ],
+      "adventureHighlights": [
+        "Coral diving",
+        "Coastal cliffs",
+        "Sailing waters"
+      ]
+    },
+    {
+      "code": "BY",
+      "name": "Belarus",
+      "mustKnow": [
+        "Eastern European forest country",
+        "Soviet-era architecture",
+        "Lakes and forests"
+      ],
+      "mustDo": [
+        "Minsk city",
+        "Belovezhskaya forest",
+        "Mir Castle"
+      ],
+      "myths": [
+        "Forest spirits (Leshy)",
+        "Swamp disappearance legends"
+      ],
+      "adventureHighlights": [
+        "Forest trekking",
+        "Castle routes",
+        "Lake wilderness"
+      ]
+    },
+    {
+      "code": "BE",
+      "name": "Belgium",
+      "mustKnow": [
+        "Chocolate and beer culture",
+        "EU capital Brussels",
+        "Multilingual nation"
+      ],
+      "mustDo": [
+        "Bruges canals",
+        "Brussels Grand Place",
+        "Ghent medieval center"
+      ],
+      "myths": [
+        "Manneken Pis folklore",
+        "Flemish giant legends"
+      ],
+      "adventureHighlights": [
+        "Castle routes",
+        "Cycling countryside",
+        "Ardennes forests"
+      ]
+    },
+    {
+      "code": "BZ",
+      "name": "Belize",
+      "mustKnow": [
+        "English-speaking Central America",
+        "Caribbean + jungle mix",
+        "Barrier reef system"
+      ],
+      "mustDo": [
+        "Great Blue Hole",
+        "Mayan ruins",
+        "Caye Caulker island"
+      ],
+      "myths": [
+        "Maya underworld Xibalba",
+        "Jungle spirits"
+      ],
+      "adventureHighlights": [
+        "Cave exploration",
+        "Reef diving",
+        "Rainforest trekking"
+      ]
+    },
+    {
+      "code": "BJ",
+      "name": "Benin",
+      "mustKnow": [
+        "Birthplace of Vodun religion",
+        "West African cultural heritage",
+        "Coastal + savannah mix"
+      ],
+      "mustDo": [
+        "Ouidah spiritual sites",
+        "Ganvie floating village",
+        "Pendjari safari"
+      ],
+      "myths": [
+        "Vodun deities and spirits",
+        "Ancestral rituals"
+      ],
+      "adventureHighlights": [
+        "Wildlife safaris",
+        "Floating villages",
+        "Cultural coastlines"
+      ]
+    },
+    {
+      "code": "BT",
+      "name": "Bhutan",
+      "mustKnow": [
+        "Happiness Index nation",
+        "Himalayan kingdom",
+        "Strict tourism rules"
+      ],
+      "mustDo": [
+        "Tiger’s Nest Monastery",
+        "Paro Valley",
+        "Thimphu culture"
+      ],
+      "myths": [
+        "Thunder Dragon legend",
+        "Buddhist protector spirits"
+      ],
+      "adventureHighlights": [
+        "Himalayan trekking",
+        "Monastery routes",
+        "Remote valleys"
+      ]
+    },
+    {
+        "code": "BG",
+        "name": "Bulgaria",
+        "mustKnow": [
+          "One of Europe’s oldest countries",
+          "Mix of Black Sea coast and mountains",
+          "Very affordable travel destination"
+        ],
+        "mustDo": [
+          "Rila Monastery",
+          "Sofia ancient ruins",
+          "Black Sea beaches"
+        ],
+        "myths": [
+          "Thracian warrior legends",
+          "Vampire folklore in rural villages"
+        ],
+        "adventureHighlights": [
+          "Rila mountain hiking",
+          "Cave exploration",
+          "Ski resorts in Bansko"
+        ]
+      },
+      {
+        "code": "BF",
+        "name": "Burkina Faso",
+        "mustKnow": [
+          "Landlocked West African country",
+          "Strong traditional culture",
+          "Known for music and art festivals"
+        ],
+        "mustDo": [
+          "Banfora waterfalls",
+          "Ouagadougou cultural festivals",
+          "Sindou peaks"
+        ],
+        "myths": [
+          "Spirit ancestors guiding tribes",
+          "Sacred forest guardians"
+        ],
+        "adventureHighlights": [
+          "Rock formations trekking",
+          "Savannah exploration",
+          "Cultural village tours"
+        ]
+      },
+      {
+        "code": "BI",
+        "name": "Burundi",
+        "mustKnow": [
+          "Small East African country",
+          "Hilly landscape",
+          "Lake Tanganyika shoreline"
+        ],
+        "mustDo": [
+          "Lake Tanganyika beaches",
+          "Gitega cultural sites",
+          "Rusizi National Park"
+        ],
+        "myths": [
+          "Sacred drum traditions",
+          "Ancestral spirit communication rituals"
+        ],
+        "adventureHighlights": [
+          "Lake kayaking",
+          "Hill trekking",
+          "Wildlife viewing"
+        ]
+      },
+      {
+        "code": "CV",
+        "name": "Cape Verde",
+        "mustKnow": [
+          "Atlantic island nation",
+          "Blend of African and Portuguese culture",
+          "Volcanic islands"
+        ],
+        "mustDo": [
+          "Fogo volcano climb",
+          "Santiago island culture",
+          "Mindelo music scene"
+        ],
+        "myths": [
+          "Sea spirit legends",
+          "Volcano god myths"
+        ],
+        "adventureHighlights": [
+          "Volcano trekking",
+          "Surfing Atlantic waves",
+          "Island hopping"
+        ]
+      },
+      {
+        "code": "KH",
+        "name": "Cambodia",
+        "mustKnow": [
+          "Home of Angkor Empire",
+          "Tropical Southeast Asia climate",
+          "Rapidly growing tourism"
+        ],
+        "mustDo": [
+          "Angkor Wat sunrise",
+          "Phnom Penh royal palace",
+          "Tonle Sap lake villages"
+        ],
+        "myths": [
+          "Nāga serpent guardians",
+          "Angkor temple spirit legends"
+        ],
+        "adventureHighlights": [
+          "Jungle temple exploration",
+          "River cruises",
+          "Rainforest trekking"
+        ]
+      },
+      {
+        "code": "CM",
+        "name": "Cameroon",
+        "mustKnow": [
+          "Called 'Africa in miniature'",
+          "Diverse landscapes from desert to rainforest",
+          "French and English official languages"
+        ],
+        "mustDo": [
+          "Mount Cameroon hike",
+          "Waza National Park safari",
+          "Limbe beaches"
+        ],
+        "myths": [
+          "Forest spirit legends",
+          "Mountain gods of volcanic peaks"
+        ],
+        "adventureHighlights": [
+          "Volcano climbing",
+          "Wildlife safaris",
+          "Rainforest trekking"
+        ]
+      },
+      {
+        "code": "CA",
+        "name": "Canada",
+        "mustKnow": [
+          "Second largest country in the world",
+          "Extreme wilderness areas",
+          "Highly safe and multicultural"
+        ],
+        "mustDo": [
+          "Banff National Park",
+          "Niagara Falls",
+          "Vancouver coastal city"
+        ],
+        "myths": [
+          "Indigenous spirit animal legends",
+          "Northern lights folklore"
+        ],
+        "adventureHighlights": [
+          "Rocky Mountains trekking",
+          "Northern wilderness exploration",
+          "Kayaking in fjords"
+        ]
+      },
+      {
+        "code": "CF",
+        "name": "Central African Republic",
+        "mustKnow": [
+          "Remote and lightly visited country",
+          "Dense rainforest regions",
+          "Wildlife-rich ecosystems"
+        ],
+        "mustDo": [
+          "Dzanga-Sangha reserve",
+          "Boali waterfalls",
+          "Rainforest exploration"
+        ],
+        "myths": [
+          "Forest guardian spirits",
+          "Ancestral jungle myths"
+        ],
+        "adventureHighlights": [
+          "Rainforest safaris",
+          "River expeditions",
+          "Wildlife tracking"
+        ]
+      },
+      {
+        "code": "TD",
+        "name": "Chad",
+        "mustKnow": [
+          "Large desert country in Africa",
+          "Sahara dominates north",
+          "Very low tourism infrastructure"
+        ],
+        "mustDo": [
+          "Zakouma National Park",
+          "Ennedi desert formations",
+          "Lake Chad region"
+        ],
+        "myths": [
+          "Desert spirits (djinn)",
+          "Ancient nomad legends"
+        ],
+        "adventureHighlights": [
+          "Sahara expeditions",
+          "Rock art exploration",
+          "Wildlife safaris"
+        ]
+      },
+      {
+        "code": "CL",
+        "name": "Chile",
+        "mustKnow": [
+          "Long narrow country in South America",
+          "Earthquake-prone region",
+          "Extremely diverse climates"
+        ],
+        "mustDo": [
+          "Atacama Desert",
+          "Patagonia Torres del Paine",
+          "Easter Island moai"
+        ],
+        "myths": [
+          "Mapuche earth spirits",
+          "Island guardian legends"
+        ],
+        "adventureHighlights": [
+          "Desert stargazing",
+          "Glacier trekking",
+          "Volcano climbing"
+        ]
+      },
+      {
+        "code": "CN",
+        "name": "China",
+        "mustKnow": [
+          "One of the oldest civilizations",
+          "Huge geographic diversity",
+          "Advanced modern cities + ancient heritage"
+        ],
+        "mustDo": [
+          "Great Wall of China",
+          "Forbidden City",
+          "Li River landscapes"
+        ],
+        "myths": [
+          "Dragon emperors",
+          "Monkey King (Journey to the West)"
+        ],
+        "adventureHighlights": [
+          "Himalayan foothill trekking",
+          "Karst mountain exploration",
+          "Desert Silk Road routes"
+        ]
+      },
+      {
+        "code": "CO",
+        "name": "Colombia",
+        "mustKnow": [
+          "Diverse geography: mountains, jungle, coast",
+          "Rich cultural heritage",
+          "Coffee is a major export"
+        ],
+        "mustDo": [
+          "Cartagena old town",
+          "Coffee region",
+          "Tayrona National Park"
+        ],
+        "myths": [
+          "El Dorado legend",
+          "La Llorona river spirit"
+        ],
+        "adventureHighlights": [
+          "Amazon jungle expeditions",
+          "Andes trekking",
+          "Caribbean coast diving"
+        ]
+      },
+      {
+        "code": "KM",
+        "name": "Comoros",
+        "mustKnow": [
+          "Island nation in Indian Ocean",
+          "Volcanic islands",
+          "Blend of African and Arab culture"
+        ],
+        "mustDo": [
+          "Mount Karthala volcano",
+          "Marine parks",
+          "Traditional villages"
+        ],
+        "myths": [
+          "Sea spirit legends",
+          "Volcano guardian myths"
+        ],
+        "adventureHighlights": [
+          "Volcano trekking",
+          "Coral reef diving",
+          "Island exploration"
+        ]
+      },
+      {
+        "code": "CG",
+        "name": "Republic of the Congo",
+        "mustKnow": [
+          "Dense rainforest country",
+          "Low population density",
+          "Wildlife-rich ecosystems"
+        ],
+        "mustDo": [
+          "Odzala-Kokoua National Park",
+          "Brazzaville riverfront",
+          "Rainforest expeditions"
+        ],
+        "myths": [
+          "Forest spirit guardians",
+          "River deity legends"
+        ],
+        "adventureHighlights": [
+          "Jungle trekking",
+          "River safaris",
+          "Wildlife observation"
+        ]
+      },
+      {
+        "code": "CD",
+        "name": "Democratic Republic of the Congo",
+        "mustKnow": [
+          "Huge Central African country",
+          "Home to Congo rainforest",
+          "Volcanic regions in east"
+        ],
+        "mustDo": [
+          "Virunga National Park",
+          "Mount Nyiragongo lava lake",
+          "Congo River expeditions"
+        ],
+        "myths": [
+          "Forest spirit kingdoms",
+          "Mountain dragon legends"
+        ],
+        "adventureHighlights": [
+          "Volcano trekking",
+          "Gorilla tracking",
+          "River expeditions"
+        ]
+      },
+      {
+        "code": "CR",
+        "name": "Costa Rica",
+        "mustKnow": [
+          "Highly biodiverse country",
+          "Eco-tourism leader",
+          "No standing army"
+        ],
+        "mustDo": [
+          "Arenal volcano",
+          "Monteverde cloud forest",
+          "Pacific beaches"
+        ],
+        "myths": [
+          "Jungle spirit guardians",
+          "Volcano deity legends"
+        ],
+        "adventureHighlights": [
+          "Zip-lining forests",
+          "Volcano hiking",
+          "Wildlife safaris"
+        ]
+      },
+      {
+        "code": "HR",
+        "name": "Croatia",
+        "mustKnow": [
+          "Adriatic coastline destination",
+          "Historic walled cities",
+          "Popular summer tourism"
+        ],
+        "mustDo": [
+          "Dubrovnik old city",
+          "Plitvice Lakes",
+          "Dalmatian islands"
+        ],
+        "myths": [
+          "Sea nymph legends",
+          "Dragon guardian folklore"
+        ],
+        "adventureHighlights": [
+          "Island hopping",
+          "National park hiking",
+          "Coastal sailing"
+        ]
+      },
+      {
+        "code": "CU",
+        "name": "Cuba",
+        "mustKnow": [
+          "Caribbean island with strong culture",
+          "Classic cars and architecture",
+          "Unique political system"
+        ],
+        "mustDo": [
+          "Havana old town",
+          "Viñales Valley",
+          "Varadero beaches"
+        ],
+        "myths": [
+          "Santería spirits",
+          "Ghost ship legends"
+        ],
+        "adventureHighlights": [
+          "Cave exploration",
+          "Beach diving",
+          "Music street culture"
+        ]
+      },
+      {
+        "code": "CY",
+        "name": "Cyprus",
+        "mustKnow": [
+          "Mediterranean island",
+          "Greek and Turkish cultural mix",
+          "Ancient history sites"
+        ],
+        "mustDo": [
+          "Paphos archaeological park",
+          "Troodos mountains",
+          "Ayia Napa beaches"
+        ],
+        "myths": [
+          "Aphrodite birth legends",
+          "Ancient Greek myths"
+        ],
+        "adventureHighlights": [
+          "Coastal hiking",
+          "Mountain trails",
+          "Sea cave exploration"
+        ]
+      },
+      {
+        "code": "CZ",
+        "name": "Czech Republic",
+        "mustKnow": [
+          "Central European country",
+          "Medieval architecture",
+          "Beer culture is huge"
+        ],
+        "mustDo": [
+          "Prague Castle",
+          "Charles Bridge",
+          "Český Krumlov"
+        ],
+        "myths": [
+          "Golem of Prague legend",
+          "Medieval alchemist myths"
+        ],
+        "adventureHighlights": [
+          "Castle exploration",
+          "River kayaking",
+          "Bohemian forest hiking"
+        ]
+      },
+      {
+        "code": "DK",
+        "name": "Denmark",
+        "mustKnow": [
+          "One of the happiest countries in the world",
+          "Flat terrain, great for cycling",
+          "High cost of living but very safe"
+        ],
+        "mustDo": [
+          "Copenhagen Nyhavn harbor",
+          "Tivoli Gardens amusement park",
+          "Little Mermaid statue"
+        ],
+        "myths": [
+          "Nisse (household elves in folklore)",
+          "Sea monster legends from Viking era"
+        ],
+        "adventureHighlights": [
+          "Coastal cycling routes",
+          "Island hopping",
+          "Nordic architecture tours"
+        ]
+      },
+      {
+        "code": "DJ",
+        "name": "Djibouti",
+        "mustKnow": [
+          "One of the hottest countries on Earth",
+          "Located in the Horn of Africa",
+          "Strategic naval location"
+        ],
+        "mustDo": [
+          "Lake Assal (saltiest lake in Africa)",
+          "Gulf of Tadjoura diving",
+          "Lac Abbé limestone chimneys"
+        ],
+        "myths": [
+          "Djinn desert spirits",
+          "Ancient salt demon legends"
+        ],
+        "adventureHighlights": [
+          "Diving with whale sharks",
+          "Desert volcano landscapes",
+          "Salt lake expeditions"
+        ]
+      },
+      {
+        "code": "DM",
+        "name": "Dominica",
+        "mustKnow": [
+          "Caribbean 'Nature Island'",
+          "Very mountainous and green",
+          "Low mass tourism compared to neighbors"
+        ],
+        "mustDo": [
+          "Boiling Lake hike",
+          "Trafalgar Falls",
+          "Morne Trois Pitons National Park"
+        ],
+        "myths": [
+          "Forest spirit guardians",
+          "Volcanic earth legends"
+        ],
+        "adventureHighlights": [
+          "Rainforest trekking",
+          "Volcanic lake hike",
+          "Hot spring bathing"
+        ]
+      },
+      {
+        "code": "DO",
+        "name": "Dominican Republic",
+        "mustKnow": [
+          "Shared island with Haiti",
+          "Caribbean tourism hub",
+          "Strong music and dance culture"
+        ],
+        "mustDo": [
+          "Punta Cana beaches",
+          "Santo Domingo colonial zone",
+          "27 Waterfalls of Damajagua"
+        ],
+        "myths": [
+          "Taíno indigenous spirit legends",
+          "Cave dwelling ancestral myths"
+        ],
+        "adventureHighlights": [
+          "Waterfall jumping",
+          "Cave swimming",
+          "Mountain trekking"
+        ]
+      },
+      {
+        "code": "EC",
+        "name": "Ecuador",
+        "mustKnow": [
+          "Named after the equator line",
+          "Includes Galápagos Islands",
+          "Highly biodiverse country"
+        ],
+        "mustDo": [
+          "Quito old town",
+          "Galápagos wildlife tours",
+          "Cotopaxi volcano"
+        ],
+        "myths": [
+          "Andean mountain spirit Apus",
+          "Amazon jungle spirit stories"
+        ],
+        "adventureHighlights": [
+          "Volcano climbing",
+          "Amazon rainforest trips",
+          "Island wildlife exploration"
+        ]
+      },
+      {
+        "code": "EG",
+        "name": "Egypt",
+        "mustKnow": [
+          "Ancient civilization birthplace",
+          "Nile River is life source",
+          "Desert climate dominates"
+        ],
+        "mustDo": [
+          "Pyramids of Giza",
+          "Luxor temples",
+          "Nile river cruise"
+        ],
+        "myths": [
+          "Osiris god of afterlife",
+          "Anubis guardian of tombs"
+        ],
+        "adventureHighlights": [
+          "Sahara desert safaris",
+          "Red Sea diving",
+          "Ancient tomb exploration"
+        ]
+      },
+      {
+        "code": "SV",
+        "name": "El Salvador",
+        "mustKnow": [
+          "Small Central American country",
+          "Volcanic landscape",
+          "Surf tourism rising"
+        ],
+        "mustDo": [
+          "Santa Ana volcano",
+          "El Tunco surf beaches",
+          "Mayapan ruins"
+        ],
+        "myths": [
+          "Volcano spirit legends",
+          "Indigenous Pipil myths"
+        ],
+        "adventureHighlights": [
+          "Volcano hiking",
+          "Surfing Pacific waves",
+          "Lava field exploration"
+        ]
+      },
+      {
+        "code": "GQ",
+        "name": "Equatorial Guinea",
+        "mustKnow": [
+          "Only Spanish-speaking African country",
+          "Small but oil-rich",
+          "Mix of mainland and islands"
+        ],
+        "mustDo": [
+          "Malabo city exploration",
+          "Bioko island beaches",
+          "Monte Alén National Park"
+        ],
+        "myths": [
+          "Forest spirit guardians",
+          "Island ancestral myths"
+        ],
+        "adventureHighlights": [
+          "Rainforest trekking",
+          "Volcanic island exploration",
+          "Wildlife viewing"
+        ]
+      },
+      {
+        "code": "ER",
+        "name": "Eritrea",
+        "mustKnow": [
+          "Red Sea coastline country",
+          "Italian colonial architecture influence",
+          "Highly restricted travel environment"
+        ],
+        "mustDo": [
+          "Asmara city architecture",
+          "Dahlak Archipelago",
+          "Red Sea coast diving"
+        ],
+        "myths": [
+          "Ancient warrior spirits",
+          "Sea guardian legends"
+        ],
+        "adventureHighlights": [
+          "Diving reefs",
+          "Desert plateau exploration",
+          "Island hopping"
+        ]
+      },
+      {
+        "code": "EE",
+        "name": "Estonia",
+        "mustKnow": [
+          "Highly digital society",
+          "Northern European Baltic country",
+          "Dense forests and islands"
+        ],
+        "mustDo": [
+          "Tallinn medieval old town",
+          "Lahemaa National Park",
+          "Saaremaa island"
+        ],
+        "myths": [
+          "Forest spirits (metsik)",
+          "Ancient Baltic pagan gods"
+        ],
+        "adventureHighlights": [
+          "Forest hiking",
+          "Island cycling",
+          "Coastal exploration"
+        ]
+      },
+      {
+        "code": "SZ",
+        "name": "Eswatini",
+        "mustKnow": [
+          "Small African kingdom",
+          "Monarchy system still active",
+          "Mountainous terrain"
+        ],
+        "mustDo": [
+          "Hlane Royal National Park",
+          "Mlilwane Wildlife Sanctuary",
+          "Ezulwini Valley"
+        ],
+        "myths": [
+          "Ancestral king spirits",
+          "Nature guardian legends"
+        ],
+        "adventureHighlights": [
+          "Safari drives",
+          "Mountain hiking",
+          "Cultural village tours"
+        ]
+      },
+      {
+        "code": "ET",
+        "name": "Ethiopia",
+        "mustKnow": [
+          "One of oldest civilizations",
+          "Never colonized (except brief occupation)",
+          "Highland geography"
+        ],
+        "mustDo": [
+          "Lalibela rock churches",
+          "Simien Mountains",
+          "Danakil Depression"
+        ],
+        "myths": [
+          "Queen of Sheba legend",
+          "Solomonic dynasty myths"
+        ],
+        "adventureHighlights": [
+          "Volcanic desert exploration",
+          "Mountain trekking",
+          "Ancient church routes"
+        ]
+      },
+      {
+        "code": "FJ",
+        "name": "Fiji",
+        "mustKnow": [
+          "Pacific island nation",
+          "Strong tourism economy",
+          "Warm tropical climate"
+        ],
+        "mustDo": [
+          "Coral Coast beaches",
+          "Mamanuca Islands",
+          "Traditional village visits"
+        ],
+        "myths": [
+          "Ocean god Dakuwaqa",
+          "Spirit canoe legends"
+        ],
+        "adventureHighlights": [
+          "Scuba diving reefs",
+          "Island hopping",
+          "Rainforest trekking"
+        ]
+      },
+      {
+        "code": "FI",
+        "name": "Finland",
+        "mustKnow": [
+          "Highly forested Nordic country",
+          "Sauna culture is central",
+          "Aurora borealis visible in north"
+        ],
+        "mustDo": [
+          "Helsinki design district",
+          "Lapland northern lights",
+          "Lake district cabins"
+        ],
+        "myths": [
+          "Kalevala epic mythology",
+          "Forest spirits and trolls"
+        ],
+        "adventureHighlights": [
+          "Snowmobiling Lapland",
+          "Ice swimming",
+          "Northern lights chasing"
+        ]
+      },
+      {
+        "code": "FR",
+        "name": "France",
+        "mustKnow": [
+          "Top global tourism destination",
+          "Rich art, food, and history",
+          "Diverse regions from Alps to coast"
+        ],
+        "mustDo": [
+          "Eiffel Tower Paris",
+          "Loire Valley castles",
+          "French Riviera beaches"
+        ],
+        "myths": [
+          "Joan of Arc legends",
+          "Arthurian Grail myths in Brittany"
+        ],
+        "adventureHighlights": [
+          "Alps skiing",
+          "Mediterranean sailing",
+          "Lavender field exploration"
+        ]
+      },
+      {
+        "code": "GA",
+        "name": "Gabon",
+        "mustKnow": [
+          "Central African rainforest country",
+          "Low population density",
+          "Strong biodiversity"
+        ],
+        "mustDo": [
+          "Loango National Park",
+          "Libreville coastline",
+          "Ivindo waterfalls"
+        ],
+        "myths": [
+          "Forest spirit guardians",
+          "River deity myths"
+        ],
+        "adventureHighlights": [
+          "Rainforest safaris",
+          "Beach wildlife encounters",
+          "River expeditions"
+        ]
+      },
+      {
+        "code": "GM",
+        "name": "Gambia",
+        "mustKnow": [
+          "Smallest mainland African country",
+          "River-based geography",
+          "English-speaking"
+        ],
+        "mustDo": [
+          "River Gambia cruises",
+          "Kunta Kinteh Island",
+          "Abuko Nature Reserve"
+        ],
+        "myths": [
+          "River spirit legends",
+          "Ancestral storytelling traditions"
+        ],
+        "adventureHighlights": [
+          "River safaris",
+          "Birdwatching tours",
+          "Cultural village exploration"
+        ]
+      },
+      {
+        "code": "GE",
+        "name": "Georgia",
+        "mustKnow": [
+          "Between Europe and Asia",
+          "Ancient wine culture",
+          "Very mountainous"
+        ],
+        "mustDo": [
+          "Tbilisi old town",
+          "Kazbegi mountains",
+          "Vardzia cave monastery"
+        ],
+        "myths": [
+          "Prometheus chained in Caucasus myth",
+          "Mountain dragon legends"
+        ],
+        "adventureHighlights": [
+          "Caucasus trekking",
+          "Wine region tours",
+          "Cave monastery exploration"
+        ]
+      },
+      {
+        "code": "GH",
+        "name": "Ghana",
+        "mustKnow": [
+          "One of West Africa’s most stable countries",
+          "Rich gold and cocoa production",
+          "English-speaking"
+        ],
+        "mustDo": [
+          "Cape Coast Castle (slave trade history)",
+          "Kakum National Park canopy walk",
+          "Accra markets and beaches"
+        ],
+        "myths": [
+          "Anansi the spider trickster stories",
+          "Forest spirit guardians (Asaase Yaa traditions)"
+        ],
+        "adventureHighlights": [
+          "Rainforest canopy walks",
+          "Atlantic coastline exploration",
+          "Wildlife reserves"
+        ]
+      },
+      {
+        "code": "GR",
+        "name": "Greece",
+        "mustKnow": [
+          "Birthplace of Western civilization",
+          "Thousands of islands",
+          "Hot Mediterranean summers"
+        ],
+        "mustDo": [
+          "Athens Acropolis",
+          "Santorini sunsets",
+          "Meteora monasteries"
+        ],
+        "myths": [
+          "Zeus and Olympian gods",
+          "Odysseus epic journey myths"
+        ],
+        "adventureHighlights": [
+          "Island hopping in Cyclades",
+          "Mountain hiking in Crete",
+          "Ancient ruins exploration"
+        ]
+      },
+      {
+        "code": "GD",
+        "name": "Grenada",
+        "mustKnow": [
+          "Known as the Spice Island",
+          "Nutmeg production is famous",
+          "Small Caribbean nation"
+        ],
+        "mustDo": [
+          "Grand Anse Beach",
+          "Annandale Falls",
+          "Underwater Sculpture Park"
+        ],
+        "myths": [
+          "Sea spirit legends",
+          "Carib indigenous folklore"
+        ],
+        "adventureHighlights": [
+          "Snorkeling sculpture park",
+          "Rainforest hikes",
+          "Waterfall swimming"
+        ]
+      },
+      {
+        "code": "GT",
+        "name": "Guatemala",
+        "mustKnow": [
+          "Strong Mayan heritage",
+          "Volcanic landscape",
+          "Colorful indigenous culture"
+        ],
+        "mustDo": [
+          "Tikal ruins",
+          "Lake Atitlán villages",
+          "Antigua colonial city"
+        ],
+        "myths": [
+          "Mayan underworld Xibalba",
+          "Quetzal sacred bird legend"
+        ],
+        "adventureHighlights": [
+          "Volcano hiking (Pacaya)",
+          "Jungle temple exploration",
+          "Lake kayaking"
+        ]
+      },
+      {
+        "code": "GN",
+        "name": "Guinea",
+        "mustKnow": [
+          "West African coastal nation",
+          "Rich mineral resources",
+          "Limited tourism infrastructure"
+        ],
+        "mustDo": [
+          "Fouta Djallon highlands",
+          "Conakry markets",
+          "Badiar National Park"
+        ],
+        "myths": [
+          "Forest spirit guardians",
+          "Ancient tribal legends"
+        ],
+        "adventureHighlights": [
+          "Highland trekking",
+          "Waterfall exploration",
+          "Rainforest expeditions"
+        ]
+      },
+      {
+        "code": "GW",
+        "name": "Guinea-Bissau",
+        "mustKnow": [
+          "Small West African country",
+          "Archipelago islands",
+          "Portuguese influence"
+        ],
+        "mustDo": [
+          "Bijagos Islands",
+          "Bissau old town",
+          "Orango National Park"
+        ],
+        "myths": [
+          "Island spirit guardians",
+          "Ancestral sea legends"
+        ],
+        "adventureHighlights": [
+          "Island hopping",
+          "Mangrove exploration",
+          "Wildlife safaris"
+        ]
+      },
+      {
+        "code": "GY",
+        "name": "Guyana",
+        "mustKnow": [
+          "Only English-speaking country in South America",
+          "Dense Amazon rainforest",
+          "Low population density"
+        ],
+        "mustDo": [
+          "Kaieteur Falls",
+          "Amazon rainforest tours",
+          "Georgetown colonial architecture"
+        ],
+        "myths": [
+          "Kanaima jungle spirit",
+          "River monster legends"
+        ],
+        "adventureHighlights": [
+          "Rainforest trekking",
+          "Waterfall expeditions",
+          "Wildlife observation"
+        ]
+      },
+      {
+        "code": "HT",
+        "name": "Haiti",
+        "mustKnow": [
+          "First Black republic",
+          "Caribbean island nation",
+          "Strong cultural identity"
+        ],
+        "mustDo": [
+          "Citadelle Laferrière",
+          "Jacmel beaches",
+          "Port-au-Prince markets"
+        ],
+        "myths": [
+          "Vodou spirits (Loa)",
+          "Zombie folklore origins"
+        ],
+        "adventureHighlights": [
+          "Mountain fortress hikes",
+          "Coastal exploration",
+          "Cultural immersion"
+        ]
+      },
+      {
+        "code": "HN",
+        "name": "Honduras",
+        "mustKnow": [
+          "Central American country",
+          "Mayan archaeological sites",
+          "Caribbean coastline"
+        ],
+        "mustDo": [
+          "Copán ruins",
+          "Roatán island diving",
+          "Pico Bonito National Park"
+        ],
+        "myths": [
+          "Mayan spirit gods",
+          "Jungle guardian legends"
+        ],
+        "adventureHighlights": [
+          "Scuba diving reefs",
+          "Rainforest trekking",
+          "River rafting"
+        ]
+      },
+      {
+        "code": "HU",
+        "name": "Hungary",
+        "mustKnow": [
+          "Central European country",
+          "Thermal bath culture",
+          "Rich Austro-Hungarian history"
+        ],
+        "mustDo": [
+          "Budapest Parliament",
+          "Széchenyi Baths",
+          "Lake Balaton"
+        ],
+        "myths": [
+          "Turul bird legend",
+          "Hungarian folk witches (boszorkány)"
+        ],
+        "adventureHighlights": [
+          "Cave exploration in Buda Hills",
+          "River Danube cruises",
+          "Wine region tours"
+        ]
+      },
+      {
+        "code": "IS",
+        "name": "Iceland",
+        "mustKnow": [
+          "Volcanic island in North Atlantic",
+          "Geothermal energy country",
+          "Extreme natural landscapes"
+        ],
+        "mustDo": [
+          "Blue Lagoon",
+          "Golden Circle",
+          "Northern Lights"
+        ],
+        "myths": [
+          "Elves and hidden people (Huldufólk)",
+          "Norse gods influence"
+        ],
+        "adventureHighlights": [
+          "Glacier hiking",
+          "Volcano tours",
+          "Ice cave exploration"
+        ]
+      },
+      {
+        "code": "IN",
+        "name": "India",
+        "mustKnow": [
+          "Extremely diverse culture and languages",
+          "Ancient civilization heritage",
+          "Massive population"
+        ],
+        "mustDo": [
+          "Taj Mahal",
+          "Varanasi Ganges rituals",
+          "Kerala backwaters"
+        ],
+        "myths": [
+          "Hindu epics (Ramayana, Mahabharata)",
+          "Goddess and deity pantheon stories"
+        ],
+        "adventureHighlights": [
+          "Himalayan trekking",
+          "Desert safaris in Rajasthan",
+          "Jungle wildlife safaris"
+        ]
+      },
+      {
+        "code": "ID",
+        "name": "Indonesia",
+        "mustKnow": [
+          "World’s largest island nation",
+          "Volcanic activity common",
+          "Huge cultural diversity"
+        ],
+        "mustDo": [
+          "Bali temples",
+          "Borobudur temple",
+          "Komodo National Park"
+        ],
+        "myths": [
+          "Ratu Kidul sea queen",
+          "Volcano spirit beliefs"
+        ],
+        "adventureHighlights": [
+          "Volcano hiking",
+          "Scuba diving reefs",
+          "Rainforest trekking"
+        ]
+      },
+      {
+        "code": "IR",
+        "name": "Iran",
+        "mustKnow": [
+          "Ancient Persian civilization",
+          "Rich architecture and poetry",
+          "Desert and mountain geography"
+        ],
+        "mustDo": [
+          "Isfahan mosques",
+          "Persepolis ruins",
+          "Shiraz gardens"
+        ],
+        "myths": [
+          "Persian epic Shahnameh heroes",
+          "Zoroastrian fire myths"
+        ],
+        "adventureHighlights": [
+          "Desert trekking",
+          "Mountain hiking",
+          "Ancient city exploration"
+        ]
+      },
+      {
+        "code": "IQ",
+        "name": "Iraq",
+        "mustKnow": [
+          "Cradle of Mesopotamian civilization",
+          "Tigris-Euphrates river system",
+          "Complex modern history"
+        ],
+        "mustDo": [
+          "Babylon ruins",
+          "Baghdad historical sites",
+          "Erbil citadel"
+        ],
+        "myths": [
+          "Epic of Gilgamesh",
+          "Mesopotamian gods (Enki, Ishtar)"
+        ],
+        "adventureHighlights": [
+          "Ancient ruin exploration",
+          "Desert travel",
+          "River valley discovery"
+        ]
+      },
+      {
+        "code": "IE",
+        "name": "Ireland",
+        "mustKnow": [
+          "Green landscapes and cliffs",
+          "Strong Celtic heritage",
+          "Pubs and music culture"
+        ],
+        "mustDo": [
+          "Cliffs of Moher",
+          "Dublin Trinity College",
+          "Ring of Kerry"
+        ],
+        "myths": [
+          "Leprechauns folklore",
+          "Celtic fairy legends (Sidhe)"
+        ],
+        "adventureHighlights": [
+          "Cliff hiking",
+          "Coastal drives",
+          "Castle exploration"
+        ]
+      },
+      {
+        "code": "IL",
+        "name": "Israel",
+        "mustKnow": [
+          "Religious crossroads of world",
+          "Very diverse population",
+          "Mediterranean + desert mix"
+        ],
+        "mustDo": [
+          "Jerusalem old city",
+          "Dead Sea floating",
+          "Tel Aviv beaches"
+        ],
+        "myths": [
+          "Biblical stories",
+          "Ancient prophetic legends"
+        ],
+        "adventureHighlights": [
+          "Desert hiking in Negev",
+          "Dead Sea wellness",
+          "Historical pilgrimages"
+        ]
+      },
+      {
+        "code": "IT",
+        "name": "Italy",
+        "mustKnow": [
+          "Roman Empire heritage",
+          "World-famous cuisine",
+          "Art and architecture hub"
+        ],
+        "mustDo": [
+          "Colosseum Rome",
+          "Venice canals",
+          "Amalfi Coast"
+        ],
+        "myths": [
+          "Roman gods mythology",
+          "Medieval saint legends"
+        ],
+        "adventureHighlights": [
+          "Alps hiking",
+          "Coastal sailing",
+          "Ancient ruins exploration"
+        ]
+      },
+      {
+        "code": "JM",
+        "name": "Jamaica",
+        "mustKnow": [
+          "Birthplace of reggae music",
+          "Caribbean island with strong culture",
+          "English-speaking"
+        ],
+        "mustDo": [
+          "Blue Mountains hike",
+          "Dunn’s River Falls",
+          "Kingston Bob Marley Museum"
+        ],
+        "myths": [
+          "Anansi trickster spider stories",
+          "Duppy (ghost) folklore"
+        ],
+        "adventureHighlights": [
+          "Waterfall climbing",
+          "Mountain trekking",
+          "Beach snorkeling"
+        ]
+      },
+      {
+        "code": "JP",
+        "name": "Japan",
+        "mustKnow": [
+          "Highly advanced technology + ancient traditions",
+          "Island nation with mountains and cities",
+          "Strong etiquette culture"
+        ],
+        "mustDo": [
+          "Mount Fuji",
+          "Tokyo Shibuya crossing",
+          "Kyoto temples"
+        ],
+        "myths": [
+          "Yokai spirits and demons",
+          "Shinto kami nature gods"
+        ],
+        "adventureHighlights": [
+          "Snowboarding in Hokkaido",
+          "Temple hiking trails",
+          "Volcano exploration"
+        ]
+      },
+      {
+        "code": "JO",
+        "name": "Jordan",
+        "mustKnow": [
+          "Middle Eastern desert country",
+          "Very safe for tourism in region",
+          "Home to ancient Nabatean sites"
+        ],
+        "mustDo": [
+          "Petra ancient city",
+          "Wadi Rum desert",
+          "Dead Sea floating"
+        ],
+        "myths": [
+          "Nabatean desert spirits",
+          "Biblical legends region"
+        ],
+        "adventureHighlights": [
+          "Desert jeep safari",
+          "Rock canyon hiking",
+          "Archaeological exploration"
+        ]
+      },
+      {
+        "code": "KZ",
+        "name": "Kazakhstan",
+        "mustKnow": [
+          "Largest landlocked country",
+          "Mix of nomadic and modern culture",
+          "Steppe landscapes dominate"
+        ],
+        "mustDo": [
+          "Almaty mountains",
+          "Charyn Canyon",
+          "Astana futuristic city"
+        ],
+        "myths": [
+          "Steppe spirit legends",
+          "Golden eagle folklore"
+        ],
+        "adventureHighlights": [
+          "Horseback trekking",
+          "Canyon hiking",
+          "Steppe exploration"
+        ]
+      },
+      {
+        "code": "KE",
+        "name": "Kenya",
+        "mustKnow": [
+          "Safari tourism capital of Africa",
+          "Great Rift Valley geography",
+          "Diverse wildlife ecosystems"
+        ],
+        "mustDo": [
+          "Masai Mara safari",
+          "Mount Kenya climb",
+          "Diani Beach"
+        ],
+        "myths": [
+          "Maasai warrior legends",
+          "Lion spirit stories"
+        ],
+        "adventureHighlights": [
+          "Big Five safaris",
+          "Mountain climbing",
+          "Coastal diving"
+        ]
+      },
+      {
+        "code": "KI",
+        "name": "Kiribati",
+        "mustKnow": [
+          "Pacific island nation spread across ocean",
+          "One of first places to see sunrise",
+          "Low-lying at risk from climate change"
+        ],
+        "mustDo": [
+          "Tarawa atoll",
+          "Phoenix Islands protected area",
+          "Traditional fishing villages"
+        ],
+        "myths": [
+          "Ocean creation legends",
+          "Ancestor sea spirit beliefs"
+        ],
+        "adventureHighlights": [
+          "Atoll exploration",
+          "Fishing expeditions",
+          "Ocean kayaking"
+        ]
+      },
+      {
+        "code": "KP",
+        "name": "North Korea",
+        "mustKnow": [
+          "Highly restricted travel",
+          "Centralized government system",
+          "Limited tourism access"
+        ],
+        "mustDo": [
+          "Pyongyang monuments (guided tours only)",
+          "Mount Kumgang region",
+          "DMZ border view"
+        ],
+        "myths": [
+          "State origin mythology",
+          "Mount Paektu sacred legend"
+        ],
+        "adventureHighlights": [
+          "Controlled hiking tours",
+          "Historical site visits",
+          "Border observation tours"
+        ]
+      },
+      {
+        "code": "KR",
+        "name": "South Korea",
+        "mustKnow": [
+          "Highly developed tech nation",
+          "Pop culture global influence (K-pop)",
+          "Fast-paced urban life"
+        ],
+        "mustDo": [
+          "Seoul palaces",
+          "Jeju Island",
+          "Busan beaches"
+        ],
+        "myths": [
+          "Dokkaebi goblin folklore",
+          "Taegeuk creation myths"
+        ],
+        "adventureHighlights": [
+          "Mountain hiking near Seoul",
+          "Island volcanic exploration",
+          "Night city adventures"
+        ]
+      },
+      {
+        "code": "KW",
+        "name": "Kuwait",
+        "mustKnow": [
+          "Wealthy Gulf country",
+          "Oil-based economy",
+          "Modern urban centers"
+        ],
+        "mustDo": [
+          "Kuwait Towers",
+          "Desert safaris",
+          "Grand Mosque"
+        ],
+        "myths": [
+          "Desert jinn legends",
+          "Pearl diving folklore"
+        ],
+        "adventureHighlights": [
+          "Desert camping",
+          "Coastal exploration",
+          "Sand dune driving"
+        ]
+      },
+      {
+        "code": "KG",
+        "name": "Kyrgyzstan",
+        "mustKnow": [
+          "Mountainous Central Asian country",
+          "Nomadic traditions still alive",
+          "Yurt culture"
+        ],
+        "mustDo": [
+          "Issyk-Kul Lake",
+          "Tian Shan mountains",
+          "Bishkek markets"
+        ],
+        "myths": [
+          "Epic of Manas hero legend",
+          "Mountain spirit beliefs"
+        ],
+        "adventureHighlights": [
+          "Horseback trekking",
+          "Alpine hiking",
+          "Yurt camping"
+        ]
+      },
+      {
+        "code": "LA",
+        "name": "Laos",
+        "mustKnow": [
+          "Landlocked Southeast Asian country",
+          "Slow-paced lifestyle",
+          "Mekong River central"
+        ],
+        "mustDo": [
+          "Luang Prabang temples",
+          "Kuang Si waterfalls",
+          "Vang Vieng caves"
+        ],
+        "myths": [
+          "Naga river serpent legends",
+          "Buddhist spirit traditions"
+        ],
+        "adventureHighlights": [
+          "Cave exploration",
+          "River kayaking",
+          "Mountain trekking"
+        ]
+      },
+      {
+        "code": "LV",
+        "name": "Latvia",
+        "mustKnow": [
+          "Baltic forest country",
+          "Strong folk traditions",
+          "Coastal + medieval cities"
+        ],
+        "mustDo": [
+          "Riga old town",
+          "Gauja National Park",
+          "Jurmala beach"
+        ],
+        "myths": [
+          "Forest deity Laima",
+          "Werewolf folklore"
+        ],
+        "adventureHighlights": [
+          "Forest hiking",
+          "Coastal cycling",
+          "Castle ruins exploration"
+        ]
+      },
+      {
+        "code": "LB",
+        "name": "Lebanon",
+        "mustKnow": [
+          "Mediterranean Middle Eastern country",
+          "Ancient Phoenician heritage",
+          "Diverse religious culture"
+        ],
+        "mustDo": [
+          "Beirut nightlife",
+          "Byblos ruins",
+          "Cedars of Lebanon forest"
+        ],
+        "myths": [
+          "Phoenix rising legend (Phoenicia)",
+          "Ancient cedar tree myths"
+        ],
+        "adventureHighlights": [
+          "Mountain skiing",
+          "Cave exploration",
+          "Coastal road trips"
+        ]
+      },
+      {
+        "code": "LS",
+        "name": "Lesotho",
+        "mustKnow": [
+          "Mountain kingdom inside South Africa",
+          "One of highest elevations in world",
+          "Cold winters with snow"
+        ],
+        "mustDo": [
+          "Sani Pass drive",
+          "Maletsunyane Falls",
+          "Thaba Bosiu plateau"
+        ],
+        "myths": [
+          "Mountain ancestor spirits",
+          "Cave guardian legends"
+        ],
+        "adventureHighlights": [
+          "High-altitude trekking",
+          "Horse riding trails",
+          "Waterfall rappelling"
+        ]
+      },
+      {
+        "code": "LR",
+        "name": "Liberia",
+        "mustKnow": [
+          "Founded by freed American slaves",
+          "English-speaking West African nation",
+          "Atlantic coastline"
+        ],
+        "mustDo": [
+          "Sapo National Park",
+          "Monrovia beaches",
+          "Mount Nimba"
+        ],
+        "myths": [
+          "Forest spirit guardians",
+          "River ancestral myths"
+        ],
+        "adventureHighlights": [
+          "Rainforest trekking",
+          "Beach exploration",
+          "Wildlife spotting"
+        ]
+      },
+      {
+        "code": "LY",
+        "name": "Libya",
+        "mustKnow": [
+          "North African desert country",
+          "Roman and Berber history",
+          "Political instability affects travel"
+        ],
+        "mustDo": [
+          "Leptis Magna ruins",
+          "Sahara desert dunes",
+          "Tripoli old city"
+        ],
+        "myths": [
+          "Desert jinn legends",
+          "Ancient Carthaginian myths"
+        ],
+        "adventureHighlights": [
+          "Desert expeditions",
+          "Archaeological exploration",
+          "Oasis visits"
+        ]
+      },
+      {
+        "code": "LI",
+        "name": "Liechtenstein",
+        "mustKnow": [
+          "Tiny Alpine principality",
+          "Highly wealthy country",
+          "Between Switzerland and Austria"
+        ],
+        "mustDo": [
+          "Vaduz castle",
+          "Alpine hiking trails",
+          "Rhine valley cycling"
+        ],
+        "myths": [
+          "Mountain dwarf folklore",
+          "Castle guardian legends"
+        ],
+        "adventureHighlights": [
+          "Alpine hiking",
+          "Skiing routes",
+          "Cycling valleys"
+        ]
+      },
+      {
+        "code": "LT",
+        "name": "Lithuania",
+        "mustKnow": [
+          "Baltic country with pagan roots",
+          "Green forests and lakes",
+          "Historic castles"
+        ],
+        "mustDo": [
+          "Vilnius old town",
+          "Curonian Spit dunes",
+          "Trakai castle"
+        ],
+        "myths": [
+          "Pagan Baltic gods",
+          "Forest witch legends"
+        ],
+        "adventureHighlights": [
+          "Dune hiking",
+          "Lake kayaking",
+          "Forest exploration"
+        ]
+      },
+      {
+        "code": "LU",
+        "name": "Luxembourg",
+        "mustKnow": [
+          "One of the richest countries in the world",
+          "Very small but highly international",
+          "Important EU financial hub"
+        ],
+        "mustDo": [
+          "Luxembourg City old fortifications",
+          "Vianden Castle",
+          "Müllerthal hiking trails"
+        ],
+        "myths": [
+          "Melusina river mermaid legend",
+          "Castle ghost folklore"
+        ],
+        "adventureHighlights": [
+          "Forest hiking",
+          "Castle exploration",
+          "River valley walks"
+        ]
+      },
+      {
+        "code": "MG",
+        "name": "Madagascar",
+        "mustKnow": [
+          "Island with unique wildlife found nowhere else",
+          "Separated from Africa millions of years ago",
+          "Strong Malagasy cultural identity"
+        ],
+        "mustDo": [
+          "Avenue of the Baobabs",
+          "Isalo National Park",
+          "Nosy Be beaches"
+        ],
+        "myths": [
+          "Ancestors turning into sacred spirits",
+          "Forest fady (taboo) beliefs"
+        ],
+        "adventureHighlights": [
+          "Lemur spotting jungles",
+          "Rock canyon trekking",
+          "Island diving"
+        ]
+      },
+      {
+        "code": "MW",
+        "name": "Malawi",
+        "mustKnow": [
+          "Known as the 'Warm Heart of Africa'",
+          "Lake Malawi dominates geography",
+          "Very friendly local culture"
+        ],
+        "mustDo": [
+          "Lake Malawi beaches",
+          "Nyika Plateau",
+          "Liwonde National Park"
+        ],
+        "myths": [
+          "Lake spirit legends",
+          "Ancestral water guardians"
+        ],
+        "adventureHighlights": [
+          "Lake snorkeling",
+          "Safari wildlife viewing",
+          "Highland trekking"
+        ]
+      },
+      {
+        "code": "MY",
+        "name": "Malaysia",
+        "mustKnow": [
+          "Multicultural country (Malay, Chinese, Indian)",
+          "Tropical climate year-round",
+          "Modern cities + rainforest mix"
+        ],
+        "mustDo": [
+          "Kuala Lumpur towers",
+          "Borneo rainforest",
+          "Langkawi islands"
+        ],
+        "myths": [
+          "Pontianak vampire spirit",
+          "Naga sea serpent legends"
+        ],
+        "adventureHighlights": [
+          "Rainforest trekking",
+          "Island diving",
+          "Cave exploration in Borneo"
+        ]
+      },
+      {
+        "code": "MV",
+        "name": "Maldives",
+        "mustKnow": [
+          "Low-lying island nation",
+          "Luxury tourism hotspot",
+          "At risk from rising sea levels"
+        ],
+        "mustDo": [
+          "Overwater villas",
+          "Coral reef snorkeling",
+          "Male city"
+        ],
+        "myths": [
+          "Sea spirit guardians",
+          "Ancient underwater kingdom legends"
+        ],
+        "adventureHighlights": [
+          "Scuba diving reefs",
+          "Island hopping",
+          "Night bioluminescent waters"
+        ]
+      },
+      {
+        "code": "ML",
+        "name": "Mali",
+        "mustKnow": [
+          "Historic West African empire center",
+          "Sahara meets Sahel geography",
+          "Rich cultural heritage"
+        ],
+        "mustDo": [
+          "Timbuktu historical city",
+          "Djenné mud mosque",
+          "Niger River region"
+        ],
+        "myths": [
+          "Mansa Musa legendary wealth",
+          "Desert spirit folklore"
+        ],
+        "adventureHighlights": [
+          "Desert expeditions",
+          "River journeys",
+          "Ancient architecture exploration"
+        ]
+      },
+      {
+        "code": "MT",
+        "name": "Malta",
+        "mustKnow": [
+          "Small Mediterranean island country",
+          "Very rich history (Knights of St. John)",
+          "Crystal clear seas"
+        ],
+        "mustDo": [
+          "Valletta old city",
+          "Blue Lagoon Comino",
+          "Mdina silent city"
+        ],
+        "myths": [
+          "Ancient temple giants legend",
+          "Knights of Malta ghost stories"
+        ],
+        "adventureHighlights": [
+          "Diving shipwrecks",
+          "Coastal cliffs hiking",
+          "Island boat tours"
+        ]
+      },
+      {
+        "code": "MH",
+        "name": "Marshall Islands",
+        "mustKnow": [
+          "Pacific island nation",
+          "U.S. nuclear test history",
+          "Remote coral atolls"
+        ],
+        "mustDo": [
+          "Majuro atoll",
+          "Bikini Atoll diving",
+          "Traditional canoe trips"
+        ],
+        "myths": [
+          "Ocean spirit navigation myths",
+          "Ancestral wave legends"
+        ],
+        "adventureHighlights": [
+          "Deep sea diving",
+          "Atoll exploration",
+          "Fishing expeditions"
+        ]
+      },
+      {
+        "code": "MR",
+        "name": "Mauritania",
+        "mustKnow": [
+          "Sahara desert dominates country",
+          "Islamic cultural heritage",
+          "Low population density"
+        ],
+        "mustDo": [
+          "Chinguetti ancient city",
+          "Adrar desert dunes",
+          "Nouakchott markets"
+        ],
+        "myths": [
+          "Desert djinn spirits",
+          "Ancient caravan legends"
+        ],
+        "adventureHighlights": [
+          "Camel desert trekking",
+          "Sahara camping",
+          "Ancient city exploration"
+        ]
+      },
+      {
+        "code": "MU",
+        "name": "Mauritius",
+        "mustKnow": [
+          "Indian Ocean island nation",
+          "Multicultural society",
+          "Tourism-driven economy"
+        ],
+        "mustDo": [
+          "Le Morne Brabant",
+          "Seven Colored Earths",
+          "Grand Baie beaches"
+        ],
+        "myths": [
+          "Dodo bird symbolism",
+          "Sea spirit legends"
+        ],
+        "adventureHighlights": [
+          "Lagoon snorkeling",
+          "Mountain hiking",
+          "Water sports"
+        ]
+      },
+      {
+        "code": "MX",
+        "name": "Mexico",
+        "mustKnow": [
+          "Blend of ancient civilizations and modern culture",
+          "Very diverse geography",
+          "World-famous cuisine"
+        ],
+        "mustDo": [
+          "Chichen Itza pyramid",
+          "Mexico City historic center",
+          "Cancún beaches"
+        ],
+        "myths": [
+          "Aztec gods (Quetzalcoatl)",
+          "La Llorona ghost legend"
+        ],
+        "adventureHighlights": [
+          "Cenote swimming",
+          "Jungle ruins exploration",
+          "Desert + volcano trekking"
+        ]
+      },
+      {
+        "code": "FM",
+        "name": "Micronesia",
+        "mustKnow": [
+          "Pacific island federation",
+          "Spread across thousands of islands",
+          "Remote and less visited"
+        ],
+        "mustDo": [
+          "Yap stone money sites",
+          "Chuuk Lagoon wreck diving",
+          "Pohnpei rainforest"
+        ],
+        "myths": [
+          "Ocean navigation spirits",
+          "Ancestor sea legends"
+        ],
+        "adventureHighlights": [
+          "Deep sea diving",
+          "Island hopping",
+          "Rainforest trekking"
+        ]
+      },
+      {
+        "code": "MD",
+        "name": "Moldova",
+        "mustKnow": [
+          "One of Europe’s least visited countries",
+          "Famous for wine production",
+          "Rural agricultural landscape"
+        ],
+        "mustDo": [
+          "Cricova underground wine cellars",
+          "Orheiul Vechi monastery",
+          "Chisinau city parks"
+        ],
+        "myths": [
+          "Dacian ancient warrior legends",
+          "Forest spirit folklore"
+        ],
+        "adventureHighlights": [
+          "Wine cave tours",
+          "Rural countryside exploration",
+          "Monastery hiking"
+        ]
+      },
+      {
+        "code": "MC",
+        "name": "Monaco",
+        "mustKnow": [
+          "Second smallest country in the world",
+          "Extremely wealthy city-state",
+          "Famous for luxury lifestyle"
+        ],
+        "mustDo": [
+          "Monte Carlo casino",
+          "Monaco Grand Prix circuit",
+          "Prince’s Palace"
+        ],
+        "myths": [
+          "Grimaldi family legends",
+          "Sea guardian folklore"
+        ],
+        "adventureHighlights": [
+          "Yacht harbor exploration",
+          "Coastal walks",
+          "Formula 1 track tours"
+        ]
+      },
+      {
+        "code": "MN",
+        "name": "Mongolia",
+        "mustKnow": [
+          "Vast steppes and desert landscapes",
+          "Nomadic culture still active",
+          "Low population density"
+        ],
+        "mustDo": [
+          "Gobi Desert",
+          "Karakorum ruins",
+          "Lake Khövsgöl"
+        ],
+        "myths": [
+          "Genghis Khan epic legacy",
+          "Sky god Tengri beliefs"
+        ],
+        "adventureHighlights": [
+          "Horseback trekking",
+          "Desert camping",
+          "Nomadic stays in yurts"
+        ]
+      },
+      {
+        "code": "ME",
+        "name": "Montenegro",
+        "mustKnow": [
+          "Small Balkan coastal country",
+          "Mountains meet Adriatic sea",
+          "Rapid tourism growth"
+        ],
+        "mustDo": [
+          "Kotor Bay",
+          "Durmitor National Park",
+          "Budva old town"
+        ],
+        "myths": [
+          "Mountain dragon legends",
+          "Sea siren folklore"
+        ],
+        "adventureHighlights": [
+          "Mountain hiking",
+          "Coastal sailing",
+          "Canyon rafting"
+        ]
+      },
+      {
+        "code": "MA",
+        "name": "Morocco",
+        "mustKnow": [
+          "North African gateway to Sahara",
+          "Arab, Berber, and French influences",
+          "Vibrant market culture"
+        ],
+        "mustDo": [
+          "Marrakech medina",
+          "Sahara desert dunes",
+          "Chefchaouen blue city"
+        ],
+        "myths": [
+          "Djinn desert spirits",
+          "Berber mountain legends"
+        ],
+        "adventureHighlights": [
+          "Camel desert trekking",
+          "Atlas mountain hiking",
+          "Medina maze exploration"
+        ]
+      },
+      {
+        "code": "MZ",
+        "name": "Mozambique",
+        "mustKnow": [
+          "Long Indian Ocean coastline",
+          "Portuguese-speaking African country",
+          "Rich marine biodiversity"
+        ],
+        "mustDo": [
+          "Bazaruto Archipelago",
+          "Maputo city markets",
+          "Gorongosa National Park"
+        ],
+        "myths": [
+          "Sea spirit guardians",
+          "Ancient coastal tribal legends"
+        ],
+        "adventureHighlights": [
+          "Diving whale sharks",
+          "Island hopping",
+          "Safari wildlife tours"
+        ]
+      },
+      {
+        "code": "MM",
+        "name": "Myanmar",
+        "mustKnow": [
+          "Strong Buddhist heritage",
+          "Golden temples everywhere",
+          "Recently opened to tourism"
+        ],
+        "mustDo": [
+          "Bagan temples",
+          "Inle Lake",
+          "Yangon Shwedagon Pagoda"
+        ],
+        "myths": [
+          "Naga serpent spirits",
+          "Nat spirit worship traditions"
+        ],
+        "adventureHighlights": [
+          "Hot air balloon over temples",
+          "Lake canoe exploration",
+          "Mountain trekking in Shan state"
+        ]
+      },
+      {
+        "code": "NA",
+        "name": "Namibia",
+        "mustKnow": [
+          "One of Africa’s most desert-dominated countries",
+          "Very low population density",
+          "Amazing night skies"
+        ],
+        "mustDo": [
+          "Sossusvlei dunes",
+          "Etosha National Park",
+          "Skeleton Coast"
+        ],
+        "myths": [
+          "Desert wind spirits",
+          "San bushman creation stories"
+        ],
+        "adventureHighlights": [
+          "Sand dune climbing",
+          "Safari wildlife viewing",
+          "Shipwreck coast exploration"
+        ]
+      },
+      {
+        "code": "NR",
+        "name": "Nauru",
+        "mustKnow": [
+          "Smallest island nation in the world by population",
+          "Phosphate mining history",
+          "Remote Pacific location"
+        ],
+        "mustDo": [
+          "Anibare Bay",
+          "Buada Lagoon",
+          "Island perimeter drive"
+        ],
+        "myths": [
+          "Ocean spirit navigation legends",
+          "Ancient island origin stories"
+        ],
+        "adventureHighlights": [
+          "Coastal driving loop",
+          "Lagoon exploration",
+          "Fishing trips"
+        ]
+      },
+      {
+        "code": "NP",
+        "name": "Nepal",
+        "mustKnow": [
+          "Home of Mount Everest",
+          "Himalayan mountain culture",
+          "Strong spiritual traditions"
+        ],
+        "mustDo": [
+          "Everest Base Camp trek",
+          "Kathmandu temples",
+          "Pokhara lake views"
+        ],
+        "myths": [
+          "Yeti snow creature legend",
+          "Hindu-Buddhist deity traditions"
+        ],
+        "adventureHighlights": [
+          "High-altitude trekking",
+          "Mountain climbing",
+          "Paragliding over Himalayas"
+        ]
+      },
+      {
+        "code": "NL",
+        "name": "Netherlands",
+        "mustKnow": [
+          "Flat country with canals and bikes",
+          "Tulip fields and windmills",
+          "Very high quality of life"
+        ],
+        "mustDo": [
+          "Amsterdam canals",
+          "Keukenhof tulip gardens",
+          "Zaanse Schans windmills"
+        ],
+        "myths": [
+          "Flying Dutchman ghost ship",
+          "Water spirit legends"
+        ],
+        "adventureHighlights": [
+          "Cycling countryside",
+          "Canal boat tours",
+          "Coastal dune hiking"
+        ]
+      },
+      {
+        "code": "NZ",
+        "name": "New Zealand",
+        "mustKnow": [
+          "Dramatic natural landscapes",
+          "Maori indigenous culture",
+          "Adventure tourism capital"
+        ],
+        "mustDo": [
+          "Milford Sound",
+          "Rotorua geothermal area",
+          "Queenstown adventure sports"
+        ],
+        "myths": [
+          "Māori creation myths (Maui legends)",
+          "Taniwha water guardians"
+        ],
+        "adventureHighlights": [
+          "Bungee jumping",
+          "Glacier hiking",
+          "Hobbiton film locations"
+        ]
+      },
+      {
+        "code": "NI",
+        "name": "Nicaragua",
+        "mustKnow": [
+          "Volcano-rich Central American country",
+          "Lakes and colonial cities",
+          "Affordable travel destination"
+        ],
+        "mustDo": [
+          "Granada colonial city",
+          "Ometepe Island volcanoes",
+          "Masaya Volcano"
+        ],
+        "myths": [
+          "Volcano spirit legends",
+          "Indigenous creation myths"
+        ],
+        "adventureHighlights": [
+          "Volcano boarding",
+          "Lake kayaking",
+          "Rainforest hiking"
+        ]
+      },
+      {
+        "code": "NE",
+        "name": "Niger",
+        "mustKnow": [
+          "Mostly Sahara desert territory",
+          "Very hot climate",
+          "Low tourism infrastructure"
+        ],
+        "mustDo": [
+          "Agadez desert city",
+          "Air Mountains",
+          "Niger River region"
+        ],
+        "myths": [
+          "Desert djinn spirits",
+          "Tuareg nomad legends"
+        ],
+        "adventureHighlights": [
+          "Camel caravans",
+          "Desert trekking",
+          "Ancient trade route exploration"
+        ]
+      },
+      {
+        "code": "NG",
+        "name": "Nigeria",
+        "mustKnow": [
+          "Most populous African country",
+          "Diverse ethnic groups",
+          "Large cultural and film industry"
+        ],
+        "mustDo": [
+          "Lagos beaches",
+          "Yankari National Park",
+          "Abuja city landmarks"
+        ],
+        "myths": [
+          "Yoruba Orisha gods",
+          "River spirit Mami Wata"
+        ],
+        "adventureHighlights": [
+          "Safari wildlife tours",
+          "Coastal exploration",
+          "Cultural city experiences"
+        ]
+      },
+      {
+        "code": "NO",
+        "name": "Norway",
+        "mustKnow": [
+          "Fjords and Arctic landscapes",
+          "High quality of life",
+          "Northern Lights visibility"
+        ],
+        "mustDo": [
+          "Geirangerfjord",
+          "Tromsø Northern Lights",
+          "Lofoten Islands"
+        ],
+        "myths": [
+          "Norse gods (Odin, Thor)",
+          "Troll mountain legends"
+        ],
+        "adventureHighlights": [
+          "Fjord kayaking",
+          "Arctic hiking",
+          "Midnight sun exploration"
+        ]
+      },
+      {
+        "code": "OM",
+        "name": "Oman",
+        "mustKnow": [
+          "Peaceful Gulf country",
+          "Desert and mountain landscapes",
+          "Strong maritime history"
+        ],
+        "mustDo": [
+          "Wahiba Sands desert",
+          "Muscat Sultan Qaboos Mosque",
+          "Wadi Shab canyons"
+        ],
+        "myths": [
+          "Sinbad the Sailor legends",
+          "Desert jinn stories"
+        ],
+        "adventureHighlights": [
+          "Desert camping",
+          "Canyon swimming",
+          "Mountain hiking"
+        ]
+      },
+      {
+        "code": "PK",
+        "name": "Pakistan",
+        "mustKnow": [
+          "Home to some of world’s highest mountains",
+          "Ancient Indus Valley civilization",
+          "Deep cultural diversity"
+        ],
+        "mustDo": [
+          "Karakoram Highway",
+          "Hunza Valley",
+          "Badshahi Mosque Lahore"
+        ],
+        "myths": [
+          "Sufi saint miracles",
+          "Mountain spirit legends"
+        ],
+        "adventureHighlights": [
+          "High-altitude trekking",
+          "Glacier exploration",
+          "Desert + valley travel"
+        ]
+      },
+      {
+        "code": "PW",
+        "name": "Palau",
+        "mustKnow": [
+          "Pacific island diving paradise",
+          "Marine conservation leader",
+          "Rock Islands UNESCO site"
+        ],
+        "mustDo": [
+          "Jellyfish Lake",
+          "Rock Islands kayaking",
+          "Coral reef diving"
+        ],
+        "myths": [
+          "Ocean spirit guardians",
+          "Ancient island creation stories"
+        ],
+        "adventureHighlights": [
+          "Scuba diving reefs",
+          "Kayaking lagoons",
+          "Island hopping"
+        ]
+      },
+      {
+        "code": "PA",
+        "name": "Panama",
+        "mustKnow": [
+          "Connects North and South America",
+          "Famous canal system",
+          "Tropical biodiversity"
+        ],
+        "mustDo": [
+          "Panama Canal",
+          "San Blas Islands",
+          "Bocas del Toro"
+        ],
+        "myths": [
+          "Guna indigenous spirit stories",
+          "Jungle guardian legends"
+        ],
+        "adventureHighlights": [
+          "Island hopping",
+          "Rainforest trekking",
+          "Canal exploration"
+        ]
+      },
+      {
+        "code": "PG",
+        "name": "Papua New Guinea",
+        "mustKnow": [
+          "One of world’s most culturally diverse countries",
+          "Remote jungle landscapes",
+          "Many indigenous tribes"
+        ],
+        "mustDo": [
+          "Sepik River",
+          "Kokoda Track",
+          "Rabaul volcano region"
+        ],
+        "myths": [
+          "Ancestral spirit masks",
+          "Jungle spirit beings"
+        ],
+        "adventureHighlights": [
+          "Jungle trekking",
+          "River expeditions",
+          "Cultural tribal visits"
+        ]
+      },
+      {
+        "code": "PY",
+        "name": "Paraguay",
+        "mustKnow": [
+          "Landlocked South American country",
+          "Strong indigenous Guarani influence",
+          "Rivers dominate geography"
+        ],
+        "mustDo": [
+          "Asunción city",
+          "Itaipu Dam",
+          "Gran Chaco wilderness"
+        ],
+        "myths": [
+          "Guarani spirit creatures",
+          "River goddess legends"
+        ],
+        "adventureHighlights": [
+          "River exploration",
+          "Jungle trekking",
+          "Wildlife spotting"
+        ]
+      },
+      {
+        "code": "PE",
+        "name": "Peru",
+        "mustKnow": [
+          "Home of the Inca Empire",
+          "Amazon + Andes + desert in one country",
+          "World-famous archaeological sites"
+        ],
+        "mustDo": [
+          "Machu Picchu",
+          "Sacred Valley",
+          "Nazca Lines"
+        ],
+        "myths": [
+          "Inca sun god Inti",
+          "Mountain spirit Apus"
+        ],
+        "adventureHighlights": [
+          "Inca Trail trekking",
+          "Amazon jungle expeditions",
+          "Andean mountain hiking"
+        ]
+      },
+      {
+        "code": "PH",
+        "name": "Philippines",
+        "mustKnow": [
+          "Archipelago of 7,000+ islands",
+          "Strong Spanish + Asian influence",
+          "Tropical climate"
+        ],
+        "mustDo": [
+          "Palawan lagoons",
+          "Boracay beaches",
+          "Chocolate Hills Bohol"
+        ],
+        "myths": [
+          "Aswang shapeshifter creatures",
+          "Tikbalang horse spirit"
+        ],
+        "adventureHighlights": [
+          "Island hopping",
+          "Coral reef diving",
+          "Volcano hiking"
+        ]
+      },
+      {
+        "code": "PL",
+        "name": "Poland",
+        "mustKnow": [
+          "Central European history hub",
+          "Strong WWII heritage sites",
+          "Medieval cities and forests"
+        ],
+        "mustDo": [
+          "Krakow old town",
+          "Auschwitz memorial",
+          "Zakopane mountains"
+        ],
+        "myths": [
+          "Wawel dragon legend",
+          "Slavic forest spirits"
+        ],
+        "adventureHighlights": [
+          "Mountain trekking",
+          "Castle exploration",
+          "Forest hiking"
+        ]
+      },
+      {
+        "code": "PT",
+        "name": "Portugal",
+        "mustKnow": [
+          "Atlantic coastline country",
+          "Age of exploration history",
+          "Fado music culture"
+        ],
+        "mustDo": [
+          "Lisbon tram streets",
+          "Porto riverside",
+          "Algarve beaches"
+        ],
+        "myths": [
+          "Sea explorer legends",
+          "Moorish ghost stories"
+        ],
+        "adventureHighlights": [
+          "Surfing Atlantic waves",
+          "Coastal hiking",
+          "Wine region tours"
+        ]
+      },
+      {
+        "code": "QA",
+        "name": "Qatar",
+        "mustKnow": [
+          "Wealthy Gulf state",
+          "Rapid modern development",
+          "Desert environment"
+        ],
+        "mustDo": [
+          "Doha skyline",
+          "Desert dunes safari",
+          "Museum of Islamic Art"
+        ],
+        "myths": [
+          "Desert jinn legends",
+          "Pearl diving folklore"
+        ],
+        "adventureHighlights": [
+          "Dune bashing",
+          "Desert camping",
+          "Coastal kayaking"
+        ]
+      },
+      {
+        "code": "RO",
+        "name": "Romania",
+        "mustKnow": [
+          "Carpathian mountains dominate landscape",
+          "Rich medieval history",
+          "Famous Dracula legend origin"
+        ],
+        "mustDo": [
+          "Bran Castle",
+          "Transylvania villages",
+          "Bucharest old town"
+        ],
+        "myths": [
+          "Vampire legend of Dracula",
+          "Forest strigoi spirits"
+        ],
+        "adventureHighlights": [
+          "Carpathian hiking",
+          "Castle tours",
+          "Mountain road trips"
+        ]
+      },
+      {
+        "code": "RU",
+        "name": "Russia",
+        "mustKnow": [
+          "Largest country in the world",
+          "Extremely diverse climates",
+          "Strong imperial + Soviet history"
+        ],
+        "mustDo": [
+          "Moscow Red Square",
+          "St. Petersburg palaces",
+          "Lake Baikal"
+        ],
+        "myths": [
+          "Baba Yaga witch legend",
+          "Domovoi house spirits"
+        ],
+        "adventureHighlights": [
+          "Trans-Siberian railway",
+          "Arctic exploration",
+          "Mountain trekking in Caucasus"
+        ]
+      },
+      {
+        "code": "RW",
+        "name": "Rwanda",
+        "mustKnow": [
+          "Land of a thousand hills",
+          "Very safe and clean African country",
+          "Known for mountain gorillas"
+        ],
+        "mustDo": [
+          "Volcanoes National Park",
+          "Kigali city",
+          "Lake Kivu"
+        ],
+        "myths": [
+          "Gorilla spirit guardians",
+          "Hill ancestor legends"
+        ],
+        "adventureHighlights": [
+          "Gorilla trekking",
+          "Volcano hiking",
+          "Lake kayaking"
+        ]
+      },
+      {
+        "code": "KN",
+        "name": "Saint Kitts and Nevis",
+        "mustKnow": [
+          "Small Caribbean twin island nation",
+          "Volcanic landscapes",
+          "Relaxed tourism vibe"
+        ],
+        "mustDo": [
+          "Brimstone Hill Fortress",
+          "Nevis Peak hike",
+          "Pinney’s Beach"
+        ],
+        "myths": [
+          "Sea pirate legends",
+          "Volcanic spirit stories"
+        ],
+        "adventureHighlights": [
+          "Volcano hiking",
+          "Snorkeling reefs",
+          "Island tours"
+        ]
+      },
+      {
+        "code": "LC",
+        "name": "Saint Lucia",
+        "mustKnow": [
+          "Famous Piton volcanic mountains",
+          "Caribbean island beauty",
+          "French + English heritage"
+        ],
+        "mustDo": [
+          "Pitons hike",
+          "Sulphur Springs",
+          "Rodney Bay"
+        ],
+        "myths": [
+          "Mountain spirit guardians",
+          "Caribbean sea goddess tales"
+        ],
+        "adventureHighlights": [
+          "Volcano hiking",
+          "Hot spring bathing",
+          "Snorkeling reefs"
+        ]
+      },
+      {
+        "code": "VC",
+        "name": "Saint Vincent and the Grenadines",
+        "mustKnow": [
+          "Volcanic island chain",
+          "Less touristy Caribbean destination",
+          "Strong sailing culture"
+        ],
+        "mustDo": [
+          "La Soufrière volcano",
+          "Bequia island",
+          "Tobago Cays"
+        ],
+        "myths": [
+          "Sea spirit navigation legends",
+          "Volcano fire myths"
+        ],
+        "adventureHighlights": [
+          "Sailing islands",
+          "Volcano hiking",
+          "Coral reef diving"
+        ]
+      },
+      {
+        "code": "WS",
+        "name": "Samoa",
+        "mustKnow": [
+          "Polynesian cultural heartland",
+          "Strong traditional lifestyle",
+          "Tropical Pacific islands"
+        ],
+        "mustDo": [
+          "To Sua ocean trench",
+          "Upolu waterfalls",
+          "Apia cultural villages"
+        ],
+        "myths": [
+          "Tagaloa creator god",
+          "Ocean giant legends"
+        ],
+        "adventureHighlights": [
+          "Ocean swimming",
+          "Waterfall hikes",
+          "Cultural village stays"
+        ]
+      },
+      {
+        "code": "SM",
+        "name": "San Marino",
+        "mustKnow": [
+          "One of world’s oldest republics",
+          "Tiny country inside Italy",
+          "Mountain fortress city-state"
+        ],
+        "mustDo": [
+          "Guaita fortress",
+          "Monte Titano views",
+          "Old town streets"
+        ],
+        "myths": [
+          "Saint Marinus founding legend",
+          "Castle guardian spirits"
+        ],
+        "adventureHighlights": [
+          "Fortress exploration",
+          "Mountain hikes",
+          "Panoramic viewpoints"
+        ]
+      },
+      {
+        "code": "ST",
+        "name": "São Tomé and Príncipe",
+        "mustKnow": [
+          "Small island nation in Gulf of Guinea",
+          "Former Portuguese colony",
+          "Dense tropical forests"
+        ],
+        "mustDo": [
+          "Obô National Park",
+          "Rolas Island equator marker",
+          "Cocoa plantations"
+        ],
+        "myths": [
+          "Forest spirit legends",
+          "Island creation myths"
+        ],
+        "adventureHighlights": [
+          "Rainforest trekking",
+          "Island exploration",
+          "Beach diving"
+        ]
+      },
+      {
+        "code": "SA",
+        "name": "Saudi Arabia",
+        "mustKnow": [
+          "Birthplace of Islam",
+          "Huge desert landscapes",
+          "Rapid modernization"
+        ],
+        "mustDo": [
+          "Mecca pilgrimage sites",
+          "Al-Ula ancient city",
+          "Riyadh skyline"
+        ],
+        "myths": [
+          "Desert djinn legends",
+          "Pre-Islamic tribal myths"
+        ],
+        "adventureHighlights": [
+          "Desert camping",
+          "Rock formations exploration",
+          "Historical archaeology tours"
+        ]
+      },
+      {
+        "code": "SN",
+        "name": "Senegal",
+        "mustKnow": [
+          "West African cultural hub",
+          "Atlantic coastline",
+          "Music and arts strong influence"
+        ],
+        "mustDo": [
+          "Dakar markets",
+          "Gorée Island",
+          "Lac Rose (Pink Lake)"
+        ],
+        "myths": [
+          "Leuk the hare trickster stories",
+          "Sea spirit legends"
+        ],
+        "adventureHighlights": [
+          "Coastal exploration",
+          "Desert lake visits",
+          "Cultural city tours"
+        ]
+      },
+      {
+        "code": "RS",
+        "name": "Serbia",
+        "mustKnow": [
+          "Balkan crossroads country",
+          "Strong nightlife culture",
+          "Rich medieval + Ottoman history"
+        ],
+        "mustDo": [
+          "Belgrade fortress",
+          "Novi Sad EXIT festival city",
+          "Tara National Park"
+        ],
+        "myths": [
+          "Vampire folklore origins in Balkans",
+          "Slavic forest spirits"
+        ],
+        "adventureHighlights": [
+          "River rafting on Drina",
+          "Mountain hiking",
+          "Castle exploration"
+        ]
+      },
+      {
+        "code": "SC",
+        "name": "Seychelles",
+        "mustKnow": [
+          "Luxury Indian Ocean islands",
+          "Granite rock beaches",
+          "Highly protected marine environment"
+        ],
+        "mustDo": [
+          "Anse Source d’Argent beach",
+          "Morne Seychellois hike",
+          "La Digue island cycling"
+        ],
+        "myths": [
+          "Sea turtle guardian spirits",
+          "Ancient pirate treasure legends"
+        ],
+        "adventureHighlights": [
+          "Snorkeling reefs",
+          "Island hopping",
+          "Rock climbing coastal formations"
+        ]
+      },
+      {
+        "code": "SL",
+        "name": "Sierra Leone",
+        "mustKnow": [
+          "West African coastal country",
+          "Post-conflict rebuilding nation",
+          "Beautiful beaches and islands"
+        ],
+        "mustDo": [
+          "Freetown beaches",
+          "Tiwai Island wildlife sanctuary",
+          "Tacugama chimpanzee reserve"
+        ],
+        "myths": [
+          "Forest spirit guardians",
+          "River mermaid legends"
+        ],
+        "adventureHighlights": [
+          "Rainforest trekking",
+          "Beach exploration",
+          "Wildlife conservation tours"
+        ]
+      },
+      {
+        "code": "SG",
+        "name": "Singapore",
+        "mustKnow": [
+          "Highly developed city-state",
+          "Strict laws and clean environment",
+          "Multicultural society"
+        ],
+        "mustDo": [
+          "Marina Bay Sands",
+          "Gardens by the Bay",
+          "Sentosa Island"
+        ],
+        "myths": [
+          "Merlion sea lion legend",
+          "Malay spirit folklore"
+        ],
+        "adventureHighlights": [
+          "Urban night exploration",
+          "Island leisure activities",
+          "Nature reserves hiking"
+        ]
+      },
+      {
+        "code": "SK",
+        "name": "Slovakia",
+        "mustKnow": [
+          "Central European mountain country",
+          "Castles everywhere",
+          "Carpathian nature"
+        ],
+        "mustDo": [
+          "Bratislava old town",
+          "High Tatras mountains",
+          "Spiš Castle"
+        ],
+        "myths": [
+          "Slavic forest witches",
+          "Mountain dragon legends"
+        ],
+        "adventureHighlights": [
+          "Mountain hiking",
+          "Castle touring",
+          "Cave exploration"
+        ]
+      },
+      {
+        "code": "SI",
+        "name": "Slovenia",
+        "mustKnow": [
+          "Small but extremely green country",
+          "Alps meet the Adriatic",
+          "High quality of life"
+        ],
+        "mustDo": [
+          "Lake Bled",
+          "Postojna caves",
+          "Ljubljana city"
+        ],
+        "myths": [
+          "Dragon of Ljubljana legend",
+          "Alpine spirit folklore"
+        ],
+        "adventureHighlights": [
+          "Lake kayaking",
+          "Cave exploration",
+          "Alpine hiking"
+        ]
+      },
+      {
+        "code": "SB",
+        "name": "Solomon Islands",
+        "mustKnow": [
+          "Remote Pacific archipelago",
+          "WWII history sites",
+          "Strong tribal cultures"
+        ],
+        "mustDo": [
+          "Honiara WWII sites",
+          "Marovo Lagoon",
+          "Guadalcanal rainforest"
+        ],
+        "myths": [
+          "Ancestor sea spirits",
+          "Island creation myths"
+        ],
+        "adventureHighlights": [
+          "Diving wreck sites",
+          "Island hopping",
+          "Jungle trekking"
+        ]
+      },
+      {
+        "code": "SO",
+        "name": "Somalia",
+        "mustKnow": [
+          "Long coastline in Horn of Africa",
+          "Ancient trading history",
+          "Complex modern situation"
+        ],
+        "mustDo": [
+          "Laas Geel rock art",
+          "Mogadishu beaches",
+          "Berbera port"
+        ],
+        "myths": [
+          "Ancient coastal merchant legends",
+          "Desert spirit folklore"
+        ],
+        "adventureHighlights": [
+          "Coastal exploration",
+          "Rock art discovery",
+          "Desert travel"
+        ]
+      },
+      {
+        "code": "ZA",
+        "name": "South Africa",
+        "mustKnow": [
+          "Rainbow nation with diverse cultures",
+          "Safari capital of Africa",
+          "Coast + mountains + deserts"
+        ],
+        "mustDo": [
+          "Kruger National Park",
+          "Cape Town Table Mountain",
+          "Garden Route"
+        ],
+        "myths": [
+          "Zulu ancestral spirits",
+          "Tokoloshe creature legend"
+        ],
+        "adventureHighlights": [
+          "Safari wildlife tours",
+          "Mountain hiking",
+          "Coastal road trips"
+        ]
+      },
+      {
+        "code": "SS",
+        "name": "South Sudan",
+        "mustKnow": [
+          "Youngest country in the world",
+          "Nile river system",
+          "Diverse ethnic cultures"
+        ],
+        "mustDo": [
+          "White Nile river exploration",
+          "Boma National Park",
+          "Juba city"
+        ],
+        "myths": [
+          "River spirit guardians",
+          "Tribal creation stories"
+        ],
+        "adventureHighlights": [
+          "River expeditions",
+          "Safari wildlife viewing",
+          "Cultural village visits"
+        ]
+      },
+      {
+        "code": "ES",
+        "name": "Spain",
+        "mustKnow": [
+          "Rich Iberian history",
+          "Strong regional cultures",
+          "Famous for festivals"
+        ],
+        "mustDo": [
+          "Barcelona Sagrada Familia",
+          "Madrid Royal Palace",
+          "Seville old town"
+        ],
+        "myths": [
+          "El Cid knight legend",
+          "Moorish ghost stories"
+        ],
+        "adventureHighlights": [
+          "Coastal surfing",
+          "Mountain hiking Pyrenees",
+          "Festival experiences"
+        ]
+      },
+      {
+        "code": "LK",
+        "name": "Sri Lanka",
+        "mustKnow": [
+          "Island nation south of India",
+          "Ancient Buddhist culture",
+          "Tea plantations and beaches"
+        ],
+        "mustDo": [
+          "Sigiriya rock fortress",
+          "Kandy temple of tooth",
+          "Ella mountain trains"
+        ],
+        "myths": [
+          "Ramayana epic connections",
+          "Demon king Ravana legends"
+        ],
+        "adventureHighlights": [
+          "Train mountain journeys",
+          "Surfing beaches",
+          "Wildlife safaris"
+        ]
+      },
+      {
+        "code": "SD",
+        "name": "Sudan",
+        "mustKnow": [
+          "Ancient Nubian civilization",
+          "Nile river lifeline",
+          "Desert dominates geography"
+        ],
+        "mustDo": [
+          "Pyramids of Meroë",
+          "Khartoum Nile confluence",
+          "Nubian desert sites"
+        ],
+        "myths": [
+          "Nubian king legends",
+          "Desert guardian spirits"
+        ],
+        "adventureHighlights": [
+          "Pyramid exploration",
+          "Desert expeditions",
+          "River journeys"
+        ]
+      },
+      {
+        "code": "SR",
+        "name": "Suriname",
+        "mustKnow": [
+          "Smallest country in South America",
+          "Dutch colonial influence",
+          "Dense rainforest coverage"
+        ],
+        "mustDo": [
+          "Paramaribo colonial city",
+          "Central Suriname Nature Reserve",
+          "River villages"
+        ],
+        "myths": [
+          "Forest spirit entities",
+          "River mermaid legends"
+        ],
+        "adventureHighlights": [
+          "Rainforest trekking",
+          "River exploration",
+          "Wildlife observation"
+        ]
+      },
+      {
+        "code": "SE",
+        "name": "Sweden",
+        "mustKnow": [
+          "Nordic welfare country",
+          "Forests and lakes everywhere",
+          "Cold winters, long summers"
+        ],
+        "mustDo": [
+          "Stockholm archipelago",
+          "Lapland Northern Lights",
+          "Gothenburg canals"
+        ],
+        "myths": [
+          "Norse mythology gods",
+          "Forest trolls folklore"
+        ],
+        "adventureHighlights": [
+          "Northern Lights hunting",
+          "Forest hiking",
+          "Ice hotel experiences"
+        ]
+      },
+      {
+        "code": "CH",
+        "name": "Switzerland",
+        "mustKnow": [
+          "Alpine mountain country",
+          "Extremely high living standards",
+          "Neutral political history"
+        ],
+        "mustDo": [
+          "Swiss Alps hiking",
+          "Lucerne lake",
+          "Zermatt Matterhorn"
+        ],
+        "myths": [
+          "William Tell legend",
+          "Alpine mountain spirits"
+        ],
+        "adventureHighlights": [
+          "Skiing Alps",
+          "Mountain hiking",
+          "Train scenic routes"
+        ]
+      },
+      {
+        "code": "SY",
+        "name": "Syria",
+        "mustKnow": [
+          "One of world’s oldest civilizations",
+          "Ancient trade routes",
+          "Conflict-affected country"
+        ],
+        "mustDo": [
+          "Palmyra ruins",
+          "Damascus old city",
+          "Aleppo historic sites"
+        ],
+        "myths": [
+          "Ancient Mesopotamian legends",
+          "Biblical historical stories"
+        ],
+        "adventureHighlights": [
+          "Archaeological exploration",
+          "Ancient city walks",
+          "Desert ruins visits"
+        ]
+      },
+      {
+        "code": "TJ",
+        "name": "Tajikistan",
+        "mustKnow": [
+          "Very mountainous Central Asian country",
+          "Part of ancient Silk Road",
+          "Remote and rugged landscapes"
+        ],
+        "mustDo": [
+          "Pamir Highway road trip",
+          "Fann Mountains trekking",
+          "Iskanderkul Lake"
+        ],
+        "myths": [
+          "Mountain spirit guardians",
+          "Ancient Silk Road caravan legends"
+        ],
+        "adventureHighlights": [
+          "High-altitude trekking",
+          "Remote road expeditions",
+          "Alpine lake exploration"
+        ]
+      },
+      {
+        "code": "TZ",
+        "name": "Tanzania",
+        "mustKnow": [
+          "Home of Mount Kilimanjaro",
+          "Famous safari destination",
+          "Includes Zanzibar islands"
+        ],
+        "mustDo": [
+          "Serengeti National Park",
+          "Mount Kilimanjaro climb",
+          "Zanzibar Stone Town"
+        ],
+        "myths": [
+          "Maasai warrior legends",
+          "Spirit animals of the savannah"
+        ],
+        "adventureHighlights": [
+          "Big Five safaris",
+          "Mountain climbing",
+          "Island diving"
+        ]
+      },
+      {
+        "code": "TH",
+        "name": "Thailand",
+        "mustKnow": [
+          "Very popular Southeast Asian destination",
+          "Strong Buddhist culture",
+          "Famous street food"
+        ],
+        "mustDo": [
+          "Bangkok temples",
+          "Phuket beaches",
+          "Chiang Mai mountains"
+        ],
+        "myths": [
+          "Naga serpent river spirits",
+          "Thai guardian giants (Yaksha)"
+        ],
+        "adventureHighlights": [
+          "Island hopping",
+          "Jungle trekking",
+          "Rock climbing Krabi"
+        ]
+      },
+      {
+        "code": "TL",
+        "name": "Timor-Leste",
+        "mustKnow": [
+          "One of youngest nations in Asia",
+          "Portuguese influence",
+          "Mountain + ocean landscape"
+        ],
+        "mustDo": [
+          "Atauro Island diving",
+          "Dili coastal city",
+          "Cristo Rei statue hike"
+        ],
+        "myths": [
+          "Crocodile creation myth of the island",
+          "Ancestor spirit beliefs"
+        ],
+        "adventureHighlights": [
+          "Scuba diving reefs",
+          "Mountain hiking",
+          "Island exploration"
+        ]
+      },
+      {
+        "code": "TG",
+        "name": "Togo",
+        "mustKnow": [
+          "Small West African coastal country",
+          "Strong traditional beliefs",
+          "French-speaking"
+        ],
+        "mustDo": [
+          "Lomé markets",
+          "Koutammakou cultural landscape",
+          "Lake Togo"
+        ],
+        "myths": [
+          "Voodoo spirit traditions",
+          "Forest guardian myths"
+        ],
+        "adventureHighlights": [
+          "Cultural village visits",
+          "Coastal exploration",
+          "Nature hikes"
+        ]
+      },
+      {
+        "code": "TO",
+        "name": "Tonga",
+        "mustKnow": [
+          "Polynesian kingdom in the Pacific",
+          "One of few remaining monarchies",
+          "Whale migration hotspot"
+        ],
+        "mustDo": [
+          "Vava'u whale swimming",
+          "Tongatapu royal sites",
+          "Ha'apai islands"
+        ],
+        "myths": [
+          "Ocean god Tangaloa",
+          "Island creation legends"
+        ],
+        "adventureHighlights": [
+          "Whale swimming",
+          "Island sailing",
+          "Coral reef diving"
+        ]
+      },
+      {
+        "code": "TT",
+        "name": "Trinidad and Tobago",
+        "mustKnow": [
+          "Caribbean twin island nation",
+          "Famous for carnival culture",
+          "Oil-rich economy"
+        ],
+        "mustDo": [
+          "Port of Spain carnival",
+          "Maracas Bay",
+          "Tobago reefs"
+        ],
+        "myths": [
+          "La Diablesse ghost legend",
+          "Anansi trickster stories"
+        ],
+        "adventureHighlights": [
+          "Carnival festivals",
+          "Snorkeling reefs",
+          "Rainforest hikes"
+        ]
+      },
+      {
+        "code": "TN",
+        "name": "Tunisia",
+        "mustKnow": [
+          "North African Mediterranean country",
+          "Ancient Carthage civilization",
+          "Desert + coast mix"
+        ],
+        "mustDo": [
+          "Carthage ruins",
+          "Sahara desert tours",
+          "Sidi Bou Said village"
+        ],
+        "myths": [
+          "Carthaginian queen Dido legend",
+          "Desert djinn spirits"
+        ],
+        "adventureHighlights": [
+          "Desert camping",
+          "Roman ruins exploration",
+          "Coastal hiking"
+        ]
+      },
+      {
+        "code": "TR",
+        "name": "Turkey",
+        "mustKnow": [
+          "Bridge between Europe and Asia",
+          "Rich Ottoman + Byzantine history",
+          "Very diverse geography"
+        ],
+        "mustDo": [
+          "Istanbul Hagia Sophia",
+          "Cappadocia hot air balloons",
+          "Pamukkale terraces"
+        ],
+        "myths": [
+          "Trojan War legends",
+          "Anatolian mountain spirits"
+        ],
+        "adventureHighlights": [
+          "Hot air ballooning",
+          "Ancient city exploration",
+          "Coastal sailing"
+        ]
+      },
+      {
+        "code": "TM",
+        "name": "Turkmenistan",
+        "mustKnow": [
+          "Very closed Central Asian country",
+          "Large desert coverage",
+          "Natural gas reserves"
+        ],
+        "mustDo": [
+          "Darvaza Gas Crater (Door to Hell)",
+          "Ashgabat white marble city",
+          "Karakum Desert"
+        ],
+        "myths": [
+          "Desert fire spirits",
+          "Ancient Silk Road caravan tales"
+        ],
+        "adventureHighlights": [
+          "Desert exploration",
+          "Crater visits",
+          "Remote travel experiences"
+        ]
+      },
+      {
+        "code": "TV",
+        "name": "Tuvalu",
+        "mustKnow": [
+          "One of smallest countries in the world",
+          "Highly threatened by rising sea levels",
+          "Remote Pacific islands"
+        ],
+        "mustDo": [
+          "Funafuti atoll",
+          "Lagoon diving",
+          "Traditional village visits"
+        ],
+        "myths": [
+          "Ocean spirit guardians",
+          "Island creation legends"
+        ],
+        "adventureHighlights": [
+          "Lagoon snorkeling",
+          "Island walking",
+          "Fishing trips"
+        ]
+      },
+      {
+        "code": "UG",
+        "name": "Uganda",
+        "mustKnow": [
+          "Home of mountain gorillas",
+          "Source of the Nile River",
+          "Green landscapes"
+        ],
+        "mustDo": [
+          "Bwindi gorilla trekking",
+          "Murchison Falls",
+          "Lake Victoria"
+        ],
+        "myths": [
+          "Gorilla forest spirit beliefs",
+          "River Nile origin legends"
+        ],
+        "adventureHighlights": [
+          "Gorilla trekking",
+          "River rafting Nile",
+          "Safari wildlife tours"
+        ]
+      },
+      {
+        "code": "UA",
+        "name": "Ukraine",
+        "mustKnow": [
+          "Large Eastern European country",
+          "Rich cultural heritage",
+          "Carpathian mountains and steppes"
+        ],
+        "mustDo": [
+          "Kyiv historic churches",
+          "Lviv old town",
+          "Carpathian hiking"
+        ],
+        "myths": [
+          "Forest rusalki water spirits",
+          "Slavic witch legends (Baba Yaga variants)"
+        ],
+        "adventureHighlights": [
+          "Mountain trekking",
+          "Castle exploration",
+          "River valley travel"
+        ]
+      },
+      {
+        "code": "AE",
+        "name": "United Arab Emirates",
+        "mustKnow": [
+          "Ultra-modern Gulf federation",
+          "Rapid desert-to-metropolis transformation",
+          "Luxury tourism hub"
+        ],
+        "mustDo": [
+          "Burj Khalifa Dubai",
+          "Abu Dhabi Sheikh Zayed Mosque",
+          "Desert safari dunes"
+        ],
+        "myths": [
+          "Desert djinn legends",
+          "Bedouin spirit tales"
+        ],
+        "adventureHighlights": [
+          "Dune bashing",
+          "Skyline city exploration",
+          "Desert camping"
+        ]
+      },
+      {
+        "code": "GB",
+        "name": "United Kingdom",
+        "mustKnow": [
+          "Made of England, Scotland, Wales, Northern Ireland",
+          "Rich monarchy history",
+          "Global cultural influence"
+        ],
+        "mustDo": [
+          "London Big Ben",
+          "Edinburgh Castle",
+          "Stonehenge"
+        ],
+        "myths": [
+          "King Arthur legend",
+          "Loch Ness Monster"
+        ],
+        "adventureHighlights": [
+          "Highland hiking",
+          "Coastal cliff walks",
+          "Historic castle tours"
+        ]
+      },
+      {
+        "code": "US",
+        "name": "United States",
+        "mustKnow": [
+          "Large and geographically diverse country",
+          "Global cultural and economic influence",
+          "National parks system"
+        ],
+        "mustDo": [
+          "Grand Canyon",
+          "New York City",
+          "Yellowstone National Park"
+        ],
+        "myths": [
+          "Bigfoot forest legend",
+          "Native American spirit stories"
+        ],
+        "adventureHighlights": [
+          "National park road trips",
+          "Mountain hiking Rockies",
+          "Coastal exploration"
+        ]
+      },
+      {
+        "code": "UY",
+        "name": "Uruguay",
+        "mustKnow": [
+          "Small South American country",
+          "Relaxed lifestyle",
+          "Strong coastal culture"
+        ],
+        "mustDo": [
+          "Montevideo old town",
+          "Punta del Este beaches",
+          "Colonia del Sacramento"
+        ],
+        "myths": [
+          "River spirit legends",
+          "Gaucho folklore"
+        ],
+        "adventureHighlights": [
+          "Beach exploration",
+          "Coastal drives",
+          "Historic town walks"
+        ]
+      },
+      {
+        "code": "UZ",
+        "name": "Uzbekistan",
+        "mustKnow": [
+          "Heart of ancient Silk Road",
+          "Rich Islamic architecture",
+          "Desert + oasis cities"
+        ],
+        "mustDo": [
+          "Samarkand Registan Square",
+          "Bukhara old city",
+          "Khiva walled city"
+        ],
+        "myths": [
+          "Silk Road caravan legends",
+          "Desert djinn spirits"
+        ],
+        "adventureHighlights": [
+          "Ancient city exploration",
+          "Desert travel",
+          "Historical architecture tours"
+        ]
+      },
+      {
+        "code": "VU",
+        "name": "Vanuatu",
+        "mustKnow": [
+          "Pacific island nation",
+          "Very active volcanoes",
+          "Strong indigenous culture"
+        ],
+        "mustDo": [
+          "Mount Yasur volcano",
+          "Blue Lagoon",
+          "Espiritu Santo beaches"
+        ],
+        "myths": [
+          "Volcano fire gods",
+          "Ancestor island spirits"
+        ],
+        "adventureHighlights": [
+          "Volcano viewing",
+          "Lagoon swimming",
+          "Island trekking"
+        ]
+      },
+      {
+        "code": "VA",
+        "name": "Vatican City",
+        "mustKnow": [
+          "Smallest country in the world",
+          "Center of Catholic Church",
+          "Located inside Rome"
+        ],
+        "mustDo": [
+          "St. Peter’s Basilica",
+          "Sistine Chapel",
+          "Vatican Museums"
+        ],
+        "myths": [
+          "Saint Peter legend",
+          "Religious miracle stories"
+        ],
+        "adventureHighlights": [
+          "Art exploration",
+          "Historical tours",
+          "Religious heritage visits"
+        ]
+      },
+      {
+        "code": "VE",
+        "name": "Venezuela",
+        "mustKnow": [
+          "Home of Angel Falls (world’s highest waterfall)",
+          "Caribbean + Andes + Amazon mix",
+          "Rich natural resources"
+        ],
+        "mustDo": [
+          "Angel Falls",
+          "Mérida mountains",
+          "Los Roques islands"
+        ],
+        "myths": [
+          "El Silbón ghost legend",
+          "Amazon jungle spirits"
+        ],
+        "adventureHighlights": [
+          "Waterfall expeditions",
+          "Mountain cable car rides",
+          "Island snorkeling"
+        ]
+      },
+      {
+        "code": "VN",
+        "name": "Vietnam",
+        "mustKnow": [
+          "Long coastal Southeast Asian country",
+          "Strong history and resilience",
+          "Famous street food culture"
+        ],
+        "mustDo": [
+          "Ha Long Bay",
+          "Hanoi old quarter",
+          "Hoi An lantern city"
+        ],
+        "myths": [
+          "Dragon children legend",
+          "Mountain spirit folklore"
+        ],
+        "adventureHighlights": [
+          "Boat cruising bays",
+          "Motorbike road trips",
+          "Cave exploration"
+        ]
+      }
+  ]

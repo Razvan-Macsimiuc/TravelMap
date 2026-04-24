@@ -1,4 +1,8 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  provideBrowserGlobalErrorListeners,
+  provideZonelessChangeDetection,
+} from '@angular/core';
 import { provideRouter, withPreloading, RouteReuseStrategy } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalone';
@@ -13,7 +17,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withPreloading(SelectivePreloadStrategy)),
     provideIonicAngular(),
     provideHttpClient(withFetch()),
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
-  ]
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+  ],
 };
-

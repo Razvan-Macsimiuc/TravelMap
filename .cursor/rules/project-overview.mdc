@@ -42,11 +42,11 @@ alwaysApply: true
 src/
   app/
     map/               # MapPage – Mapbox map, country interaction
-    stats/             # StatsPage – visited list, progress, achievements
-    settings/          # SettingsPage – reset, version, links
-    country-detail/    # CountryDetailPage – per-country detail & toggle
+    stats/             # StatsPage – visited list, progress, achievements; hero shows birthplace when set (`BirthplaceService`); “Total countries” / “Achievements” pills open `IonModal` galleries (all flags · all trophies with locked rows dimmed)
+    settings/          # SettingsPage – travel reel, reset, about (UI English-only)
+    country-detail/    # CountryDetailPage – per-country detail & toggle; English UI copy in templates
     splash/            # SplashPage – launch screen, session init
-    welcome/           # WelcomePage – multi-slide onboarding
+    welcome/           # WelcomePage – slides then birthplace; **Skip** on slides opens birthplace (not the map); only birthplace **Skip** or **Start exploring** (after save) sets `hopahopa_welcome_seen` and goes to map
     tabs/              # TabsPage – bottom-tab shell
     components/        # Shared standalone UI components
     services/          # Injectable services
@@ -57,7 +57,7 @@ src/
     utils/             # confetti.ts, counter-animation.ts
     styles/            # Shared SCSS (premium-header.scss)
     app.routes.ts      # Route definitions
-    app.config.ts      # Bootstrap config
+    app.config.ts      # Bootstrap config (router, Ionic, HTTP, zoneless)
   assets/
     countries.geojson       # Offline fallback GeoJSON
     data/country-insights.json  # Per-country travel sections (generated; loaded at runtime on Country Detail)
@@ -76,7 +76,7 @@ package.json
 
 ```
 /splash                     SplashPage (sets sessionStorage hopahopa_splash_shown)
-/welcome                    WelcomePage (sets localStorage hopahopa_welcome_seen)
+/welcome                    WelcomePage (slides → birthplace; slide Skip goes to birthplace; map only after birthplace Skip or save)
 '' (root, splashGuard)
   map                       MapPage        (tab)
   stats                     StatsPage      (tab)
@@ -95,15 +95,17 @@ package.json
 
 | Service | File | Responsibility |
 |---|---|---|
-| `CountryService` | `services/country.service.ts` | Source of truth for all ~195 countries; Angular **signals + computed** for counts; load/merge from storage; toggle visited; update stats/cities/notes; auto-save via `effect()` |
+| `CountryService` | `services/country.service.ts` | Source of truth for all ~195 countries; Angular **signals + computed** for counts; load/merge from storage; toggle visited; update stats/cities/notes; auto-save via `effect()`; on init and when birthplace is saved, **`syncBirthplaceIntoTravelData`** marks the birth country visited and adds the birth city (with coordinates) like a logged city |
 | `StorageService` | `services/storage.service.ts` | **Capacitor Preferences** key `travelmap_countries`; generic JSON get/set/remove; migration from legacy localStorage; optional IndexedDB `HopaHopaDB` cleanup |
-| `AchievementService` | `services/achievement.service.ts` | Milestone / continent / special achievements; sync unlock state with `CountryService`; celebrations (sound, haptics, modal); persists to `localStorage` key `hopahopa_achievements` |
+| `AchievementService` | `services/achievement.service.ts` | Milestone / continent / special achievements; sync unlock state with `CountryService`; celebrations (sound, haptics, modal); persists to `localStorage` key `hopahopa_achievements`; copy is **English** in code constants (`localizeAchievement` is a no-op pass-through) |
 | `SettingsService` | `services/settings.service.ts` | Forces dark mode on `documentElement` / `body`; `resetSettings()` removes preferences key |
 | `OverlayService` | `services/overlay.service.ts` | On `NavigationStart`, dismisses modals, popovers, alerts, action sheets; initialized from `AppComponent` |
 | `PageTransitionService` | `services/page-transition.service.ts` | Shared state (position, country id/name) for map → country-detail transition animation |
 | `ErrorService` | `services/error.service.ts` | User-facing toasts/alerts for categorized errors; logging helper |
-| `CitySearchService` | `services/city-search.service.ts` | Wraps Mapbox Geocoding API (`/geocoding/v5/mapbox.places`) to return city suggestions filtered by country ISO code; used by `CountryDetailPage` autocomplete |
-| `CountryInsightsLoaderService` | `services/country-insights-loader.service.ts` | One-time `HttpClient` load of `assets/data/country-insights.json`; per-code bundles + regional fallbacks from `country-insights.data.ts` |
+| `CitySearchService` | `services/city-search.service.ts` | Wraps Mapbox Geocoding API (`/geocoding/v5/mapbox.places`) to return city suggestions filtered by country ISO code; used by `CountryDetailPage` and `WelcomePage` (birthplace city) |
+| `BirthplaceService` | `services/birthplace.service.ts` | Load/save user birthplace for onboarding + map pin; persists via `StorageService` key `hopahopa_birthplace`; after save (and `CountryService` init), calls **`syncBirthplaceIntoTravelData`** so stats/achievements/map visited state match; `MapPage` still shows the dedicated birthplace layer + fly-to |
+| `AssetPrefetchService` | `services/asset-prefetch.service.ts` | During **splash** and **welcome**, schedules (idle) dynamic `import()` of map / Mapbox / stats / settings chunks and `fetch` for `assets/countries.geojson` so cache is warm before the map opens |
+| `CountryInsightsLoaderService` | `services/country-insights-loader.service.ts` | One-time `HttpClient` load of `assets/data/country-insights.json` (see **`build:insights-from-travel`**); per-code `CountryInsightsBundle` + optional **`wikipediaAttribution`**; regional fallbacks from `country-insights.data.ts` |
 | `MapInstanceBridgeService` | `services/map-instance-bridge.service.ts` | Holds the live Mapbox `Map` from `MapPage` so `TravelReelComponent` can sample the real globe; cleared when the map page is destroyed |
 
 ## Shared components
@@ -134,13 +136,14 @@ interface Country {
 }
 ```
 
-Other types: `Achievement`, `UnlockedAchievement`, `AchievementCategory` (in `AchievementService`); `TransitionState` (in `PageTransitionService`); `AppSettings` (in `SettingsService`); `ErrorContext` / `ErrorType` (in `ErrorService`).
+Other types: `Birthplace`, `BIRTHPLACE_STORAGE_KEY`, `isValidBirthplace()` (`models/birthplace.model.ts`); `Achievement`, `UnlockedAchievement`, `AchievementCategory` (in `AchievementService`); `TransitionState` (in `PageTransitionService`); `AppSettings` (in `SettingsService`); `ErrorContext` / `ErrorType` (in `ErrorService`).
 
 ## Storage keys
 
 | Key | Storage | Content |
 |---|---|---|
 | `travelmap_countries` | Capacitor Preferences | Serialized country array |
+| `hopahopa_birthplace` | Capacitor Preferences | JSON `Birthplace` (country + city + coordinates); cleared on full data reset |
 | `hopahopa_achievements` | `localStorage` | Unlocked achievement IDs |
 | `hopahopa_welcome_seen` | `localStorage` | `'true'` after onboarding |
 | `hopahopa_splash_shown` | `sessionStorage` | `'true'` per session |
@@ -149,7 +152,7 @@ Other types: `Achievement`, `UnlockedAchievement`, `AchievementCategory` (in `Ac
 
 - **Mapbox:** map tiles + dark style (`mapbox://styles/mapbox/dark-v11`); token from `environment.mapboxToken`
 - **GeoJSON (countries):** `https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson` with fallback to `assets/countries.geojson`
-- **Wikipedia (dev-time only):** `npm run generate:insights` builds `assets/data/country-insights.json` from English Wikipedia REST API summaries (CC BY-SA 4.0) for “At a glance” plus curated visitor sections; regenerate after changing `countries.data.ts`
+- **Country detail blurbs:** `assets/data/country-insights.json` is keyed by ISO alpha-2 and consumed by `CountryInsightsLoaderService`. Regenerate from **`src/assets/travel.json`** with **`npm run build:insights-from-travel`** (maps `mustKnow` / `mustDo` / `myths` / `adventureHighlights` → `atAGlance` / `whyVisit` / `tasteAndTraditions` / `planSmart`). Optional legacy pipeline: **`npm run generate:insights`** (Wikipedia-derived) if that script is still used in your workflow.
 - **No custom REST backend** — fully offline-first; all data lives on-device
 
 ## Capacitor plugins in use
@@ -161,8 +164,9 @@ Other types: `Achievement`, `UnlockedAchievement`, `AchievementCategory` (in `Ac
 ## Known caveats / tech debt
 
 - **GitHub Pages vs local:** `ng serve` uses `<base href="/">`; CI (`.github/workflows/build.yml`) builds with `--base-href=/<repository-name>/` so asset and lazy chunk URLs match `https://<user>.github.io/<repo>/`. If you deploy manually, use the same `--base-href` or the app will load wrong. **Mapbox:** production token is injected in CI via `MAPBOX_TOKEN`; if the Mapbox token has **URL restrictions** that only list `localhost`, map tiles fail on GitHub Pages while local dev works—add `https://*.github.io/*` (or your exact Pages URL) in the Mapbox dashboard
-- Adding or renaming countries in `countries.data.ts` requires re-running `npm run generate:insights` and committing `assets/data/country-insights.json` so detail blurbs stay in sync
+- Adding or renaming countries in `countries.data.ts`: update **`src/assets/travel.json`** (if used), run **`npm run build:insights-from-travel`**, and commit **`assets/data/country-insights.json`** so country detail blurbs stay in sync
 - `zone.js` remains a devDependency for Karma (`src/test.ts`); the app runtime is zoneless (`provideZonelessChangeDetection`)
 - `StorageService.loadCountries()` currently maps only `code`, `name`, `visited`, `photoIds` — `visitCount`, `daysStayed`, `cities`, `note` may not survive a full reload
 - `src/environments/environment.ts` is gitignored (developer local copy); copy from `environment.example.ts` and fill in your Mapbox token for local dev
 - The pre-existing `Cannot find module '../../environments/environment'` lint error in `map.page.ts` is expected in CI/readonly environments where `environment.ts` is absent
+- **UI language:** The app is **English-only** (no runtime translation layer or locale JSON)

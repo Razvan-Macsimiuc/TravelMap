@@ -72,7 +72,7 @@
             <section class="insight-section">
               <div class="insight-section-head">
                 <ion-icon name="restaurant-outline" class="insight-ico" aria-hidden="true"></ion-icon>
-                <h3 class="insight-heading">Taste &amp; traditions</h3>
+                <h3 class="insight-heading">Taste & traditions</h3>
               </div>
               <p class="insight-body">{{ ins.tasteAndTraditions }}</p>
             </section>
@@ -88,9 +88,9 @@
 
           @if (insightsFromWikipedia()) {
             <p class="insight-source">
-              “At a glance” adapts English Wikipedia —
-              <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>.
-              Other sections are travel tips for visitors.
+              <span>"At a glance" adapts English Wikipedia — </span>
+              <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>
+              <span>. Other sections are travel tips for visitors.</span>
             </p>
           }
         </ion-card-content>
@@ -99,13 +99,13 @@
 
     <ion-card class="status-card">
       <ion-card-header>
-        <ion-card-title class="section-title">My Visit Status</ion-card-title>
+        <ion-card-title class="section-title">My visit status</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <ion-item lines="none" class="toggle-item">
           <ion-icon [name]="isVisited() ? 'checkmark-circle' : 'close-circle'" [color]="isVisited() ? 'success' : 'medium'" slot="start"></ion-icon>
           <ion-label>
-            <h2>{{ isVisited() ? 'Visited' : 'Not Visited' }}</h2>
+            <h2>{{ isVisited() ? 'Visited' : 'Not visited' }}</h2>
           </ion-label>
           <ion-toggle [checked]="isVisited()" (ionChange)="onVisitedToggle($event)" slot="end"></ion-toggle>
         </ion-item>
@@ -117,10 +117,16 @@
       <ion-card-header>
         <ion-card-title class="section-title">
           <ion-icon name="location-outline"></ion-icon>
-          Cities Visited
+          Cities visited
         </ion-card-title>
         @if (cities().length > 0) {
-          <ion-card-subtitle>{{ cities().length }} {{ cities().length === 1 ? 'city' : 'cities' }} logged</ion-card-subtitle>
+          <ion-card-subtitle>
+            @if (cities().length === 1) {
+              1 city logged
+            } @else {
+              {{ cities().length }} cities logged
+            }
+          </ion-card-subtitle>
         }
       </ion-card-header>
 

@@ -12,6 +12,12 @@ import {
   IonItem,
   IonLabel,
   IonIcon,
+  IonModal,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonButtons,
+  IonButton,
   ViewWillEnter,
 } from '@ionic/angular/standalone';
 import { AnimatedBackgroundComponent } from '../components/animated-background/animated-background.component';
@@ -24,11 +30,14 @@ import {
   airplaneOutline,
   ribbonOutline,
   starOutline,
+  locationOutline,
   lockClosedOutline,
   checkmarkCircleOutline,
+  closeOutline,
 } from 'ionicons/icons';
 import { CountryService } from '../services/country.service';
 import { AchievementService, AchievementCategory } from '../services/achievement.service';
+import { BirthplaceService } from '../services/birthplace.service';
 import { Country } from '../models/country.model';
 
 const TOTAL_WORLD_COUNTRIES = 195;
@@ -56,11 +65,18 @@ type ViewMode = 'countries' | 'achievements';
     IonItem,
     IonLabel,
     IonIcon,
+    IonModal,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonButtons,
+    IonButton,
   ],
 })
 export class StatsPage implements ViewWillEnter {
   private readonly countryService = inject(CountryService);
   private readonly achievementService = inject(AchievementService);
+  private readonly birthplaceService = inject(BirthplaceService);
   private readonly router = inject(Router);
 
   readonly totalWorldCountries = TOTAL_WORLD_COUNTRIES;
@@ -68,8 +84,35 @@ export class StatsPage implements ViewWillEnter {
   // View mode toggle
   readonly viewMode = signal<ViewMode>('countries');
 
+  /** Hero stat pills: full-screen galleries */
+  readonly countriesGalleryOpen = signal(false);
+  readonly achievementsGalleryOpen = signal(false);
+
+  /** All countries (~195) with flag URLs and visited state for the gallery modal. */
+  readonly allCountriesGallery = computed(() =>
+    this.countryService
+      .countries()
+      .map((c) => ({
+        code: c.code,
+        name: c.name,
+        visited: c.visited,
+        flagUrl: `https://flagcdn.com/w40/${c.code.toLowerCase()}.png`,
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name))
+  );
+
   // Computed signals for reactive stats
   readonly visitedCount = computed(() => this.countryService.visitedCount());
+
+  /** Total saved cities across all countries (same as Settings). */
+  readonly savedCityCount = computed(() =>
+    this.countryService
+      .countries()
+      .reduce((n, c) => n + (c.cities?.length ?? 0), 0)
+  );
+
+  /** Birthplace from onboarding / Preferences (map uses the same source). */
+  readonly birthplace = this.birthplaceService.record;
 
   readonly visitedPercentage = computed(() => {
     const count = this.visitedCount();
@@ -146,9 +189,27 @@ export class StatsPage implements ViewWillEnter {
       airplaneOutline,
       ribbonOutline,
       starOutline,
+      locationOutline,
       lockClosedOutline,
       checkmarkCircleOutline,
+      closeOutline,
     });
+  }
+
+  openCountriesGallery(): void {
+    this.countriesGalleryOpen.set(true);
+  }
+
+  onCountriesGalleryDismiss(): void {
+    this.countriesGalleryOpen.set(false);
+  }
+
+  openAchievementsGallery(): void {
+    this.achievementsGalleryOpen.set(true);
+  }
+
+  onAchievementsGalleryDismiss(): void {
+    this.achievementsGalleryOpen.set(false);
   }
 
   /**

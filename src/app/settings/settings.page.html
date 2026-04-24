@@ -37,9 +37,7 @@
 
     <ion-card-content>
       <p class="reel-description">
-        Create a short vertical video of your progress—visited countries, stats, and
-        achievements—then save or share it like any other video. Recording opens the Map
-        tab so the intro uses the same live globe as the map (not a separate graphic).
+        Create a short vertical video of your progress—visited countries, stats, and achievements—then save or share it like any other video. Recording opens the Map tab so the intro uses the same live globe as the map (not a separate graphic).
       </p>
       <ion-button
         expand="block"
@@ -72,6 +70,11 @@
           <span class="data-value">{{ visitedCount() }}</span>
           <span class="data-label">Countries</span>
         </div>
+        <div class="data-item data-item-cities">
+          <ion-icon name="location-outline"></ion-icon>
+          <span class="data-value">{{ savedCityCount() }}</span>
+          <span class="data-label">Cities</span>
+        </div>
       </div>
 
       <ion-button
@@ -84,13 +87,15 @@
       >
         @if (isResetting()) {
         <ion-icon name="refresh-outline" class="spin"></ion-icon>
-        Resetting... } @else {
+        Resetting...
+        } @else {
         <ion-icon name="trash-outline" slot="start"></ion-icon>
-        Reset All Data }
+        Reset All Data
+        }
       </ion-button>
 
       <p class="warning-text">
-        This will permanently delete all visited countries and saved progress.
+        This will permanently delete all visited countries, saved cities, and other progress.
       </p>
     </ion-card-content>
   </ion-card>
@@ -114,8 +119,7 @@
       </div>
 
       <p class="app-description">
-        Track your travels around the world! Mark countries you've visited and see
-        your exploration progress with achievements and statistics.
+        Track your travels around the world! Mark countries you've visited and see your exploration progress with achievements and statistics.
       </p>
 
       <div class="features-list">

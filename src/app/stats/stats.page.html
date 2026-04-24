@@ -6,10 +6,25 @@
   <ion-card class="hero-card">
     <ion-card-content>
       <div class="hero-stats">
-        <!-- Main Counter - uses real signal value for accuracy -->
+        <!-- Main counter; cities only under the subtitle when savedCityCount() > 0 -->
         <div class="main-stat">
-          <div class="stat-number">{{ visitedCount() }}</div>
+          <span class="stat-number">{{ visitedCount() }}</span>
           <div class="stat-label">Countries Visited</div>
+          @if (savedCityCount() > 0) {
+            <div class="stat-cities-companion" aria-label="Saved cities">
+              <span class="stat-cities-value">{{ savedCityCount() }}</span>
+              <span class="stat-cities-caption">cities</span>
+            </div>
+          }
+          @if (birthplace(); as bp) {
+            <div class="birthplace-hero" aria-label="Birthplace">
+              <ion-icon name="location-outline"></ion-icon>
+              <div class="birthplace-hero-text">
+                <span class="birthplace-label">Born in</span>
+                <span class="birthplace-value">{{ bp.cityName }}, {{ bp.countryName }}</span>
+              </div>
+            </div>
+          }
         </div>
 
         <!-- Progress Ring -->
@@ -45,32 +60,42 @@
 
       <!-- Stats Row -->
       <div class="stats-row">
-        <div class="stat-item">
+        <button
+          type="button"
+          class="stat-item"
+          (click)="openCountriesGallery()"
+          aria-label="View all country flags"
+        >
           <ion-icon name="globe-outline"></ion-icon>
           <span class="value">{{ totalWorldCountries }}</span>
           <span class="label">Total Countries</span>
-        </div>
-        <div class="stat-item">
+        </button>
+        <button
+          type="button"
+          class="stat-item"
+          (click)="openAchievementsGallery()"
+          aria-label="View all achievements"
+        >
           <ion-icon name="trophy-outline"></ion-icon>
           <span class="value">{{ unlockedCount() }}</span>
           <span class="label">Achievements</span>
-        </div>
+        </button>
       </div>
     </ion-card-content>
   </ion-card>
 
   <!-- View Mode Toggle -->
   <div class="view-toggle">
-    <button 
-      class="toggle-btn" 
+    <button
+      class="toggle-btn"
       [class.active]="viewMode() === 'countries'"
       (click)="setViewMode('countries')"
     >
       <ion-icon name="flag-outline"></ion-icon>
       <span>Countries</span>
     </button>
-    <button 
-      class="toggle-btn" 
+    <button
+      class="toggle-btn"
       [class.active]="viewMode() === 'achievements'"
       (click)="setViewMode('achievements')"
     >
@@ -82,7 +107,7 @@
   <!-- Countries View -->
   @if (viewMode() === 'countries') {
     <!-- Milestone Card -->
-    @if (milestoneReached()) {
+    @if (milestoneReached(); as m) {
       <ion-card class="milestone-card">
         <ion-card-content>
           <div class="milestone-content">
@@ -90,9 +115,9 @@
               <ion-icon name="trophy-outline"></ion-icon>
             </div>
             <div class="milestone-info">
-              <div class="milestone-title">{{ milestoneReached()?.label }}</div>
+              <div class="milestone-title">{{ m.label }}</div>
               <div class="milestone-subtitle">
-                You've visited {{ milestoneReached()?.threshold }}+ countries!
+                You've visited {{ m.threshold }}+ countries!
               </div>
             </div>
           </div>
@@ -186,7 +211,7 @@
           <div class="achievement-label">Achievements Unlocked</div>
         </div>
         <div class="achievement-progress-bar">
-          <div 
+          <div
             class="achievement-progress-fill"
             [style.width.%]="achievementProgress()"
           ></div>
@@ -293,6 +318,128 @@
       </ion-card-content>
     </ion-card>
   }
+
+  <!-- All countries flags -->
+  <ion-modal
+    [isOpen]="countriesGalleryOpen()"
+    (didDismiss)="onCountriesGalleryDismiss()"
+    class="stats-gallery-modal"
+  >
+    <ng-template>
+      <ion-header class="ion-no-border">
+        <ion-toolbar>
+          <ion-title>All countries</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="onCountriesGalleryDismiss()">
+              <ion-icon slot="icon-only" name="close-outline" aria-label="Close"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding gallery-scroll">
+        <p class="gallery-hint">
+          {{ allCountriesGallery().length }} flags · visited are full color; unvisited are dimmed
+        </p>
+        <div class="flags-grid">
+          @for (c of allCountriesGallery(); track c.code) {
+            <div
+              class="flag-cell"
+              [class.flag-cell--unvisited]="!c.visited"
+              [attr.title]="c.name + (c.visited ? '' : ' (not visited)')"
+            >
+              <img [src]="c.flagUrl" [alt]="c.name + ' flag'" loading="lazy" width="40" height="28" />
+              <span class="flag-code">{{ c.code }}</span>
+            </div>
+          }
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <!-- All achievements -->
+  <ion-modal
+    [isOpen]="achievementsGalleryOpen()"
+    (didDismiss)="onAchievementsGalleryDismiss()"
+    class="stats-gallery-modal"
+  >
+    <ng-template>
+      <ion-header class="ion-no-border">
+        <ion-toolbar>
+          <ion-title>All achievements</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="onAchievementsGalleryDismiss()">
+              <ion-icon slot="icon-only" name="close-outline" aria-label="Close"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding gallery-scroll achievements-gallery-modal">
+        <p class="gallery-hint">
+          {{ unlockedCount() }} / {{ totalAchievements() }} unlocked · same grid layout as countries
+        </p>
+
+        <h3 class="gallery-section-title">Milestones</h3>
+        <div class="achievement-tiles-grid">
+          @for (a of milestoneAchievements(); track a.id) {
+            <div
+              class="achievement-tile"
+              [class.achievement-tile--locked]="!a.unlocked"
+              [attr.title]="a.title + ' — ' + a.description"
+            >
+              <div class="achievement-tile-bubble" [style.background]="a.unlocked ? a.color : null">
+                @if (a.unlocked) {
+                  <span class="achievement-tile-emoji">{{ a.icon }}</span>
+                } @else {
+                  <ion-icon name="lock-closed-outline"></ion-icon>
+                }
+              </div>
+              <span class="achievement-tile-caption">{{ a.requirement }}</span>
+            </div>
+          }
+        </div>
+
+        <h3 class="gallery-section-title">Continents</h3>
+        <div class="achievement-tiles-grid">
+          @for (a of continentAchievements(); track a.id) {
+            <div
+              class="achievement-tile"
+              [class.achievement-tile--locked]="!a.unlocked"
+              [attr.title]="a.title + ' — ' + a.description"
+            >
+              <div class="achievement-tile-bubble" [style.background]="a.unlocked ? a.color : null">
+                @if (a.unlocked) {
+                  <span class="achievement-tile-emoji">{{ a.icon }}</span>
+                } @else {
+                  <ion-icon name="lock-closed-outline"></ion-icon>
+                }
+              </div>
+              <span class="achievement-tile-caption">{{ a.title }}</span>
+            </div>
+          }
+        </div>
+
+        <h3 class="gallery-section-title">Special</h3>
+        <div class="achievement-tiles-grid">
+          @for (a of specialAchievements(); track a.id) {
+            <div
+              class="achievement-tile"
+              [class.achievement-tile--locked]="!a.unlocked"
+              [attr.title]="a.title + ' — ' + a.description"
+            >
+              <div class="achievement-tile-bubble" [style.background]="a.unlocked ? a.color : null">
+                @if (a.unlocked) {
+                  <span class="achievement-tile-emoji">{{ a.icon }}</span>
+                } @else {
+                  <ion-icon name="lock-closed-outline"></ion-icon>
+                }
+              </div>
+              <span class="achievement-tile-caption">{{ a.title }}</span>
+            </div>
+          }
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 
   <!-- Bottom spacing for tab bar -->
   <div class="bottom-spacer"></div>

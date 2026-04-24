@@ -121,11 +121,16 @@ body:not(.ion-palette-dark) .hero-card {
   margin-bottom: var(--space-8);
 }
 
-// Main counter - Giant number
+// Main counter — city line stacked under the big number (hidden when 0 cities)
 .main-stat {
   flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 
   .stat-number {
+    display: inline-block;
     font-family: var(--font-display);
     font-size: var(--font-size-hero);
     font-weight: 800;
@@ -137,6 +142,32 @@ body:not(.ion-palette-dark) .hero-card {
     animation: numberSlideUp 0.8s var(--ease-out-expo) both;
   }
 
+  .stat-cities-companion {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    margin-top: var(--space-1);
+    animation: labelFadeIn 0.8s var(--ease-out-expo) 0.25s both;
+
+    .stat-cities-value {
+      font-family: var(--font-display);
+      font-size: clamp(1.2rem, 3.8vw, 1.65rem);
+      font-weight: 600;
+      line-height: 1;
+      color: rgba(255, 255, 255, 0.9);
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    .stat-cities-caption {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.68);
+    }
+  }
+
   .stat-label {
     font-family: var(--font-display);
     font-size: var(--font-size-lg);
@@ -145,6 +176,49 @@ body:not(.ion-palette-dark) .hero-card {
     margin-top: var(--space-2);
     letter-spacing: 0.5px;
     animation: labelFadeIn 0.8s var(--ease-out-expo) 0.2s both;
+  }
+
+  .birthplace-hero {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    max-width: 100%;
+    border-radius: var(--radius-lg);
+    background: rgba(15, 23, 42, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    animation: labelFadeIn 0.8s var(--ease-out-expo) 0.35s both;
+
+    ion-icon {
+      flex-shrink: 0;
+      font-size: 22px;
+      color: rgba(251, 113, 133, 0.95);
+      margin-top: 2px;
+    }
+  }
+
+  .birthplace-hero-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .birthplace-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .birthplace-value {
+    font-size: clamp(0.9rem, 2.8vw, 1.05rem);
+    font-weight: 600;
+    line-height: 1.35;
+    color: rgba(255, 255, 255, 0.95);
+    word-wrap: break-word;
   }
 }
 
@@ -260,20 +334,40 @@ body:not(.ion-palette-dark) .hero-card {
   }
 }
 
-.stat-item {
+.stats-row button.stat-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
   padding: var(--space-3) var(--space-5);
-  background: rgba(255, 255, 255, 0.12);
+  border: none;
   border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(10px);
+  color: inherit;
+  font: inherit;
+  font-family: inherit;
+  text-align: center;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
   transition: all 0.3s var(--ease-out-expo);
 
   &:hover {
     background: rgba(255, 255, 255, 0.18);
     transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.65);
+    outline-offset: 2px;
   }
 
   ion-icon {
@@ -868,6 +962,139 @@ body:not(.ion-palette-dark) .hero-card {
   font-size: 22px;
   color: var(--ion-color-success);
   flex-shrink: 0;
+}
+
+// ============================================
+// Hero modals — all flags / all achievements
+// ============================================
+
+.gallery-scroll {
+  --background: var(--ion-background-color);
+}
+
+.gallery-hint {
+  margin: 0 0 var(--space-4);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--ion-color-medium);
+}
+
+.flags-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+  gap: var(--space-3);
+  padding-bottom: var(--space-6);
+}
+
+.flag-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+
+  img {
+    width: 40px;
+    height: auto;
+    border-radius: 6px;
+    box-shadow: var(--shadow-sm);
+    object-fit: cover;
+  }
+
+  .flag-code {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--ion-color-medium);
+  }
+
+  &.flag-cell--unvisited {
+    opacity: 0.38;
+    filter: grayscale(1);
+
+    img {
+      box-shadow: none;
+    }
+
+    .flag-code {
+      color: var(--ion-color-step-500);
+    }
+  }
+}
+
+.gallery-section-title {
+  margin: var(--space-5) 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ion-color-medium);
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+}
+
+// Achievements modal — compact tiles (same idea as flag grid)
+.achievement-tiles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.achievement-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+
+  .achievement-tile-bubble {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: var(--ion-color-step-150);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .achievement-tile-emoji {
+    font-size: 1.35rem;
+    line-height: 1;
+  }
+
+  .achievement-tile-bubble ion-icon {
+    font-size: 20px;
+    color: var(--ion-color-medium);
+  }
+
+  .achievement-tile-caption {
+    font-size: 0.58rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+    color: var(--ion-color-medium);
+    max-width: 100%;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-break: break-word;
+  }
+
+  &.achievement-tile--locked {
+    opacity: 0.4;
+    filter: grayscale(1);
+
+    .achievement-tile-bubble {
+      box-shadow: none;
+    }
+  }
 }
 
 // ============================================

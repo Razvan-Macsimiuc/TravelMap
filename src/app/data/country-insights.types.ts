@@ -4,6 +4,8 @@ export interface CountryInsightsBundle {
   whyVisit: string;
   tasteAndTraditions: string;
   planSmart: string;
+  /** When true, country detail shows the Wikipedia / CC-BY-SA footer. Omitted or false for `travel.json`-sourced bundles. */
+  wikipediaAttribution?: boolean;
 }
 
 export type CountryInsights = CountryInsightsBundle;

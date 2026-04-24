@@ -52,7 +52,6 @@ import { CitySearchService, CityResult } from '../services/city-search.service';
 import { Country } from '../models/country.model';
 import type { CountryInsights } from '../data/country-insights.types';
 import { CountryInsightsLoaderService } from '../services/country-insights-loader.service';
-
 @Component({
   selector: 'app-country-detail',
   templateUrl: 'country-detail.page.html',
@@ -187,7 +186,7 @@ export class CountryDetailPage implements OnInit {
     this.insightsLoading.set(true);
     await this.insightsLoader.ensureLoaded();
     this.insights.set(this.insightsLoader.getBundle(code, c.name));
-    this.insightsFromWikipedia.set(this.insightsLoader.hasBundledEntry(code));
+    this.insightsFromWikipedia.set(this.insightsLoader.shouldShowWikipediaFooter(code));
     this.insightsLoading.set(false);
   }
 
@@ -198,7 +197,7 @@ export class CountryDetailPage implements OnInit {
       this.countryService.toggleVisited(code, country.name);
       // Check achievements in both directions: newly earned ones celebrate,
       // revoked ones are removed and will re-celebrate when earned again.
-      const visitedCodes = this.countryService.visitedCountries().map(c => c.code);
+      const visitedCodes = this.countryService.visitedCountries().map((c) => c.code);
       await this.achievementService.checkAchievements(visitedCodes);
     }
   }
@@ -228,7 +227,7 @@ export class CountryDetailPage implements OnInit {
     const code = this.countryCode();
     if (!name || !code) return;
     this.countryService.addCity(code, name, coordinates);
-    const visitedCodes = this.countryService.visitedCountries().map(c => c.code);
+    const visitedCodes = this.countryService.visitedCountries().map((c) => c.code);
     this.achievementService.checkAchievements(visitedCodes);
   }
 
@@ -236,7 +235,7 @@ export class CountryDetailPage implements OnInit {
     const code = this.countryCode();
     if (!code) return;
     this.countryService.removeCity(code, cityName);
-    const visitedCodes = this.countryService.visitedCountries().map(c => c.code);
+    const visitedCodes = this.countryService.visitedCountries().map((c) => c.code);
     this.achievementService.checkAchievements(visitedCodes);
   }
 

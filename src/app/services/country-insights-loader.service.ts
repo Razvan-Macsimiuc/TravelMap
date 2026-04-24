@@ -6,6 +6,7 @@ import { buildFallbackCountryInsights } from '../data/country-insights.data';
 
 /**
  * Loads `assets/data/country-insights.json` once and serves per-country bundles.
+ * Bundles may set `wikipediaAttribution: true` to show the Wikipedia / CC-BY-SA footer on detail.
  * Falls back to regional templates if JSON is missing or a code is absent.
  */
 @Injectable({ providedIn: 'root' })
@@ -41,8 +42,14 @@ export class CountryInsightsLoaderService {
     return this.byCode.get(upper) ?? buildFallbackCountryInsights(upper, name);
   }
 
-  /** True when JSON contained an entry for this code (Wikipedia “at a glance” present). */
+  /** True when JSON contained an entry for this code. */
   hasBundledEntry(code: string): boolean {
     return this.byCode.has(code.toUpperCase());
+  }
+
+  /** Wikipedia / CC-BY-SA footer on country detail (only when bundle opts in). */
+  shouldShowWikipediaFooter(code: string): boolean {
+    const b = this.byCode.get(code.toUpperCase());
+    return b?.wikipediaAttribution === true;
   }
 }

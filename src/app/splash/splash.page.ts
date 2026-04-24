@@ -1,8 +1,8 @@
-import { Component, signal, OnInit, OnDestroy } from '@angular/core';
+import { Component, signal, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { IonContent } from '@ionic/angular/standalone';
-
+import { AssetPrefetchService } from '../services/asset-prefetch.service';
 @Component({
   selector: 'app-splash',
   standalone: true,
@@ -42,6 +42,9 @@ import { IonContent } from '@ionic/angular/standalone';
   styleUrls: ['splash.page.scss'],
 })
 export class SplashPage implements OnInit, OnDestroy {
+  private readonly router = inject(Router);
+  private readonly assetPrefetch = inject(AssetPrefetchService);
+
   readonly animateIn = signal(false);
   readonly showBrand = signal(false);
   readonly showLoading = signal(false);
@@ -49,11 +52,12 @@ export class SplashPage implements OnInit, OnDestroy {
 
   private navigationTimeout: ReturnType<typeof setTimeout> | null = null;
 
-  constructor(private router: Router) {}
-
   ngOnInit(): void {
     // Mark splash as shown for this session
     sessionStorage.setItem('hopahopa_splash_shown', 'true');
+
+    // Warm map/tab chunks + GeoJSON cache while splash (and later welcome) runs
+    this.assetPrefetch.warmupHeavyMapResources();
 
     // Trigger entrance animations
     setTimeout(() => this.animateIn.set(true), 100);

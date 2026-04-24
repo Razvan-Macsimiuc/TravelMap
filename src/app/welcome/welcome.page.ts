@@ -1,14 +1,36 @@
-import { Component, signal, OnInit } from '@angular/core';
+import { Component, signal, OnInit, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { IonContent, IonButton, IonIcon } from '@ionic/angular/standalone';
+import {
+  IonContent,
+  IonIcon,
+  IonList,
+  IonItem,
+  IonLabel,
+  IonSearchbar,
+  IonSpinner,
+} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   arrowForwardOutline,
   earthOutline,
   trophyOutline,
   statsChartOutline,
+  chevronBackOutline,
 } from 'ionicons/icons';
+import { toObservable, takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  switchMap,
+  finalize,
+  of,
+} from 'rxjs';
+import { CountryService } from '../services/country.service';
+import { CitySearchService, type CityResult } from '../services/city-search.service';
+import { BirthplaceService } from '../services/birthplace.service';
+import { AssetPrefetchService } from '../services/asset-prefetch.service';
+import type { Country } from '../models/country.model';
 
 interface OnboardingSlide {
   icon: string;
@@ -20,84 +42,49 @@ interface OnboardingSlide {
 @Component({
   selector: 'app-welcome',
   standalone: true,
-  imports: [CommonModule, IonContent, IonIcon],
-  template: `
-    <ion-content [fullscreen]="true" [scrollY]="false">
-      <div class="welcome-container" [class.animate-in]="animateIn()">
-        <!-- Animated background -->
-        <div class="background-layer">
-          <div class="gradient-orb orb-1"></div>
-          <div class="gradient-orb orb-2"></div>
-          <div class="gradient-orb orb-3"></div>
-          <div class="grid-overlay"></div>
-        </div>
-
-        <!-- Logo & Brand -->
-        <div class="brand-section" [class.show]="showBrand()">
-          <div class="logo-container">
-            <span class="logo-emoji">🌍</span>
-            <div class="logo-ring"></div>
-          </div>
-          <h1 class="app-name">HopaHopa</h1>
-          <p class="tagline">Track Your World Adventures</p>
-        </div>
-
-        <!-- Slides -->
-        <div class="slides-container">
-          @for (slide of slides; track slide.title; let i = $index) {
-          <div
-            class="slide"
-            [class.active]="currentSlide() === i"
-            [class.prev]="currentSlide() > i"
-            [class.next]="currentSlide() < i"
-          >
-            <div class="slide-icon" [style.background]="slide.gradient">
-              <ion-icon [name]="slide.icon"></ion-icon>
-            </div>
-            <h2 class="slide-title">{{ slide.title }}</h2>
-            <p class="slide-description">{{ slide.description }}</p>
-          </div>
-          }
-        </div>
-
-        <!-- Pagination dots -->
-        <div class="pagination">
-          @for (slide of slides; track slide.title; let i = $index) {
-          <button
-            class="dot"
-            [class.active]="currentSlide() === i"
-            (click)="goToSlide(i)"
-          ></button>
-          }
-        </div>
-
-        <!-- Action buttons -->
-        <div class="action-section" [class.show]="showActions()">
-          @if (currentSlide() < slides.length - 1) {
-          <button class="skip-btn" (click)="skip()">Skip</button>
-          <button class="next-btn" (click)="nextSlide()">
-            <span>Next</span>
-            <ion-icon name="arrow-forward-outline"></ion-icon>
-          </button>
-          } @else {
-          <button class="start-btn" (click)="getStarted()">
-            <span>Start Exploring</span>
-            <ion-icon name="arrow-forward-outline"></ion-icon>
-          </button>
-          }
-        </div>
-      </div>
-    </ion-content>
-  `,
+  imports: [
+    CommonModule,
+    IonContent,
+    IonIcon,
+    IonList,
+    IonItem,
+    IonLabel,
+    IonSearchbar,
+    IonSpinner,
+  ],
+  templateUrl: './welcome.page.html',
   styleUrls: ['welcome.page.scss'],
 })
 export class WelcomePage implements OnInit {
-  private readonly router = Router.prototype;
+  private readonly router = inject(Router);
+  private readonly countryService = inject(CountryService);
+  private readonly citySearch = inject(CitySearchService);
+  private readonly birthplaceService = inject(BirthplaceService);
+  private readonly assetPrefetch = inject(AssetPrefetchService);
 
   readonly animateIn = signal(false);
   readonly showBrand = signal(false);
   readonly showActions = signal(false);
   readonly currentSlide = signal(0);
+  readonly flowPhase = signal<'slides' | 'birthplace'>('slides');
+
+  readonly countryFilter = signal('');
+  readonly filteredCountries = computed(() => {
+    const q = this.countryFilter().trim().toLowerCase();
+    const list = this.countryService.countries();
+    if (!q) return list.slice(0, 50);
+    return list.filter((c) => c.name.toLowerCase().includes(q)).slice(0, 50);
+  });
+
+  readonly selectedCountry = signal<{ code: string; name: string } | null>(null);
+  readonly cityQueryText = signal('');
+  readonly cityResults = signal<CityResult[]>([]);
+  readonly citySearching = signal(false);
+  readonly selectedCity = signal<CityResult | null>(null);
+
+  readonly canSaveBirthplace = computed(
+    () => !!this.selectedCountry() && !!this.selectedCity()
+  );
 
   readonly slides: OnboardingSlide[] = [
     {
@@ -123,18 +110,39 @@ export class WelcomePage implements OnInit {
     },
   ];
 
-  constructor(private routerInstance: Router) {
-    this.router = routerInstance;
+  constructor() {
     addIcons({
       arrowForwardOutline,
       earthOutline,
       trophyOutline,
       statsChartOutline,
+      chevronBackOutline,
     });
+
+    toObservable(this.cityQueryText)
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((q) => {
+          const sel = this.selectedCountry();
+          const trimmed = q.trim();
+          if (!sel || trimmed.length < 2) {
+            this.citySearching.set(false);
+            this.cityResults.set([]);
+            return of([]);
+          }
+          this.citySearching.set(true);
+          return this.citySearch.searchCities(trimmed, sel.code).pipe(
+            finalize(() => this.citySearching.set(false))
+          );
+        }),
+        takeUntilDestroyed()
+      )
+      .subscribe((r) => this.cityResults.set(r));
   }
 
   ngOnInit(): void {
-    // Trigger entrance animations
+    this.assetPrefetch.warmupHeavyMapResources();
     setTimeout(() => this.animateIn.set(true), 100);
     setTimeout(() => this.showBrand.set(true), 300);
     setTimeout(() => this.showActions.set(true), 800);
@@ -150,15 +158,67 @@ export class WelcomePage implements OnInit {
     this.currentSlide.set(index);
   }
 
+  /** From slides: always opens birthplace (same as Continue). Map is only after birthplace Skip or save. */
   skip(): void {
-    this.getStarted();
+    this.goToBirthplaceStep();
   }
 
-  getStarted(): void {
-    // Mark as seen in localStorage
-    localStorage.setItem('hopahopa_welcome_seen', 'true');
+  goToBirthplaceStep(): void {
+    this.flowPhase.set('birthplace');
+  }
 
-    // Navigate to map
-    this.router.navigate(['/map'], { replaceUrl: true });
+  backToSlides(): void {
+    this.flowPhase.set('slides');
+  }
+
+  skipBirthplace(): void {
+    this.finishWelcome();
+  }
+
+  finishWelcome(): void {
+    localStorage.setItem('hopahopa_welcome_seen', 'true');
+    void this.router.navigate(['/map'], { replaceUrl: true });
+  }
+
+  async saveBirthplaceAndFinish(): Promise<void> {
+    const c = this.selectedCountry();
+    const city = this.selectedCity();
+    if (!c || !city) return;
+    await this.birthplaceService.save({
+      countryCode: c.code,
+      countryName: c.name,
+      cityName: city.name,
+      lng: city.coordinates[0],
+      lat: city.coordinates[1],
+    });
+    this.finishWelcome();
+  }
+
+  onCountryFilter(ev: Event): void {
+    const ce = ev as CustomEvent<{ value?: string | null }>;
+    this.countryFilter.set(String(ce.detail?.value ?? ''));
+  }
+
+  onCityQuery(ev: Event): void {
+    const ce = ev as CustomEvent<{ value?: string | null }>;
+    this.selectedCity.set(null);
+    this.cityQueryText.set(String(ce.detail?.value ?? ''));
+  }
+
+  selectCountry(c: Country): void {
+    this.selectedCountry.set({ code: c.code, name: c.name });
+    this.cityQueryText.set('');
+    this.cityResults.set([]);
+    this.selectedCity.set(null);
+  }
+
+  selectCity(r: CityResult): void {
+    this.selectedCity.set(r);
+  }
+
+  isSelectedCity(r: CityResult): boolean {
+    const s = this.selectedCity();
+    if (!s) return false;
+    return s.name === r.name && s.subtitle === r.subtitle;
   }
 }

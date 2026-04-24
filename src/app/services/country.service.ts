@@ -1,5 +1,10 @@
 import { Injectable, signal, computed, effect, inject } from '@angular/core';
 import { Country } from '../models/country.model';
+import {
+  type Birthplace,
+  BIRTHPLACE_STORAGE_KEY,
+  isValidBirthplace,
+} from '../models/birthplace.model';
 import { StorageService } from './storage.service';
 import { ALL_COUNTRIES } from '../data/countries.data';
 
@@ -25,9 +30,11 @@ export class CountryService {
 
   readonly totalCount = computed(() => this.countriesSignal().length);
 
+  /** Resolves after storage merge, optional birthplace sync, and `isInitialized` is set. */
+  readonly initializationComplete: Promise<void>;
+
   constructor() {
-    // Initialize by loading from storage
-    this.initialize();
+    this.initializationComplete = this.initialize();
 
     // Auto-save to storage when countries change (after initialization)
     effect(() => {
@@ -82,6 +89,13 @@ export class CountryService {
           // Clear migration data
           await this.storageService.clearMigrationData();
         }
+      }
+
+      const birthplaceRecord = await this.storageService.get<Birthplace>(
+        BIRTHPLACE_STORAGE_KEY
+      );
+      if (birthplaceRecord && isValidBirthplace(birthplaceRecord)) {
+        this.syncBirthplaceIntoTravelData(birthplaceRecord);
       }
 
       this.isInitialized = true;
@@ -152,6 +166,42 @@ export class CountryService {
    * Toggle visited status for a country.
    * If the country doesn't exist in the list, it will be added.
    */
+  /**
+   * Mark a country as visited if it is not already (idempotent).
+   * Used when syncing birthplace into travel stats.
+   */
+  markCountryVisited(countryCode: string, countryName?: string): void {
+    const upper = countryCode.toUpperCase();
+    this.countriesSignal.update((countries) => {
+      const idx = countries.findIndex((c) => c.code.toUpperCase() === upper);
+      if (idx >= 0) {
+        const c = countries[idx];
+        if (c.visited) return countries;
+        const next = [...countries];
+        next[idx] = { ...c, visited: true };
+        return next;
+      }
+      return [
+        ...countries,
+        {
+          code: upper,
+          name: countryName?.trim() || upper,
+          visited: true,
+          photoIds: [],
+        },
+      ];
+    });
+  }
+
+  /**
+   * Birth country counts as visited; birth city is added like a logged city (map pins, stats).
+   */
+  syncBirthplaceIntoTravelData(bp: Birthplace): void {
+    if (!isValidBirthplace(bp)) return;
+    this.markCountryVisited(bp.countryCode, bp.countryName);
+    this.addCity(bp.countryCode, bp.cityName, [bp.lng, bp.lat]);
+  }
+
   toggleVisited(countryCode: string, countryName?: string): void {
     const upperCode = countryCode.toUpperCase();
     const existingCountry = this.getCountryByCode(upperCode);

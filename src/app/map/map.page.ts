@@ -44,6 +44,8 @@ import { ErrorService } from '../services/error.service';
 import { AchievementService } from '../services/achievement.service';
 import { PageTransitionService } from '../services/page-transition.service';
 import { Country } from '../models/country.model';
+import type { Birthplace } from '../models/birthplace.model';
+import { BirthplaceService } from '../services/birthplace.service';
 import { environment } from '../../environments/environment';
 import type mapboxgl from 'mapbox-gl';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
@@ -60,6 +62,9 @@ const HOVER_VISITED_COLOR = '#38bdf8'; // Lighter cyan on hover
 const HOVER_UNVISITED_COLOR = '#334155'; // Slightly lighter slate on hover
 const BORDER_COLOR = 'rgba(255, 255, 255, 0.08)'; // Subtle white border
 const CITY_PIN_COLOR = '#facc15'; // Yellow for city pins
+const BIRTHPLACE_PIN_COLOR = '#ec4899'; // Distinct from visited / city pins
+/** Show saved city pins for all countries at or above this zoom (~midway from default globe 1.8 to max 8). */
+const CITY_PINS_MIN_ZOOM = 4.9;
 
 @Component({
   selector: 'app-map',
@@ -86,6 +91,7 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
   private readonly destroyRef = inject(DestroyRef);
   private readonly injector = inject(Injector);
   private readonly mapInstanceBridge = inject(MapInstanceBridgeService);
+  private readonly birthplaceService = inject(BirthplaceService);
 
   private readonly mapContainer =
     viewChild.required<ElementRef<HTMLDivElement>>('mapContainer');
@@ -112,9 +118,14 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
   private resizeObserver: ResizeObserver | null = null;
   private hoveredFeatureId: number | string | null = null;
   private mapLoaded = false;
+  /** True once country + city + birthplace layers exist — used by effects (plain `mapLoaded` is not reactive). */
+  private readonly mapInteractionReady = signal(false);
   private confetti: ConfettiEffect | null = null;
   /** Set to true for one microtask tick when a city pin is clicked, to suppress the country handler. */
   private cityPinJustClicked = false;
+  private birthplacePinJustClicked = false;
+  /** Fly to birthplace once per map instance when data exists. */
+  private birthplaceCameraApplied = false;
 
   // Loading and error states
   readonly isMapLoading = signal(true);
@@ -129,8 +140,6 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
   // Selected country signals
   private readonly selectedCountryCode = signal<string>('');
   readonly selectedCountryName = signal<string>('');
-  /** Tracks which country's city pins are visible; survives dock close. */
-  private readonly cityPinsCountryCode = signal<string>('');
 
   // Country search state
   readonly showSearch = signal(false);
@@ -159,8 +168,8 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
   readonly showPreviewCard = signal(false);
   readonly hoveredCountry = signal<Country | null>(null);
 
-  // Zoom level for adaptive details
-  readonly currentZoom = signal(2);
+  // Zoom level (synced from Mapbox for city pins and other adaptive UI)
+  readonly currentZoom = signal(1.8);
 
   constructor() {
     addIcons({
@@ -182,12 +191,19 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
       }
     });
 
-    // Effect to refresh city pins – only for the last focused country
+    // Effect to refresh city pins when data or zoom changes (pins show past CITY_PINS_MIN_ZOOM)
     effect(() => {
       const countries = this.countries();
-      const focusedCode = this.cityPinsCountryCode();
+      const zoom = this.currentZoom();
       if (this.mapLoaded && this.map) {
-        this.updateCityPins(countries, focusedCode);
+        this.updateCityPins(countries, zoom);
+      }
+    });
+
+    effect(() => {
+      const bp = this.birthplaceService.record();
+      if (this.mapInteractionReady() && this.map) {
+        this.syncBirthplaceLayer(bp);
       }
     });
 
@@ -224,6 +240,8 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
     this.map?.remove();
     this.map = null;
     this.mapboxglLib = null;
+    this.mapInteractionReady.set(false);
+    this.birthplaceCameraApplied = false;
   }
 
   /**
@@ -482,11 +500,11 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
         });
       });
 
-      // Track zoom level for adaptive details
+      // Track zoom for city pins (all countries past threshold) and other adaptive UI
       this.map.on('zoom', () => {
         if (this.map) {
           const zoom = this.map.getZoom();
-          this.currentZoom.set(zoom);
+          this.ngZone.run(() => this.currentZoom.set(zoom));
         }
       });
 
@@ -535,6 +553,8 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
     this.map = null;
     this.mapLoaded = false;
     this.mapboxglLib = null;
+    this.mapInteractionReady.set(false);
+    this.birthplaceCameraApplied = false;
     void this.initializeMap().catch((err) => this.handleMapError(err));
   }
 
@@ -571,13 +591,15 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
       this.addCountriesSource(geojsonData);
       this.addCountriesLayers();
       this.addCityPinsLayer();
+      this.addBirthplaceLayer();
       this.setupMapInteractions();
       this.mapLoaded = true;
+      this.mapInteractionReady.set(true);
 
       // Initial color update
       this.updateCountryColors(this.visitedCountries().map((c) => c.code));
-      // Initial city pins render (dock is closed at load time, so no pins shown)
-      this.updateCityPins(this.countries(), '');
+      this.currentZoom.set(this.map.getZoom());
+      this.updateCityPins(this.countries(), this.map.getZoom());
 
       // Clear loading states
       this.ngZone.run(() => {
@@ -587,6 +609,7 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
       });
     } catch (error) {
       this.errorService.logError('MapPage.loadCountriesLayer', error);
+      this.mapInteractionReady.set(false);
 
       this.ngZone.run(() => {
         this.isMapLoading.set(false);
@@ -712,17 +735,85 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
     });
   }
 
-  private updateCityPins(countries: Country[], focusedCode: string): void {
+  private addBirthplaceLayer(): void {
+    if (!this.map) return;
+
+    this.map.addSource('birthplace-pin', {
+      type: 'geojson',
+      data: { type: 'FeatureCollection', features: [] },
+    });
+
+    this.map.addLayer({
+      id: 'birthplace-pin-glow',
+      type: 'circle',
+      source: 'birthplace-pin',
+      paint: {
+        'circle-radius': 11,
+        'circle-color': BIRTHPLACE_PIN_COLOR,
+        'circle-opacity': 0.28,
+        'circle-blur': 1,
+      },
+    });
+
+    this.map.addLayer({
+      id: 'birthplace-pin',
+      type: 'circle',
+      source: 'birthplace-pin',
+      paint: {
+        'circle-radius': 6,
+        'circle-color': BIRTHPLACE_PIN_COLOR,
+        'circle-stroke-width': 2,
+        'circle-stroke-color': '#ffffff',
+        'circle-opacity': 1,
+      },
+    });
+  }
+
+  private syncBirthplaceLayer(bp: Birthplace | null): void {
+    const src = this.map?.getSource('birthplace-pin') as mapboxgl.GeoJSONSource | undefined;
+    if (!src || !this.map) return;
+
+    if (!bp) {
+      src.setData({ type: 'FeatureCollection', features: [] });
+      this.birthplaceCameraApplied = false;
+      return;
+    }
+
+    src.setData({
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          geometry: { type: 'Point', coordinates: [bp.lng, bp.lat] },
+          properties: {
+            cityName: bp.cityName,
+            countryName: bp.countryName,
+            type: 'birthplace',
+          },
+        },
+      ],
+    });
+
+    if (!this.birthplaceCameraApplied) {
+      this.birthplaceCameraApplied = true;
+      this.map.flyTo({
+        center: [bp.lng, bp.lat],
+        zoom: 5,
+        duration: 1400,
+        essential: true,
+      });
+    }
+  }
+
+  private updateCityPins(countries: Country[], zoom: number): void {
     const source = this.map?.getSource('city-pins') as mapboxgl.GeoJSONSource | undefined;
     if (!source) return;
 
     const features: GeoJSON.Feature<GeoJSON.Point>[] = [];
 
-    if (focusedCode) {
-      const country = countries.find(
-        (c) => c.code.toUpperCase() === focusedCode.toUpperCase()
-      );
-      if (country?.cityCoordinates) {
+    if (zoom >= CITY_PINS_MIN_ZOOM) {
+      for (const country of countries) {
+        if (!country.cityCoordinates) continue;
         for (const [cityName, coords] of Object.entries(country.cityCoordinates)) {
           features.push({
             type: 'Feature',
@@ -763,9 +854,39 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
         .addTo(this.map);
     });
 
+    this.map.on('mouseenter', 'birthplace-pin', () => {
+      if (this.map) this.map.getCanvas().style.cursor = 'pointer';
+    });
+    this.map.on('mouseleave', 'birthplace-pin', () => {
+      if (this.map) this.map.getCanvas().style.cursor = '';
+    });
+    this.map.on('click', 'birthplace-pin', (e) => {
+      this.birthplacePinJustClicked = true;
+      queueMicrotask(() => {
+        this.birthplacePinJustClicked = false;
+      });
+      if (!e.features?.length || !this.map) return;
+      const props = e.features[0].properties as { cityName: string; countryName: string };
+      const coords = (e.features[0].geometry as GeoJSON.Point).coordinates as [number, number];
+      new this.mapboxglLib!.Popup({
+        closeButton: true,
+        offset: 14,
+        className: 'city-pin-popup birthplace-popup',
+      })
+        .setLngLat(coords)
+        .setHTML(
+          `<div class="city-popup-content">
+            <span class="city-popup-label">Born here</span>
+            <span class="city-popup-name">${props['cityName']}</span>
+            <span class="city-popup-country">${props['countryName']}</span>
+          </div>`
+        )
+        .addTo(this.map);
+    });
+
     // Click handler for country selection
     this.map.on('click', 'countries-fill', (e) => {
-      if (this.cityPinJustClicked) return; // city pin already handled this click
+      if (this.cityPinJustClicked || this.birthplacePinJustClicked) return;
       if (!e.features || e.features.length === 0) return;
 
       const feature = e.features[0];
@@ -1011,7 +1132,6 @@ export class MapPage implements AfterViewInit, OnDestroy, ViewWillLeave {
     // Set selected country
     this.selectedCountryCode.set(isoCode);
     this.selectedCountryName.set(countryName);
-    this.cityPinsCountryCode.set(isoCode);
 
     // Pan the map to center on the country with smooth animation
     if (this.map) {

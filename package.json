@@ -11,7 +11,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "generate:insights": "node scripts/generate-country-insights.mjs"
+    "generate:insights": "node scripts/generate-country-insights.mjs",
+    "build:insights-from-travel": "node scripts/build-country-insights-from-travel.mjs"
   },
   "private": true,
   "dependencies": {

@@ -23,7 +23,11 @@
               <span class="stats-label">countries</span>
             </div>
             <div class="stats-divider"></div>
-            <button class="stats-search-btn" (click)="openSearch()" aria-label="Search countries">
+            <button
+              class="stats-search-btn"
+              (click)="openSearch()"
+              aria-label="Search countries"
+            >
               <ion-icon name="search-outline"></ion-icon>
             </button>
           } @else {
@@ -73,7 +77,11 @@
     <div class="loading-content">
       <ion-spinner name="crescent" color="primary"></ion-spinner>
       <p class="loading-text">
-        @if (isMapLoading()) { Loading map... } @else { Loading countries... }
+        @if (isMapLoading()) {
+          Loading map...
+        } @else {
+          Loading countries...
+        }
       </p>
     </div>
   </div>

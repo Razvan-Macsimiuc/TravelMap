@@ -380,6 +380,156 @@
 }
 
 // ============================================
+// Birthplace step (post-slides)
+// ============================================
+
+.birthplace-step {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-bottom: var(--space-8);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.45s var(--ease-out-expo), transform 0.45s var(--ease-out-expo);
+
+  &.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.birthplace-header {
+  text-align: center;
+  margin-bottom: var(--space-2);
+}
+
+.back-to-slides {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: var(--space-3);
+  padding: 6px 10px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(226, 232, 240, 0.95);
+  font-size: 13px;
+  cursor: pointer;
+
+  ion-icon {
+    font-size: 18px;
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+.birthplace-title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: #f8fafc;
+  margin: 0 0 var(--space-2);
+  letter-spacing: -0.02em;
+}
+
+.birthplace-subtitle {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: rgba(148, 163, 184, 0.95);
+}
+
+.country-search,
+.city-search {
+  --background: rgba(15, 23, 42, 0.55);
+  --border-radius: 12px;
+  --box-shadow: none;
+  --color: #e2e8f0;
+  padding: 0;
+}
+
+.birthplace-lists {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.list-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.list-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(148, 163, 184, 0.85);
+  padding-left: 4px;
+}
+
+.scroll-list {
+  max-height: 160px;
+  overflow-y: auto;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  padding: 4px 0;
+}
+
+ion-item.selected {
+  --background: rgba(14, 165, 233, 0.18);
+  --color: #f8fafc;
+}
+
+.hint-muted {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(148, 163, 184, 0.8);
+  padding: var(--space-2) 4px;
+}
+
+.city-line {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.city-sub {
+  font-size: 12px;
+  color: rgba(148, 163, 184, 0.9);
+  margin-top: 2px;
+}
+
+.city-loading {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-2);
+}
+
+.birthplace-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.next-btn:disabled {
+  opacity: 0.45;
+  pointer-events: none;
+  transform: none;
+  box-shadow: none;
+}
+
+// ============================================
 // Responsive Adjustments
 // ============================================
 

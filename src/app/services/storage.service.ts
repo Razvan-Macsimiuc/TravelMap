@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
 import { Country } from '../models/country.model';
+import { BIRTHPLACE_STORAGE_KEY } from '../models/birthplace.model';
 
 const STORAGE_KEYS = {
   COUNTRIES: 'travelmap_countries',
@@ -125,6 +126,7 @@ export class StorageService {
       await Preferences.remove({ key: STORAGE_KEYS.COUNTRIES });
       await Preferences.remove({ key: 'travelmap_photos' });
       await Preferences.remove({ key: 'bucket_list_items' });
+      await Preferences.remove({ key: BIRTHPLACE_STORAGE_KEY });
       
       // Also clear IndexedDB on web
       try {

@@ -315,6 +315,14 @@ const SPECIAL_ACHIEVEMENTS: Achievement[] = [
   },
 ];
 
+/** Modal count line labels (English). */
+const ACHIEVEMENT_COUNT_LABELS: Record<string, string> = {
+  'achievements.countLabels.countriesVisited': 'Countries Visited',
+  'achievements.countLabels.citiesLogged': 'Cities Logged',
+  'achievements.countLabels.continentsExplored': 'Continents Explored',
+  'achievements.countLabels.islandNationsVisited': 'Island Nations Visited',
+};
+
 // Nordic countries
 const NORDIC_COUNTRIES = new Set(['DK', 'FI', 'IS', 'NO', 'SE']);
 
@@ -631,7 +639,9 @@ export class AchievementService {
   private suppressCelebrations = true; // Prevent celebrations during startup
 
   // Computed signals for easy access
-  readonly allAchievements = computed(() => ALL_ACHIEVEMENTS);
+  readonly allAchievements = computed(() =>
+    ALL_ACHIEVEMENTS.map((a) => this.localizeAchievement(a))
+  );
 
   readonly unlockedList = computed(() =>
     Array.from(this.unlockedAchievements().values())
@@ -1004,34 +1014,38 @@ export class AchievementService {
       '../components/achievement-modal/achievement-modal.component'
     );
 
+    const loc = this.localizeAchievement(achievement);
     const visited = this.countryService.visitedCountries();
-    let countLabel = 'Countries Visited';
+    let countLabelKey = 'achievements.countLabels.countriesVisited';
     let displayCount = visited.length;
 
     if (['special_first_city', 'special_city_wanderer', 'special_city_explorer', 'special_urban_legend', 'special_metropolitan'].includes(achievement.id)) {
-      countLabel = 'Cities Logged';
+      countLabelKey = 'achievements.countLabels.citiesLogged';
       displayCount = visited.reduce((sum, c) => sum + (c.cities?.length ?? 0), 0);
     } else if (['special_5_continents', 'special_all_continents'].includes(achievement.id)) {
-      countLabel = 'Continents Explored';
+      countLabelKey = 'achievements.countLabels.continentsExplored';
       displayCount = new Set(
         visited.map((c) => CONTINENT_MAP[c.code]).filter(Boolean)
       ).size;
     } else if (['special_island_hopper'].includes(achievement.id)) {
-      countLabel = 'Island Nations Visited';
+      countLabelKey = 'achievements.countLabels.islandNationsVisited';
       displayCount = visited.filter((c) => ISLAND_NATIONS.has(c.code)).length;
     } else if (['special_nordic', 'special_mediterranean', 'special_southeast_asia'].includes(achievement.id)) {
-      countLabel = 'Countries Visited';
+      countLabelKey = 'achievements.countLabels.countriesVisited';
     }
+
+    const countLabel =
+      ACHIEVEMENT_COUNT_LABELS[countLabelKey] ?? countLabelKey;
 
     const modal = await this.modalController.create({
       component: AchievementModalComponent,
       componentProps: {
         milestone: {
           count: achievement.requirement,
-          title: achievement.title,
+          title: loc.title,
           icon: achievement.icon,
           color: achievement.color,
-          message: achievement.unlockedMessage,
+          message: loc.unlockedMessage,
           countLabel,
         },
         visitedCount: displayCount,
@@ -1058,19 +1072,21 @@ export class AchievementService {
   getAchievementsByCategory(
     category: AchievementCategory
   ): (Achievement & { unlocked: boolean })[] {
-    return ALL_ACHIEVEMENTS.filter((a) => a.category === category).map((a) => ({
-      ...a,
-      unlocked: this.isUnlocked(a.id),
-    }));
+    return ALL_ACHIEVEMENTS.filter((a) => a.category === category).map((a) => {
+      const loc = this.localizeAchievement(a);
+      return {
+        ...loc,
+        unlocked: this.isUnlocked(a.id),
+      };
+    });
   }
 
   /**
    * Get next milestone achievement.
    */
   getNextMilestone(visitedCount: number): Achievement | null {
-    return (
-      MILESTONE_ACHIEVEMENTS.find((a) => a.requirement > visitedCount) || null
-    );
+    const raw = MILESTONE_ACHIEVEMENTS.find((a) => a.requirement > visitedCount);
+    return raw ? this.localizeAchievement(raw) : null;
   }
 
   /**
@@ -1116,12 +1132,19 @@ export class AchievementService {
    * Get all milestones (legacy compatibility).
    */
   getMilestones() {
-    return MILESTONE_ACHIEVEMENTS.map((a) => ({
-      count: a.requirement,
-      title: a.title,
-      icon: a.icon,
-      color: a.color,
-      message: a.unlockedMessage,
-    }));
+    return MILESTONE_ACHIEVEMENTS.map((a) => {
+      const loc = this.localizeAchievement(a);
+      return {
+        count: a.requirement,
+        title: loc.title,
+        icon: a.icon,
+        color: a.color,
+        message: loc.unlockedMessage,
+      };
+    });
+  }
+
+  private localizeAchievement(a: Achievement): Achievement {
+    return { ...a };
   }
 }
